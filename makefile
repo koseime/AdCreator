@@ -6,9 +6,9 @@ CFLAGS = -Wall -c -g -std=c99 \
 	 `sdl-config --cflags` \
 	 `pkg-config --cflags cairo` $(INCPATH)
 
-LDFLAGS = `sdl-config --libs` \
-	  `pkg-config --libs cairo` \
-	  -lGL -lGLU -lm
+LDFLAGS = -L /usr/lib64 -Wl,-Bstatic -lSDL \
+	  -Wl,-Bdynamic -lGL -lGLU \
+	  -lm -lpthread `pkg-config --libs cairo`
 
 SRCS = main.cpp
 

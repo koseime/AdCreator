@@ -9,7 +9,7 @@
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
-#include </usr/include/cairo/cairo.h>
+#include <cairo/cairo.h>
 
 //./gl-cairo-simple vacuum.png "We think you would like this vacuum" out.png
 
