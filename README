@@ -7,3 +7,4 @@ sudo yum install cairo-devel
 sudo yum install libjpeg-turbo-static
 
 
+
