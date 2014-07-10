@@ -1,2 +1,9 @@
 ./gl-cairo-simple ./images/vacuum1.jpg "Here is a jpg" out2.png
 
+
+Required libraries:
+sudo yum install SDL-static.x86_64
+sudo yum install cairo-devel
+sudo yum install libjpeg-turbo-static
+
+
