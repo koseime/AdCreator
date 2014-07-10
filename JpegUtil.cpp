@@ -87,7 +87,6 @@ cairo_surface_t * JpegUtil::loadJpg(const char* Name){
 	FILE * infile;    	/* source file */
 	JSAMPARRAY pJpegBuffer;   	/* Output row buffer */
 	int row_stride;   	/* physical row width in output buffer */
-	printf("Opening product: %s", Name);
 	if ((infile = fopen(Name, "rb")) == NULL)
 	{
 		fprintf(stderr, "can't open %s\n", Name);

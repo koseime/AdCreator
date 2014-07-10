@@ -16,7 +16,7 @@ class LayoutEngine {
 public:
 	LayoutEngine();
 	virtual ~LayoutEngine();
-	int create(char* image_product_file, char* ad_text, char* output);
+	int create(const char* image_product_file, const char* ad_text, const char* output);
 
 
 private:

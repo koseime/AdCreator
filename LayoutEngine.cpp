@@ -1,6 +1,10 @@
 /*
  * LayoutEngine.cpp
  *
+ * TODO:
+ * This is going to be like more like a gaming engine -- at least it will be a lot more
+ * flexible for various layouts, cropping, background, etc
+ *
  *  Created on: Jul 10, 2014
  *      Author: lanceriedel
  */
@@ -11,7 +15,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "JpegUtil.h"
 
 
 
@@ -26,7 +29,7 @@ LayoutEngine::~LayoutEngine() {
 
 
 
-int LayoutEngine::create(char* image_product_file, char* ad_text, char* output) {
+int LayoutEngine::create(const char* image_product_file, const char* ad_text, const char* output) {
 
 	cairo_surface_t *input_img_surface  = NULL;
 
@@ -37,7 +40,7 @@ int LayoutEngine::create(char* image_product_file, char* ad_text, char* output) 
 		input_img_surface  = cairo_image_surface_create_from_png(image_product_file );
 	}
 
-	cairo_surface_t *border_surface = cairo_image_surface_create_from_png("320x50Border.png");
+	cairo_surface_t *border_surface = cairo_image_surface_create_from_png("images/320x50Border.png");
 
 	//Create the background image
 	cairo_surface_t *img = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 320, 50);
@@ -94,32 +97,5 @@ int LayoutEngine::create(char* image_product_file, char* ad_text, char* output) 
 }
 
 
-
-//./gl-cairo-simple vacuum.png "We think you would like this vacuum" out.png
-
-int main(int argc, char *argv[])
-{
-	printf ("Num args: %d", argc);
-
-
-	if (argc!=4) {
-		while(argc--)
-			printf("%s\n", *argv++);
-
-		printf("\nUsage: <product image> <product description> <output>");
-		exit(1);
-	}
-
-	char* ad_text = argv[2];
-	char* output = argv[3];
-
-
-	//Load a few images from files
-	char* image_product_file = argv[1];
-
-	LayoutEngine engine;
-	return engine.create( image_product_file,  ad_text,  output);
-
-}
 
 

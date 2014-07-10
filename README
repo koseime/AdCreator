@@ -1,4 +1,20 @@
-./gl-cairo-simple ./images/vacuum1.jpg "Here is a jpg" out2.png
+Create an ad from parts
+usage: 
+	./gl-cairo-simple {options}
+options: 
+	-o <output directory> : bulk - Output directory name
+	-i <input file>  : bulk - Input file to bulk process ads format:[id<tab><image path><description>
+	-x <eXecution type>  : bulk or single
+	-p <product image>  : single - product image
+	-d <ad text>  : single - ad text
+	-r <ad result>  : single - ad result output
+
+
+
+example single use:
+./gl-cairo-simple -x single -p ./images/vacuum1.jpg -d "Here is a jpg" -r output/out-single.png
+
+example bulk use:
 
 
 Required libraries:

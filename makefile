@@ -10,7 +10,7 @@ LDFLAGS = -L /usr/lib64 -Wl,-Bstatic -lSDL -ljpeg\
 	  -Wl,-Bdynamic -lGL -lGLU \
 	  -lm -lpthread `pkg-config --libs cairo`
 
-SRCS = main.cpp LayoutEngine.cpp JpegUtil.cpp
+SRCS =  LayoutEngine.cpp JpegUtil.cpp BulkProcessor.cpp FileProcessor.cpp AdCreatorCLI.cpp
 
 OBJS = $(SRCS:.c=.o)
 
@@ -24,5 +24,5 @@ $(APP):	$(OBJS)
 	$(CC) $(OBJS) $(LDFLAGS) -o$(APP)  
 
 clean:
-	rm -f *.o  *~ $(APP) result.png
+	rm -f *.o  *~ $(APP) output/*.*
 
