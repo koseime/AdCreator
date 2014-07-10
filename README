@@ -1,3 +1,7 @@
+AdCreator  - ability to create ads from text and images
+https://github.com/koseime/AdCreator.git
+
+
 Create an ad from parts
 usage: 
 	./gl-cairo-simple {options}
@@ -15,6 +19,7 @@ example single use:
 ./gl-cairo-simple -x single -p ./images/vacuum1.jpg -d "Here is a jpg" -r output/out-single.png
 
 example bulk use:
+./gl-cairo-simple -x bulk -o ./output -i ./samples/sample.tsv -g ./images
 
 
 Required libraries:
