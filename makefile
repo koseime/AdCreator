@@ -6,11 +6,11 @@ CFLAGS = -Wall -c -g -std=c99 \
 	 `sdl-config --cflags` \
 	 `pkg-config --cflags cairo` $(INCPATH)
 
-LDFLAGS = -L /usr/lib64 -Wl,-Bstatic -lSDL \
+LDFLAGS = -L /usr/lib64 -Wl,-Bstatic -lSDL -ljpeg\
 	  -Wl,-Bdynamic -lGL -lGLU \
 	  -lm -lpthread `pkg-config --libs cairo`
 
-SRCS = main.cpp
+SRCS = main.cpp LayoutEngine.cpp JpegUtil.cpp
 
 OBJS = $(SRCS:.c=.o)
 
