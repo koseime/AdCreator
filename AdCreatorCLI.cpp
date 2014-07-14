@@ -7,6 +7,7 @@
 
 #include "AdCreatorCLI.h"
 #include <iostream>
+#include <getopt.h>
 #include "LayoutEngine.h"
 #include "BulkProcessor.h"
 

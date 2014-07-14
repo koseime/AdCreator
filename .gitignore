@@ -1,1 +1,5 @@
 output/*.png
+.idea/
+*.iml
+
+
