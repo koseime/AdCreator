@@ -1,4 +1,4 @@
-APP = gl-cairo-simple
+APP = kosei-ad-creator
 CC = gcc
 
 

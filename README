@@ -4,7 +4,7 @@ https://github.com/koseime/AdCreator.git
 
 Create an ad from parts
 usage: 
-	./gl-cairo-simple {options}
+	./kosei-ad-creator {options}
 options: 
 	-o <output directory> : bulk - Output directory name
 	-i <input file>  : bulk - Input file to bulk process ads format:[id<tab><image path><description>
@@ -16,10 +16,10 @@ options:
 
 
 example single use:
-./gl-cairo-simple -x single -p ./images/vacuum1.jpg -d "Here is a jpg" -r output/out-single.png
+./kosei-ad-creator -x single -p ./images/vacuum1.jpg -d "Here is a jpg" -r output/out-single.png
 
 example bulk use:
-./gl-cairo-simple -x bulk -o ./output -i ./samples/sample.tsv -g ./images
+./kosei-ad-creator -x bulk -o ./output -i ./samples/sample.tsv -g ./images
 
 
 Required libraries:
