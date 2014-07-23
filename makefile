@@ -17,9 +17,9 @@ CC = gcc
  ifeq ($(OSARCH),osx)
     CFLAGS = -Wall -c -g -std=c99 \
     	 `sdl-config --cflags` \
-    	 `pkg-config --cflags cairo` $(INCPATH)
+    	 $(INCPATH)
     LDFLAGS = -mmacosx-version-min=10.8   -lstdc++.6 -lSDL -ljpeg -framework OpenGL \
-              -lm -lpthread `pkg-config --libs cairo`
+              -lm -lpthread -L/usr/local/Cellar/cairo/1.12.16_1/lib -lcairo
 else
     CFLAGS = -Wall -c -g -std=c99 \
     	 `sdl-config --cflags` \
