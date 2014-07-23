@@ -22,10 +22,14 @@ example bulk use:
 ./kosei-ad-creator -x bulk -o ./output -i ./samples/sample.tsv -g ./images
 
 
-Required libraries:
+Required libraries (linux):
 sudo yum install SDL-static.x86_64
 sudo yum install cairo-devel
 sudo yum install libjpeg-turbo-static
 
-
+Required libraries (mac):
+brew install pkg-config
+brew install SDL
+brew install cario
+Note: may ask you to install XQuartz: https://xquartz.macosforge.org
 
