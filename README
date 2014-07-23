@@ -33,3 +33,18 @@ brew install SDL
 brew install cario
 Note: may ask you to install XQuartz: https://xquartz.macosforge.org
 
+
+You will need to download the hadoop source for pipes to work:
+wget https://archive.apache.org/dist/hadoop/core/hadoop-2.2.0/hadoop-2.2.0-src.tar.gz
+
+
+To make on commandline for pipes:
+HADOOP_SRC=<path to the untarred hadoop-2.2.0-src directory from above> make -f makefile.pipes
+ 
+To make in eclipse, you will need to set a couple of env variables:
+Project->Properties->C/C++ Build/Environment ->
+	PATH   $PATH:/usr/local/bin     //NOTE: this is to be able to find the sdl-config  and pkg-config execs for the build
+	HADOOP_SRC   <path to the untarred hadoop-2.2.0-src directory from above>
+
+
+
