@@ -1,10 +1,7 @@
 APP = kosei-ad-creator
 CC = gcc
 
-
-
-
-
+ACPROTO = ../AdCreatorWorkflow/build/generated-sources-cpp/
 
  ifeq ($(shell uname),Darwin)
    OSARCH=osx
@@ -18,8 +15,9 @@ CC = gcc
     CFLAGS = -Wall -c -g -std=c99 \
     	 `sdl-config --cflags` \
     	 $(INCPATH)
-    LDFLAGS = -mmacosx-version-min=10.8   -lstdc++.6 -lSDL -ljpeg -framework OpenGL \
-              -lm -lpthread -L/usr/local/Cellar/cairo/1.12.16_1/lib -lcairo
+    LDFLAGS = -mmacosx-version-min=10.8 -std=c++0x --stdlib=libc++ -lc++ -lSDL -ljpeg -framework OpenGL \
+              -lm -lpthread -L/usr/local/Cellar/cairo/1.12.16_1/lib -lcairo \
+              -L/usr/local/Cellar/protobuf/2.5.0/lib/ -lprotoc -lprotobuf
 else
     CFLAGS = -Wall -c -g -std=c99 \
     	 `sdl-config --cflags` \
@@ -32,7 +30,7 @@ else
 
 
 
-SRCS =  LayoutEngine.cpp JpegUtil.cpp BulkProcessor.cpp FileProcessor.cpp AdCreatorCLI.cpp
+SRCS =  LayoutEngine.cpp JpegUtil.cpp BulkProcessor.cpp FileProcessor.cpp AdCreatorCLI.cpp  $(ACPROTO)/AdComponentsMessages.pb.cc
 
 OBJS = $(SRCS:.c=.o)
 
@@ -43,7 +41,7 @@ all: $(APP)
 
 # it is important that $(OBJS) stands _before_ $(LDFLAGS)
 $(APP):	$(OBJS)
-	$(CC) $(OBJS) $(LDFLAGS) -o$(APP)  
+	$(CC) $(OBJS) $(LDFLAGS) -I$(ACPROTO) -o$(APP)
 
 clean:
 	rm -f *.o  *~ $(APP) output/*.*

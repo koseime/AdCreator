@@ -12,10 +12,13 @@
 #include "LayoutEngine.h"
 #include <cairo/cairo.h>
 #include <iostream>
+#include <fstream>
 #include <stdio.h>
+
 #include <stdlib.h>
 #include <string.h>
 
+#include "AdComponentsMessages.pb.h"
 
 
 LayoutEngine::LayoutEngine() {
@@ -27,18 +30,42 @@ LayoutEngine::~LayoutEngine() {
 	// TODO Auto-generated destructor stub
 }
 
+int LayoutEngine::create(const char* product_image_file, const char* ad_text, const char* output) {
+	// Load file content into byte array
+	std::ifstream fl(product_image_file);
+	fl.seekg( 0, std::ios::end );
+	size_t len = fl.tellg();
+	char *product_image = new char[len];
+	fl.seekg(0, std::ios::beg);
+	fl.read(product_image, len);
+	fl.close();
 
+	com::kosei::proto::AdComponents temp;
+	temp.set_productjpg(product_image, len);
+	int retVal = create(&temp, ad_text, output);
 
-int LayoutEngine::create(const char* image_product_file, const char* ad_text, const char* output) {
+	delete[] product_image;
+	return retVal;
+}
 
+int LayoutEngine::create(const com::kosei::proto::AdComponents* product_info, const char* ad_text, const char* output) {
 	cairo_surface_t *input_img_surface  = NULL;
 
+	/*
 	if (strlen(image_product_file) >= 4 && strcmp(image_product_file + strlen(image_product_file) - 4, ".jpg") == 0) {
 		input_img_surface = jpegUtil.loadJpg(image_product_file);
 	} else {
-
-		input_img_surface  = cairo_image_surface_create_from_png(image_product_file );
+		input_img_surface  = cairo_image_surface_create_from_png(image_product_file);
 	}
+	 */
+	
+	const std::string &image_product_string = product_info->productjpg();
+	char *image_product = new char [image_product_string.length()];
+	std::memcpy(image_product, image_product_string.c_str(), image_product_string.length());
+	
+	input_img_surface = jpegUtil.loadJpgFromMemory(image_product, image_product_string.length());
+
+	delete[] image_product;
 
 	cairo_surface_t *border_surface = cairo_image_surface_create_from_png("images/320x50Border.png");
 

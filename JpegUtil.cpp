@@ -78,7 +78,7 @@ cairo_surface_t * JpegUtil::decodeJPEGIntoSurface(jpeg_decompress_struct *info) 
 	return surface;
 }
 
-cairo_surface_t * JpegUtil::loadJpg(const char* Name){
+cairo_surface_t * JpegUtil::loadJpgFromFile(const char* Name) {
 	unsigned char a,r,g,b;
 	int width, height;
 	struct jpeg_decompress_struct cinfo;
@@ -87,8 +87,7 @@ cairo_surface_t * JpegUtil::loadJpg(const char* Name){
 	FILE * infile;    	/* source file */
 	JSAMPARRAY pJpegBuffer;   	/* Output row buffer */
 	int row_stride;   	/* physical row width in output buffer */
-	if ((infile = fopen(Name, "rb")) == NULL)
-	{
+	if ((infile = fopen(Name, "rb")) == NULL) {
 		fprintf(stderr, "can't open %s\n", Name);
 		return 0;
 	}
@@ -103,3 +102,52 @@ cairo_surface_t * JpegUtil::loadJpg(const char* Name){
 	return decodeJPEGIntoSurface(&cinfo);
 }
 
+
+cairo_surface_t * JpegUtil::loadJpgFromMemory(const char* buffer, size_t nbytes) {
+	struct jpeg_error_mgr jerr;
+	struct jpeg_decompress_struct cinfo;
+
+	cinfo.err = jpeg_std_error(&jerr);
+	jpeg_source_mgr src_mem;
+	jpeg_create_decompress(&cinfo);
+	JpegMemSrcMng::jpeg_mem_src(&cinfo, &src_mem, (void *)buffer, (long)nbytes);
+	jpeg_read_header(&cinfo, TRUE);
+	jpeg_start_decompress(&cinfo);
+
+	return decodeJPEGIntoSurface(&cinfo);
+}
+
+void JpegUtil::JpegMemSrcMng::mem_init_source(j_decompress_ptr cinfo) {
+}
+
+void JpegUtil::JpegMemSrcMng::mem_term_source(j_decompress_ptr cinfo) {
+}
+
+boolean JpegUtil::JpegMemSrcMng::mem_fill_input_buffer(j_decompress_ptr cinfo) {
+	ERREXIT( cinfo, JERR_INPUT_EOF );
+	return TRUE;
+}
+
+void JpegUtil::JpegMemSrcMng::mem_skip_input_data(j_decompress_ptr cinfo, long num_bytes) {
+    jpeg_source_mgr* src = (jpeg_source_mgr*)cinfo->src;
+
+    if (1 > num_bytes) { return; }
+
+	if (num_bytes < src->bytes_in_buffer) {
+		src->next_input_byte += (size_t)num_bytes;
+		src->bytes_in_buffer -= (size_t)num_bytes;
+	} else {
+		ERREXIT(cinfo, JERR_INPUT_EOF);
+	}
+}
+
+void JpegUtil::JpegMemSrcMng::jpeg_mem_src(j_decompress_ptr cinfo, jpeg_source_mgr * const src, void const * const buffer, long nbytes) {
+    src->init_source = mem_init_source;
+    src->fill_input_buffer = mem_fill_input_buffer;
+    src->skip_input_data = mem_skip_input_data;
+    src->resync_to_restart = jpeg_resync_to_restart;
+    src->term_source = mem_term_source;
+    src->bytes_in_buffer = nbytes;
+    src->next_input_byte = (JOCTET*)buffer;
+    cinfo->src = src;
+}
