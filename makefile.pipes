@@ -1,21 +1,21 @@
 APP = kosei-ad-creator
-CC = gcc
+CC = g++
 HADOOP_SRC_DIR = $(HADOOP_SRC)
 
  ifeq ($(shell uname),Darwin)
    OSARCH=osx
-   INCPATH += -I. -I/usr/include/cairo/ -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/pipes/api
+   INCPATH += -I. -I/usr/include/cairo/ -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/pipes/api -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/utils/api 
  else
    OSARCH=linux
-   INCPATH = -I/Library/Frameworks/SDL2.framework/Headers/ -I/usr/include/cairo/ -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/pipes/api
+   INCPATH = -I/Library/Frameworks/SDL2.framework/Headers/ -I/usr/include/cairo/ -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/pipes/api -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/utils/api 
  endif
 
  ifeq ($(OSARCH),osx)
-    CFLAGS = -Wall -c -g -std=c99 \
+    CFLAGS = -Wall -c -g -std=c++0x \
     	 `sdl-config --cflags` \
     	 `pkg-config --cflags cairo` $(INCPATH)
-    LDFLAGS = -O2 -g -Wall -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/pipes/api -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/utils/api -mmacosx-version-min=10.8   -lstdc++.6 -lSDL -ljpeg -framework OpenGL \
-              -lm -lpthread `pkg-config --libs cairo` $(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/target/native/libhadooppipes.a $(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/target/native/libhadooputils.a -lpthread -lcrypto -lssl
+    LDFLAGS = -mmacosx-version-min=10.8   -lSDL -ljpeg -framework OpenGL \
+              -lm -lpthread `pkg-config --libs cairo` $(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/target/native/libhadooppipes.a $(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/target/native/libhadooputils.a -lpthread -lcrypto -lssl -lc++
 else
     CFLAGS = -Wall -c -g -std=c99 \
     	 `sdl-config --cflags` \
@@ -29,13 +29,13 @@ else
 
 
 
-SRCS =  LayoutEngine.cpp JpegUtil.cpp BulkProcessor.cpp FileProcessor.cpp AdCreatorCLI.cpp WordCount.cpp
+SRCS =  LayoutEngine.cpp JpegUtil.cpp BulkProcessor.cpp FileProcessor.cpp WordCount.cpp
 
-OBJS = $(SRCS:.c=.o)
+OBJS = $(SRCS:.cpp=.o)
 
 all: $(APP)
 
-.c.o:
+.cpp.o:
 	$(CC) $(CFLAGS) -c $< -o $@
 
 # it is important that $(OBJS) stands _before_ $(LDFLAGS)
