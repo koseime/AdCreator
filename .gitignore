@@ -1,3 +1,6 @@
+*.o
+.DS_Store
+.settings
 kosei-ad-creator
 output/*.png
 .idea/

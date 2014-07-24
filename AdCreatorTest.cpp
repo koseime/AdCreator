@@ -1,6 +1,8 @@
 /*
  * hadoop pipes -Dhadoop.pipes.java.recordreader=true -Dhadoop.pipes.java.recordwriter=false -input test/input.seq -output output -inputformat org.apache.hadoop.mapred.SequenceFileInputFormat -program bin/ad-creator-test
  *
+  --LANCE"S WORKING (NOTE USING makefile.pipes)
+ * hadoop pipes -Dhadoop.pipes.java.recordreader=true -Dhadoop.pipes.java.recordwriter=true -input test/input-byteswritable.seq -output output9 -inputformat org.apache.hadoop.mapred.SequenceFileInputFormat -program bin/ad-creator-test
  */
 // .cpp
 #include "fstream"
@@ -23,6 +25,9 @@ public:
   // constructor: does nothing
   AdCreatorTestMapper( HadoopPipes::TaskContext& context ) {
 	  counter = 0;
+	  std::ofstream out("/tmp/DEBUG" + std::to_string(counter) + ".bin");
+          out << "CONSTRUCTOR...";
+          out.close();
   }
 
   // map function: receives a line, outputs (word,"1")
@@ -32,9 +37,12 @@ public:
     //--- get line of text ---
     string line = context.getInputValue();
 
-    std::ofstream out("output" + std::to_string(counter) + ".bin");
-    out << line;
-    out.close();
+    std::ofstream out("/tmp/output" + std::to_string(counter) + ".bin");
+                    out << line;
+                    out.close();
+
+    context.emit( "finished", HadoopUtils::toString( 1 ) );
+
 
   }
 };
@@ -47,15 +55,7 @@ public:
 
   // reduce function
   void reduce( HadoopPipes::ReduceContext& context ) {
-    int count = 0;
 
-    //--- get all tuples with the same key, and count their numbers ---
-    while ( context.nextValue() ) {
-      count += HadoopUtils::toInt( context.getInputValue() );
-    }
-
-    //--- emit (word, count) ---
-    context.emit(context.getInputKey(), HadoopUtils::toString( count ));
   }
 };
 
