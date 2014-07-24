@@ -1,10 +1,13 @@
 APP = ad-creator-test
 CC = g++
 HADOOP_SRC_DIR = $(HADOOP_SRC)
+ACPROTO = ../AdCreatorWorkflow/build/generated-sources-cpp/
+
 
  ifeq ($(shell uname),Darwin)
    OSARCH=osx
-   INCPATH += -I. -I/usr/include/cairo/ -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/pipes/api -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/utils/api 
+   INCPATH += -I. -I/usr/include/cairo/ -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/pipes/api \
+   -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/utils/api  -I/usr/include/protobuf -I$(ACPROTO)
  else
    OSARCH=linux
    INCPATH = -I/Library/Frameworks/SDL2.framework/Headers/ -I/usr/include/cairo/ -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/pipes/api -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/utils/api 
@@ -13,9 +16,15 @@ HADOOP_SRC_DIR = $(HADOOP_SRC)
  ifeq ($(OSARCH),osx)
     CFLAGS = -Wall -c -g -std=c++0x \
     	 `sdl-config --cflags` \
-    	 `pkg-config --cflags cairo` $(INCPATH)
+    	 `pkg-config --cflags cairo` \
+    	 `pkg-config --cflags protobuf` $(INCPATH)
     LDFLAGS = -mmacosx-version-min=10.8   -lSDL -ljpeg -framework OpenGL \
-              -lm -lpthread `pkg-config --libs cairo` $(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/target/native/libhadooppipes.a $(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/target/native/libhadooputils.a -lpthread -lcrypto -lssl -lc++
+              -lm -lpthread \
+              `pkg-config --libs cairo` \
+              `pkg-config --libs protobuf` \
+              $(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/target/native/libhadooppipes.a \
+              $(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/target/native/libhadooputils.a \
+              -lpthread -lcrypto -lssl -lc++
 else
     CFLAGS = -Wall -c -g -std=c99 \
     	 `sdl-config --cflags` \
@@ -30,10 +39,12 @@ else
 
 
 # SRCS =  LayoutEngine.cpp JpegUtil.cpp BulkProcessor.cpp FileProcessor.cpp WordCount.cpp
+PROTOSRCS = $(ACPROTO)/AdComponentsMessages.pb.cc
 SRCS =  AdCreatorTest.cpp
 
 
-OBJS = $(SRCS:.cpp=.o)
+PROTOOBJS = $(PROTOSRCS:.cc=.o)
+OBJS = $(SRCS:.cpp=.o) $(PROTOOBJS)
 
 all: $(APP)
 

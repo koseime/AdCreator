@@ -15,6 +15,8 @@
 #include "hadoop/Pipes.hh"
 #include "hadoop/TemplateFactory.hh"
 #include "hadoop/StringUtils.hh"
+#include "AdComponentsMessages.pb.h"
+
 
 using namespace std;
 
@@ -39,8 +41,23 @@ public:
 
     std::ofstream out("/tmp/output" + std::to_string(counter) + ".bin");
                     out << line;
-                    out.close();
+    out << "||||" << std::endl;
+    out << std::endl;
 
+    com::kosei::proto::AdComponents adComponents;
+    if (adComponents.ParseFromString(line) == false) {
+    	out << std::endl;
+    	out << " FAILED " << std::endl;
+    }
+   out << std::endl;
+   out << "DEBUG:" <<std::endl;
+   out << adComponents.DebugString() << std::endl;
+   out << "__________________" << std::endl;
+   out << adComponents.id() << std::endl;
+   out << "xxxxxxxxxx" << std::endl;
+
+
+    out.close();
     context.emit( "finished", HadoopUtils::toString( 1 ) );
 
 
