@@ -1,4 +1,4 @@
-APP = kosei-ad-creator
+APP = ad-creator-test
 CC = g++
 HADOOP_SRC_DIR = $(HADOOP_SRC)
 
@@ -29,7 +29,9 @@ else
 
 
 
-SRCS =  LayoutEngine.cpp JpegUtil.cpp BulkProcessor.cpp FileProcessor.cpp WordCount.cpp
+# SRCS =  LayoutEngine.cpp JpegUtil.cpp BulkProcessor.cpp FileProcessor.cpp WordCount.cpp
+SRCS =  AdCreatorTest.cpp
+
 
 OBJS = $(SRCS:.cpp=.o)
 
