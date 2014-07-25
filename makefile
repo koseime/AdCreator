@@ -17,23 +17,19 @@ export PKG_CONFIG_PATH=$(IMAGEMAGICK)/Magick++/lib/:$(IMAGEMAGICK)/wand:$(IMAGEM
 
  ifeq ($(OSARCH),osx)
     CFLAGS = -Wall -c -g -std=c++0x \
-    	 `sdl-config --cflags` \
-    	 `pkg-config --cflags cairo` \
     	 `pkg-config --cflags protobuf` \
     	 `Magick++-config --cxxflags --cppflags` \
     	  $(INCPATH)
-    LDFLAGS = -mmacosx-version-min=10.8 -lSDL -ljpeg -framework OpenGL \
+    LDFLAGS = -mmacosx-version-min=10.8  -ljpeg -framework OpenGL \
             `Magick++-config --ldflags --libs` \
-              -lm -lpthread `pkg-config --libs cairo` `pkg-config --libs protobuf` \
+              -lm -lpthread `pkg-config --libs protobuf` \
               -lpthread -lcrypto -lssl -lc++ \
               -ljpeg -lpng -lfreetype -lbz2 -lfontconfig \
               -lpthread -lcrypto -lssl -lc++                         
 else
     CFLAGS = -Wall -c -g -std=c99 \
-    	 `sdl-config --cflags` \
-    	 `pkg-config --cflags cairo` \
     	 `pkg-config --cflags protobuf` $(INCPATH)
-    LDFLAGS = -L /usr/lib64 -Wl,-Bstatic -lSDL -ljpeg \
+    LDFLAGS = -L /usr/lib64 -Wl,-Bstatic -ljpeg \
           -Wl,-Bdynamic -lGL -lGLU -lpthread -lcrypto -lssl \
           -lm -lpthread `pkg-config --libs cairo` `pkg-config --cflags protobuf`
  endif
@@ -41,7 +37,7 @@ else
 
 
 PROTOSRCS = $(ACPROTO)/AdComponentsMessages.pb.cc
-SRCS =  LayoutEngine.cpp JpegUtil.cpp BulkProcessor.cpp FileProcessor.cpp AdCreatorCLI.cpp
+SRCS =  ImageMagickLayoutEngine.cpp  BulkProcessor.cpp FileProcessor.cpp AdCreatorCLI.cpp
 
 PROTOOBJS = $(PROTOSRCS:.cc=.o)
 OBJS = $(SRCS:.cpp=.o) $(PROTOOBJS) 
