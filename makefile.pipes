@@ -6,39 +6,38 @@ ACPROTO = ../AdCreatorWorkflow/build/generated-sources-cpp/
 
  ifeq ($(shell uname),Darwin)
    OSARCH=osx
-   INCPATH += -I. -I/usr/include/cairo/ -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/pipes/api \
+   INCPATH += -I. -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/pipes/api \
    -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/utils/api  -I/usr/include/protobuf -I$(ACPROTO)
  else
    OSARCH=linux
-   INCPATH = -I/Library/Frameworks/SDL2.framework/Headers/ -I/usr/include/cairo/ -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/pipes/api -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/utils/api 
+   INCPATH = -I/Library/Frameworks/SDL2.framework/Headers/ \
+   -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/pipes/api \
+    -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/utils/api 
  endif
 
  ifeq ($(OSARCH),osx)
     CFLAGS = -Wall -c -g -std=c++0x \
-    	 `sdl-config --cflags` \
-    	 `pkg-config --cflags cairo` \
     	 `pkg-config --cflags protobuf` $(INCPATH)
-    LDFLAGS = -mmacosx-version-min=10.8   -lSDL -ljpeg -framework OpenGL \
+    LDFLAGS = -mmacosx-version-min=10.8  -ljpeg -framework OpenGL \
               -lm -lpthread \
-              `pkg-config --libs cairo` \
               `pkg-config --libs protobuf` \
               $(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/target/native/libhadooppipes.a \
               $(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/target/native/libhadooputils.a \
               -lpthread -lcrypto -lssl -lc++
 else
     CFLAGS = -Wall -c -g -std=c99 \
-    	 `sdl-config --cflags` \
-    	 `pkg-config --cflags cairo` $(INCPATH)
-    LDFLAGS = -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/pipes/api -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/utils/api -L /usr/lib64  \
+    	  $(INCPATH)
+    LDFLAGS = -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/pipes/api \
+    	-I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/utils/api -L /usr/lib64  \
             -Wl,-Bstatic -L $(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/target/native -lhadooppipes -lhadooputils -lSDL -ljpeg \
           -Wl,-Bdynamic -lGL -lGLU -lpthread -lcrypto -lssl \
-          -lm -lpthread `pkg-config --libs cairo`
+          -lm -lpthread
 
  endif
 
 
 
-# SRCS =  LayoutEngine.cpp JpegUtil.cpp BulkProcessor.cpp FileProcessor.cpp WordCount.cpp
+# SRCS =  ImageMagickLayoutEngine.cpp  BulkProcessor.cpp FileProcessor.cpp WordCount.cpp
 PROTOSRCS = $(ACPROTO)/AdComponentsMessages.pb.cc
 SRCS =  AdCreatorTest.cpp
 
