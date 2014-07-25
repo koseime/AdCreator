@@ -2,10 +2,14 @@ APP = kosei-ad-creator
 CC = g++
 
 ACPROTO = ../AdCreatorWorkflow/build/generated-sources-cpp/
+IMAGEMAGICK = /home/lanceriedel/tools/ImageMagick-6.8.9-5
+
+export PKG_CONFIG_PATH=$(IMAGEMAGICK)/Magick++/lib/:$(IMAGEMAGICK)/wand:$(IMAGEMAGICK)/magick
 
  ifeq ($(shell uname),Darwin)
    OSARCH=osx
-   INCPATH += -I. -I/usr/include/cairo/ -I/usr/include/protobuf -I$(ACPROTO)
+   INCPATH += -I. -I/usr/include/cairo/ -I/usr/include/protobuf -I$(ACPROTO) \
+    -I/usr/local/include/ImageMagick-6/magick  -I/usr/local/include/ImageMagick-6
  else
    OSARCH=linux
    INCPATH = -I/Library/Frameworks/SDL2.framework/Headers/ -I/usr/include/cairo/ -I/usr/include/protobuf -I$(ACPROTO)
@@ -15,9 +19,15 @@ ACPROTO = ../AdCreatorWorkflow/build/generated-sources-cpp/
     CFLAGS = -Wall -c -g -std=c++0x \
     	 `sdl-config --cflags` \
     	 `pkg-config --cflags cairo` \
-    	 `pkg-config --cflags protobuf` $(INCPATH)
+    	 `pkg-config --cflags protobuf` \
+    	 `Magick++-config --cxxflags --cppflags` \
+    	  $(INCPATH)
     LDFLAGS = -mmacosx-version-min=10.8 -lSDL -ljpeg -framework OpenGL \
-              -lm -lpthread `pkg-config --libs cairo` `pkg-config --libs protobuf` -lpthread -lcrypto -lssl -lc++
+            `Magick++-config --ldflags --libs` \
+              -lm -lpthread `pkg-config --libs cairo` `pkg-config --libs protobuf` \
+              -lpthread -lcrypto -lssl -lc++ \
+              -ljpeg -lpng -lfreetype -lbz2 -lfontconfig \
+              -lpthread -lcrypto -lssl -lc++                         
 else
     CFLAGS = -Wall -c -g -std=c99 \
     	 `sdl-config --cflags` \

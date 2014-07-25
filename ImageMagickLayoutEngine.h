@@ -5,22 +5,20 @@
  *      Author: lanceriedel
  */
 
-#ifndef LAYOUTENGINE_H_
-#define LAYOUTENGINE_H_
+#ifndef IMAGEMAGICKLAYOUTENGINE_H_
+#define IMAGEMAGICKLAYOUTENGINE_H_
 
-#include "JpegUtil.h"
 #include "AdComponentsMessages.pb.h"
 
 
-class LayoutEngine {
+class ImageMagickLayoutEngine {
 public:
-	LayoutEngine();
-	virtual ~LayoutEngine();
+	ImageMagickLayoutEngine();
+	virtual ~ImageMagickLayoutEngine();
 	int create(const com::kosei::proto::AdComponents* product_info, const char* ad_text, const char* output);
 	int create(const char* product_image_file, const char* ad_text, const char* output);
 
-private:
-	JpegUtil jpegUtil;
+
 };
 
-#endif /* LAYOUTENGINE_H_ */
+#endif /* IMAGEMAGICKLAYOUTENGINE_H_ */

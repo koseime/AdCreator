@@ -7,6 +7,8 @@
 
 #include "BulkProcessor.h"
 #include "Tokenizer.h"
+#include <iostream>
+
 
 BulkProcessor::BulkProcessor() {
 

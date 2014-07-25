@@ -14,7 +14,7 @@
 #include "Tokenizer.h"
 #include "ProcessorCommand.h"
 #include "FileProcessor.h"
-#include "LayoutEngine.h"
+#include "ImageMagickLayoutEngine.h"
 
 class BulkProcessor: public ProcessorCommand  {
 public:
@@ -35,7 +35,7 @@ private:
 	std::string _inputImageDir;
 	std::string* _line;
 	int _lineCount;
-	LayoutEngine layoutEngine;
+	ImageMagickLayoutEngine layoutEngine;
 };
 
 #endif /* BULKPROCESSOR_H_ */

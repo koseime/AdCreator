@@ -34,6 +34,17 @@ brew install cario
 Note: may ask you to install XQuartz: https://xquartz.macosforge.org
 
 
+Required for ImageMagick
+$wget http://www.imagemagick.org/download/ImageMagick.tar.gz ./
+$tar -xvzf ImageMagick.tar.gz 
+$cd ImageMagick-6.8.9-5/
+$./configure
+$make
+$sudo make install
+
+
+
+
 You will need to download the hadoop source for pipes to work:
 wget https://archive.apache.org/dist/hadoop/core/hadoop-2.2.0/hadoop-2.2.0-src.tar.gz
 

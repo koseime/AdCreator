@@ -8,7 +8,7 @@
 #include "AdCreatorCLI.h"
 #include <iostream>
 #include <getopt.h>
-#include "LayoutEngine.h"
+#include "ImageMagickLayoutEngine.h"
 #include "BulkProcessor.h"
 
 AdCreatorCLI::AdCreatorCLI() {
@@ -80,7 +80,7 @@ int main(int argc, char *argv[])
 		std::cout << "Create an ad from parts - single use: " << "image: " << prodimage << " text:" << adtext << std::endl;
 		//Load a few images from files
 
-		LayoutEngine engine;
+		ImageMagickLayoutEngine engine;
 		return engine.create(prodimage.c_str(),  adtext.c_str(),  adresult.c_str());
 	} else if (exectype.compare("bulk") == 0) {
 		std::cout << "Create an ad from parts - single use: " << "image: " << prodimage << " text:" << adtext << std::endl;
