@@ -30,7 +30,7 @@ ACPROTO = ../AdCreatorWorkflow/build/generated-sources-cpp/
 else
     CFLAGS = -Wall -c -g -std=c99 \
     LDFLAGS = -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/pipes/api -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/utils/api -L /usr/lib64  \
-            -Wl,-Bstatic -L $(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/target/native -lhadooppipes -lhadooputils -lSDL -ljpeg 
+            -Wl,-Bstatic -L $(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/target/native -lhadooppipes -lhadooputils -ljpeg 
              /usr/local/lib/libMagick++-6.Q16.a \
         	/usr/local/lib/libMagickWand-6.Q16.a \
     		/usr/local/lib/libMagickCore-6.Q16.a \

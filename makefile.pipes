@@ -7,20 +7,22 @@ ACPROTO = ../AdCreatorWorkflow/build/generated-sources-cpp/
  ifeq ($(shell uname),Darwin)
    OSARCH=osx
    INCPATH += -I. -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/pipes/api \
+   -I/usr/local/include/ImageMagick-6/magick  -I/usr/local/include/ImageMagick-6 \
    -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/utils/api  -I/usr/include/protobuf -I$(ACPROTO)
  else
    OSARCH=linux
-   INCPATH = -I/Library/Frameworks/SDL2.framework/Headers/ \
-   -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/pipes/api \
-    -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/utils/api 
+   INCPATH = -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/pipes/api \
+   -I/usr/local/include/ImageMagick-6/magick  -I/usr/local/include/ImageMagick-6 \
+    -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/utils/api   -I/usr/include/protobuf -I$(ACPROTO)
  endif
 
  ifeq ($(OSARCH),osx)
     CFLAGS = -Wall -c -g -std=c++0x \
     	 `pkg-config --cflags protobuf` $(INCPATH)
-    LDFLAGS = -mmacosx-version-min=10.8  -ljpeg -framework OpenGL \
+    LDFLAGS = -mmacosx-version-min=10.8  -ljpeg  \
               -lm -lpthread \
               `pkg-config --libs protobuf` \
+              `Magick++-config --ldflags --libs` \
               $(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/target/native/libhadooppipes.a \
               $(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/target/native/libhadooputils.a \
               -lpthread -lcrypto -lssl -lc++
@@ -29,10 +31,12 @@ else
     	  $(INCPATH)
     LDFLAGS = -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/pipes/api \
     	-I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/utils/api -L /usr/lib64  \
-            -Wl,-Bstatic -L $(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/target/native -lhadooppipes -lhadooputils -lSDL -ljpeg \
-          -Wl,-Bdynamic -lGL -lGLU -lpthread -lcrypto -lssl \
-          -lm -lpthread
-
+            -Wl,-Bstatic -L $(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/target/native -lhadooppipes -lhadooputils -ljpeg \
+            /usr/local/lib/libMagick++-6.Q16.a \
+        	/usr/local/lib/libMagickWand-6.Q16.a \
+    		/usr/local/lib/libMagickCore-6.Q16.a \
+          -Wl,-Bdynamic -lpthread -lcrypto -lssl \       
+          	-lm -lpthread
  endif
 
 

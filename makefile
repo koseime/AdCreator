@@ -8,11 +8,13 @@ export PKG_CONFIG_PATH=$(IMAGEMAGICK)/Magick++/lib/:$(IMAGEMAGICK)/wand:$(IMAGEM
 
  ifeq ($(shell uname),Darwin)
    OSARCH=osx
-   INCPATH += -I. -I/usr/include/cairo/ -I/usr/include/protobuf -I$(ACPROTO) \
+   INCPATH += -I. -I/usr/include/protobuf -I$(ACPROTO) \
     -I/usr/local/include/ImageMagick-6/magick  -I/usr/local/include/ImageMagick-6
  else
    OSARCH=linux
-   INCPATH = -I/Library/Frameworks/SDL2.framework/Headers/ -I/usr/include/cairo/ -I/usr/include/protobuf -I$(ACPROTO)
+   INCPATH = -I. -I/usr/include/protobuf -I$(ACPROTO)
+     -I/usr/local/include/ImageMagick-6/magick  -I/usr/local/include/ImageMagick-6
+   
  endif
 
  ifeq ($(OSARCH),osx)
@@ -20,7 +22,7 @@ export PKG_CONFIG_PATH=$(IMAGEMAGICK)/Magick++/lib/:$(IMAGEMAGICK)/wand:$(IMAGEM
     	 `pkg-config --cflags protobuf` \
     	 `Magick++-config --cxxflags --cppflags` \
     	  $(INCPATH)
-    LDFLAGS = -mmacosx-version-min=10.8  -ljpeg -framework OpenGL \
+    LDFLAGS = -mmacosx-version-min=10.8  -ljpeg \
             `Magick++-config --ldflags --libs` \
               -lm -lpthread `pkg-config --libs protobuf` \
               -lpthread -lcrypto -lssl -lc++ \
@@ -30,8 +32,11 @@ else
     CFLAGS = -Wall -c -g -std=c99 \
     	 `pkg-config --cflags protobuf` $(INCPATH)
     LDFLAGS = -L /usr/lib64 -Wl,-Bstatic -ljpeg \
+    		/usr/local/lib/libMagick++-6.Q16.a \
+        	/usr/local/lib/libMagickWand-6.Q16.a \
+    		/usr/local/lib/libMagickCore-6.Q16.a \
           -Wl,-Bdynamic -lGL -lGLU -lpthread -lcrypto -lssl \
-          -lm -lpthread `pkg-config --libs cairo` `pkg-config --cflags protobuf`
+          	-lm -lpthread  `pkg-config --cflags protobuf`
  endif
 
 
