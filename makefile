@@ -2,9 +2,6 @@ APP = kosei-ad-creator
 CC = g++
 
 ACPROTO = ../AdCreatorWorkflow/build/generated-sources-cpp/
-IMAGEMAGICK = /home/lanceriedel/tools/ImageMagick-6.8.9-5
-
-export PKG_CONFIG_PATH=$(IMAGEMAGICK)/Magick++/lib/:$(IMAGEMAGICK)/wand:$(IMAGEMAGICK)/magick
 
  ifeq ($(shell uname),Darwin)
    OSARCH=osx
@@ -12,7 +9,7 @@ export PKG_CONFIG_PATH=$(IMAGEMAGICK)/Magick++/lib/:$(IMAGEMAGICK)/wand:$(IMAGEM
     -I/usr/local/include/ImageMagick-6/magick  -I/usr/local/include/ImageMagick-6
  else
    OSARCH=linux
-   INCPATH = -I. -I/usr/include/protobuf -I$(ACPROTO)
+   INCPATH = -I. -I/usr/include/protobuf -I$(ACPROTO) \
      -I/usr/local/include/ImageMagick-6/magick  -I/usr/local/include/ImageMagick-6
    
  endif
