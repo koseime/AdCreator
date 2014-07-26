@@ -58,12 +58,12 @@ int ImageMagickLayoutEngine::create(const com::kosei::proto::AdComponents* produ
 
 	//copy product image bytes NOTE: may not need to do this anymore??
 	const std::string &image_product_string = product_info->productjpg();
-	char *image_product = new char [image_product_string.length()];
-	std::memcpy(image_product, image_product_string.c_str(), image_product_string.length());
+//	char *image_product = new char [image_product_string.length()];
+//	std::memcpy(image_product, image_product_string.c_str(), image_product_string.length());
 
-	Blob blob(image_product, image_product_string.length());
+	Blob blob(image_product_string.c_str(), image_product_string.length());
 	Image product_image( blob );
-	delete[] image_product;
+	//delete[] image_product;
 
 	///Create Background image
 	Image background_image;
