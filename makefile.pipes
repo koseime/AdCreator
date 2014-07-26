@@ -2,6 +2,7 @@ APP = ad-creator-test
 CC = g++
 HADOOP_SRC_DIR = $(HADOOP_SRC)
 ACPROTO = ../AdCreatorWorkflow/build/generated-sources-cpp/
+export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig
 
 
  ifeq ($(shell uname),Darwin)
@@ -27,7 +28,7 @@ ACPROTO = ../AdCreatorWorkflow/build/generated-sources-cpp/
               $(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/target/native/libhadooputils.a \
               -lpthread -lcrypto -lssl -lc++
 else
-    CFLAGS = -Wall -c -g -std=c99 \
+    CFLAGS = -Wall -c -g \
     	  $(INCPATH)
     LDFLAGS = -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/pipes/api \
     	-I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/utils/api -L /usr/lib64  \

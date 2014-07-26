@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
 {
 	std::string input, inputimagedir, outputdir, exectype, prodimage, adtext, adresult;
 	int opt;
-	while ((opt = getopt(argc, argv, "x:i:o:p:d:r:g:h")) != EOF) {
+	while ((opt = getopt(argc, argv, "x:i:o:p:d:r:g:h")) != -1) {
 		switch (opt) {
 		case 'x':
 			exectype = optarg;
