@@ -2,7 +2,7 @@
  * hadoop pipes -Dhadoop.pipes.java.recordreader=true -Dhadoop.pipes.java.recordwriter=false -input test/input.seq -output output -inputformat org.apache.hadoop.mapred.SequenceFileInputFormat -program bin/ad-creator-test
  *
   --LANCE"S WORKING (NOTE USING makefile.pipes)
- * hadoop pipes -Dhadoop.pipes.java.recordreader=true -Dhadoop.pipes.java.recordwriter=true -input test/input-byteswritable.seq -output output9 -inputformat org.apache.hadoop.mapred.SequenceFileInputFormat -program bin/ad-creator-test
+ * hadoop pipes -Dhadoop.pipes.java.recordreader=true -Dhadoop.pipes.java.recordwriter=true -files images/320x50Border.png -input test/input-byteswritable.seq -output output9 -inputformat org.apache.hadoop.mapred.SequenceFileInputFormat -program bin/ad-creator-test
  */
 // .cpp
 #include "fstream"
@@ -63,9 +63,17 @@ public:
 
 
     out.close();
-    context.emit( "finished", HadoopUtils::toString( 1 ) );
 
+    string out_image_path = "/tmp/out_image_" + std::to_string(counter) + ".png";
+    LayoutEngine engine;
+    engine.create(&adComponents,  "test description",  out_image_path.c_str());
 
+    int size = adComponents.ByteSize();
+    char *buffer = new char[size];
+    adComponents.SerializeToArray(buffer, size);
+    std::string empty = "";
+    context.emit(context.getInputKey(), std::string(buffer, size));
+    delete[] buffer;
   }
 };
 

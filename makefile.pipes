@@ -52,6 +52,9 @@ OBJS = $(SRCS:.cpp=.o) $(PROTOOBJS)
 
 all: $(APP)
 
+.cc.o:
+	$(CC) $(CFLAGS) -c $< -o $@
+	
 .cpp.o:
 	$(CC) $(CFLAGS) -c $< -o $@
 
