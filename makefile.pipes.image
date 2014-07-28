@@ -4,8 +4,6 @@ HADOOP_SRC_DIR = $(HADOOP_SRC)
 ACPROTO=../AdCreatorWorkflow/build/generated-sources-cpp/
 export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig
 
-
-
  ifeq ($(shell uname),Darwin)
    OSARCH=osx
    INCPATH += -I$(ACPROTO) -I. -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/pipes/api \
@@ -14,8 +12,8 @@ export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig
  else
    OSARCH=linux
    INCPATH = -I$(ACPROTO) -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/pipes/api \
-   -I/usr/local/include/ImageMagick-6/magick  -I/usr/local/include/ImageMagick-6 \
-    -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/utils/api   -I/usr/include/protobuf 
+   -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/utils/api   -I/usr/include/protobuf \
+   -I/usr/local/include/ImageMagick-6/magick  -I/usr/local/include/ImageMagick-6
  endif
 
  ifeq ($(OSARCH),osx)
@@ -41,7 +39,7 @@ else
     		-L/usr/local/lib -lprotobuf \
           -Wl,-Bdynamic -lpthread -lcrypto -lssl \
            -lm -lpthread -lpng -lX11 -lgomp \
-           -lfreetype -lbz2 -lfontconfig -lXext \
+           -lfreetype -lbz2 -lfontconfig -lXext
     		
  endif
 

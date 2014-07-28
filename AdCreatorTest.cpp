@@ -15,6 +15,7 @@
 #include "hadoop/Pipes.hh"
 #include "hadoop/TemplateFactory.hh"
 #include "hadoop/StringUtils.hh"
+#include "ImageMagickLayoutEngine.h"
 #include "AdComponentsMessages.pb.h"
 
 
@@ -55,6 +56,10 @@ public:
    out << "__________________" << std::endl;
    out << adComponents.id() << std::endl;
    out << "xxxxxxxxxx" << std::endl;
+
+   ImageMagickLayoutEngine engine;
+   const char* output = NULL;
+   engine.create((const com::kosei::proto::AdComponents*)&adComponents, (const char*) adComponents.description().c_str (),  output);
 
 
     out.close();

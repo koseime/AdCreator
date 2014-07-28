@@ -44,7 +44,7 @@ else
 
 # SRCS =  ImageMagickLayoutEngine.cpp  BulkProcessor.cpp FileProcessor.cpp WordCount.cpp
 PROTOSRCS = $(ACPROTO)/AdComponentsMessages.pb.cc
-SRCS =  AdCreatorTest.cpp
+SRCS =  ImageMagickLayoutEngine.cpp AdCreatorTest.cpp
 
 
 PROTOOBJS = $(PROTOSRCS:.cc=.o)
