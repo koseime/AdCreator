@@ -64,10 +64,6 @@ public:
 
     out.close();
 
-    string out_image_path = "/tmp/out_image_" + std::to_string(counter) + ".png";
-    LayoutEngine engine;
-    engine.create(&adComponents,  "test description",  out_image_path.c_str());
-
     int size = adComponents.ByteSize();
     char *buffer = new char[size];
     adComponents.SerializeToArray(buffer, size);
