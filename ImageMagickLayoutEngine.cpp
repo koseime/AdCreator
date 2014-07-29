@@ -88,7 +88,7 @@ int ImageMagickLayoutEngine::create(const com::kosei::proto::AdComponents* produ
 
 	///Create Background image
 	Image background_image;
-	background_image.read("320x50Border.png");
+	background_image.read("images/320x50Border.png");
 
 
 
