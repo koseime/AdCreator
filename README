@@ -16,10 +16,10 @@ options:
 
 
 example single use:
-./kosei-ad-creator -x single -p ./images/vacuum1.jpg -d "Here is a jpg" -r output/out-single.png
+./ad-creator-client -x single -p ./images/vacuum1.jpg -d "Here is a jpg" -r output/out-single.png
 
 example bulk use:
-./kosei-ad-creator -x bulk -o ./output -i ./samples/sample.tsv -g ./images
+./ad-creator-client -x bulk -o ./output -i ./samples/sample.tsv -g ./images
 
 
 Required libraries (linux):
