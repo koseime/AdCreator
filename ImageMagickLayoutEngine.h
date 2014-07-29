@@ -17,7 +17,7 @@ public:
 	virtual ~ImageMagickLayoutEngine();
 	int create(const com::kosei::proto::AdComponents* product_info, const char* ad_text, const char* output);
 	int create(const char* product_image_file, const char* ad_text, const char* output);
-
+	char *createToBuffer(const com::kosei::proto::AdComponents* product_info, const char* ad_text, size_t *length);
 
 };
 

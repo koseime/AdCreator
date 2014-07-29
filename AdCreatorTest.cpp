@@ -50,19 +50,19 @@ public:
     	out << std::endl;
     	out << " FAILED " << std::endl;
     }
-   out << std::endl;
-   out << "DEBUG:" <<std::endl;
-   out << adComponents.DebugString() << std::endl;
-   out << "__________________" << std::endl;
-   out << adComponents.id() << std::endl;
-   out << "xxxxxxxxxx" << std::endl;
-
-   ImageMagickLayoutEngine engine;
-   const char* output = NULL;
-   engine.create((const com::kosei::proto::AdComponents*)&adComponents, (const char*) adComponents.description().c_str (),  output);
-
-
+    out << std::endl;
+    out << "DEBUG:" <<std::endl;
+    out << adComponents.DebugString() << std::endl;
+    out << "__________________" << std::endl;
+    out << adComponents.id() << std::endl;
+    out << "xxxxxxxxxx" << std::endl;
     out.close();
+
+    ImageMagickLayoutEngine engine;
+    size_t output_image_size;
+    char* output_image = engine.createToBuffer((const com::kosei::proto::AdComponents*)&adComponents, (const char*) adComponents.description().c_str (), &output_image_size);
+    adComponents.set_generatedjpgad((void *)output_image, output_image_size);
+    delete[] output_image;
 
     int size = adComponents.ByteSize();
     char *buffer = new char[size];
