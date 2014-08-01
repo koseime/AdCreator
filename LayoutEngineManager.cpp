@@ -55,29 +55,47 @@ int LayoutEngineManager::importImagesAndLayouts(const string &path) {
 	archive_read_support_format_all(a);
 
 	FILE *fin = fopen(path.c_str(), "r");
-	if (fin == NULL) { return -1; }
+	if (fin == NULL) {
+		cerr << path + " not found";
+		return -1;
+	}
 
 	r = archive_read_open_FILE(a, fin);
-	if (r != ARCHIVE_OK) { return -1; }
+	if (r != ARCHIVE_OK) {
+		cerr << "Error reading " + path;
+		return -1;
+	}
 
+	bool manFileFound = false;
 	while (archive_read_next_header(a, &entry) == ARCHIVE_OK) {
 		const char* entry_pathname = archive_entry_pathname(entry);
-
 		size_t entry_size = archive_entry_size(entry);
 
 		char *fileContents = new char[entry_size];
-		archive_read_data(a, fileContents, entry_size);
+		int retVal = archive_read_data(a, fileContents, entry_size);
 
-		if (strcmp(entry_pathname, "manifest.properties") == 0) {
+		if (retVal <= 0) {
+			cerr << "Error reading " + string(entry_pathname) + " from " + path;
+		} else if (strcmp(entry_pathname, "manifest.properties") == 0) {
+			manFileFound = true;
 			importAdLayouts(fileContents, entry_size);
 		} else {
 			idToBlob[string(entry_pathname)].update(fileContents, entry_size);
 		}
+
 		delete[] fileContents;
 	}
 
+	if (!manFileFound) {
+		cerr << "manifest.properties not found";
+		return -1;
+	}
+
 	r = archive_read_free(a);
-	if (r != ARCHIVE_OK) { return -1; }
+	if (r != ARCHIVE_OK) {
+		cerr << "Error reading " + path;
+		return -1;
+	}
 
 	return 0;
 }

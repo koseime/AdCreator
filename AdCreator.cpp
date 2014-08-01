@@ -14,6 +14,7 @@
 
 // .cpp
 #include <string>
+#include <iostream>
 
 #include "hadoop/Pipes.hh"
 #include "hadoop/TemplateFactory.hh"
@@ -32,7 +33,11 @@ public:
 	// TODO: initializing in constructor might not be correct
 	// constructor: does nothing
 	AdCreatorMapper(HadoopPipes::TaskContext& context) {
-		engine.importResources(context.getJobConf()->get("layout.resource.tar"));
+		int retVal = engine.importResources(context.getJobConf()->get("layout.resource.tar"));
+		if (retVal != 0) {
+			cerr << "Error importing images and layouts";
+			exit(-1);
+		}
 	}
 
 	// map function
@@ -42,8 +47,7 @@ public:
 		com::kosei::proto::AdComponents adComponents;
 		adComponents.ParseFromString(line);
 
-		// Initialize ImageMagickLayoutEngine
-
+		// Generate Ads
 		vector<pair<string, Blob> > generatedJpgAds;
 		engine.createFromLayouts((const com::kosei::proto::AdComponents*)&adComponents,
 				generatedJpgAds);

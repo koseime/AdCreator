@@ -68,7 +68,12 @@ void ImageMagickLayoutEngine::createFromLayouts(const com::kosei::proto::AdCompo
 		Image product_image(blob);
 
 		// Create Background image
-		Image background_image(*(layoutEngineManager.getImageBlob(layoutEngineManager.adLayouts[i].background_filename)));
+		Blob *background_blob = layoutEngineManager.getImageBlob(layoutEngineManager.adLayouts[i].background_filename);
+		if (background_blob == NULL) {
+			cerr << "Error loading background image " + layoutEngineManager.adLayouts[i].background_filename;
+			continue;
+		}
+		Image background_image(*background_blob);
 
 		// Scale the product image
 		Geometry sz = product_image.size();
