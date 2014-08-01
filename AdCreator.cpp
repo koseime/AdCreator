@@ -27,8 +27,12 @@ using namespace Magick;
 
 class AdCreatorMapper : public HadoopPipes::Mapper {
 public:
+	ImageMagickLayoutEngine engine;
+
+	// TODO: initializing in constructor might not be correct
 	// constructor: does nothing
 	AdCreatorMapper(HadoopPipes::TaskContext& context) {
+		engine.importResources(context.getJobConf()->get("layout.resource.tar"));
 	}
 
 	// map function
@@ -39,8 +43,6 @@ public:
 		adComponents.ParseFromString(line);
 
 		// Initialize ImageMagickLayoutEngine
-		ImageMagickLayoutEngine engine;
-		engine.importResources(context.getJobConf()->get("layout.resource.tar"));
 
 		vector<pair<string, Blob> > generatedJpgAds;
 		engine.createFromLayouts((const com::kosei::proto::AdComponents*)&adComponents,
