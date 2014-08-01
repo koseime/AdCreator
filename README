@@ -33,6 +33,13 @@ brew install SDL
 brew install cario
 Note: may ask you to install XQuartz: https://xquartz.macosforge.org
 
+Required for libarchive
+wget http://www.libarchive.org/downloads/libarchive-3.1.2.tar.gz
+tar -xvzf libarchive-3.1.2.tar.gz
+cd libarchive-3.1.2
+./configure --without-xml2 --without-lzo2 --without-lzma --without-lzmadec --without-iconv --without-libiconv-prefix --without-nettle --without-openssl --without-expat
+make
+make install
 
 Required for ImageMagick
 $wget http://www.imagemagick.org/download/ImageMagick.tar.gz ./
@@ -56,6 +63,5 @@ To make in eclipse, you will need to set a couple of env variables:
 Project->Properties->C/C++ Build/Environment ->
 	PATH   $PATH:/usr/local/bin     //NOTE: this is to be able to find the sdl-config  and pkg-config execs for the build
 	HADOOP_SRC   <path to the untarred hadoop-2.2.0-src directory from above>
-
 
 

@@ -10,7 +10,9 @@ export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig
    OSARCH=osx
    INCPATH += -I. -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/pipes/api \
    -I/usr/local/include/ImageMagick-6/magick  -I/usr/local/include/ImageMagick-6 \
-   -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/utils/api  -I/usr/include/protobuf -I$(ACPROTO)
+   -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/utils/api \
+   -I/usr/local/include \
+   -I/usr/include/protobuf -I$(ACPROTO)
  else
    OSARCH=linux
    INCPATH = -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/pipes/api \
@@ -27,6 +29,7 @@ export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig
               `Magick++-config --ldflags --libs` \
               $(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/target/native/libhadooppipes.a \
               $(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/target/native/libhadooputils.a \
+              /usr/local/lib/libarchive.a -lz -lbz2 \
               -lpthread -lcrypto -lssl -lc++
 else
     CFLAGS = -Wall -c -g \
@@ -44,8 +47,8 @@ else
 
 
 PROTOSRCS = $(ACPROTO)/AdComponentsMessages.pb.cc
-SRCS =  ImageMagickLayoutEngine.cpp AdCreator.cpp
-CLISRCS = ImageMagickLayoutEngine.cpp BulkProcessor.cpp FileProcessor.cpp AdCreatorCLI.cpp
+SRCS =  ImageMagickLayoutEngine.cpp LayoutEngineManager.cpp AdCreator.cpp
+CLISRCS = ImageMagickLayoutEngine.cpp LayoutEngineManager.cpp BulkProcessor.cpp FileProcessor.cpp AdCreatorCLI.cpp
 
 PROTOOBJS = $(PROTOSRCS:.cc=.o)
 OBJS = $(SRCS:.cpp=.o) $(PROTOOBJS)

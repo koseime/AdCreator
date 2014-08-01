@@ -17,11 +17,13 @@
 
 #include "hadoop/Pipes.hh"
 #include "hadoop/TemplateFactory.hh"
+#include "Magick++.h"
 
 #include "ImageMagickLayoutEngine.h"
 #include "AdComponentsMessages.pb.h"
 
 using namespace std;
+using namespace Magick;
 
 class AdCreatorMapper : public HadoopPipes::Mapper {
 public:
@@ -36,16 +38,20 @@ public:
 		com::kosei::proto::AdComponents adComponents;
 		adComponents.ParseFromString(line);
 
-		// Generate Ad
+		// Initialize ImageMagickLayoutEngine
 		ImageMagickLayoutEngine engine;
-		size_t output_image_size;
-		char* output_image = engine.createToBuffer(
-				(const com::kosei::proto::AdComponents*)&adComponents,
-				(const char*)adComponents.description().c_str(),
-				&output_image_size);
+		engine.importResources(context.getJobConf()->get("layout.resource.tar"));
 
-		adComponents.set_generatedjpgad((void *)output_image, output_image_size);
-		delete[] output_image;
+		vector<pair<string, Blob> > generatedJpgAds;
+		engine.createFromLayouts((const com::kosei::proto::AdComponents*)&adComponents,
+				generatedJpgAds);
+
+		// Add to AdComponents protobuf
+		for (int i = 0; i < generatedJpgAds.size(); i++) {
+			com::kosei::proto::AdComponents_Ad* ad = adComponents.add_generatedads();
+			ad->set_adjpg(generatedJpgAds[i].second.data(), generatedJpgAds[i].second.length());
+			ad->set_layoutname(generatedJpgAds[i].first);
+		}
 
 		// Serialize and write output
 		int size = adComponents.ByteSize();
