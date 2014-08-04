@@ -21,6 +21,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <wand/magick_wand.h>
+
 #include "AdComponentsMessages.pb.h"
 #include "LayoutEngineManager.h"
 #include <Magick++.h>
@@ -60,17 +62,19 @@ int ImageMagickLayoutEngine::create(const char* product_image_file, const char* 
 }
 
 void ImageMagickLayoutEngine::createFromLayouts(const com::kosei::proto::AdComponents* product_info, vector<pair<string, Blob> > &generatedAds) {
-	generatedAds.reserve(layoutEngineManager.adLayouts.size());
-	for (int i = 0; i < layoutEngineManager.adLayouts.size(); i++) {
+	vector<LayoutEngineManager::AdLayoutEntry> adLayouts;
+	layoutEngineManager.getAdLayouts(adLayouts);
+	generatedAds.reserve(adLayouts.size());
+	for (int i = 0; i < adLayouts.size(); i++) {
 		// Create product image
 		const std::string &image_product_string = product_info->productjpg();
 		Blob blob(image_product_string.c_str(), image_product_string.length());
 		Image product_image(blob);
 
 		// Create Background image
-		Blob *background_blob = layoutEngineManager.getImageBlob(layoutEngineManager.adLayouts[i].background_filename);
+		Blob *background_blob = layoutEngineManager.getImageBlob(adLayouts[i].getBackgroundFilename());
 		if (background_blob == NULL) {
-			cerr << "Error loading background image " + layoutEngineManager.adLayouts[i].background_filename;
+			cerr << "Error loading background image " + adLayouts[i].getBackgroundFilename();
 			continue;
 		}
 		Image background_image(*background_blob);
@@ -88,7 +92,7 @@ void ImageMagickLayoutEngine::createFromLayouts(const com::kosei::proto::AdCompo
 		// Write output
 		generatedAds.push_back(pair<string, Blob>());
 		int last = generatedAds.size() - 1;
-		generatedAds[last].first = layoutEngineManager.adLayouts[i].id;
+		generatedAds[last].first = adLayouts[i].getId();
 		background_image.write(&generatedAds[last].second);
 	}
 }
@@ -119,38 +123,76 @@ char *ImageMagickLayoutEngine::createToBuffer(const com::kosei::proto::AdCompone
 	return output_buffer;
 }
 
-int ImageMagickLayoutEngine::create(const com::kosei::proto::AdComponents* product_info, const char* ad_text, const char* output) {
+double computeScale(double size, double height, double width) {
+	return size / max(height, width);
+}
 
+void sscaleImage(Image *image, int size) {
+	Geometry imageSize = image->size();
+	double scale = computeScale((double)size, (double)imageSize.height(), (double)imageSize.width());
+	int newWidth = floor((double)imageSize.width() * scale + 0.5);
+	int newHeight = floor((double)imageSize.height() * scale + 0.5);
+
+	image->scale(Geometry(newWidth, newHeight));
+	image->extent(Geometry(size, size), CenterGravity);
+}
+
+int ImageMagickLayoutEngine::create(const com::kosei::proto::AdComponents* product_info, const char* ad_text, const char* output) {
+	// Create Product image
 	const std::string &image_product_string = product_info->productjpg();
 	Blob blob(image_product_string.c_str(), image_product_string.length());
-	Image product_image( blob );
+	Image productImage(blob);
 
-	///Create Background image
-	Image background_image;
-	background_image.read("images/320x50Border.png");
+	// Create Background image
+	Image backgroundImage("320x50", "white");
+	//backgroundImage.read("images/320x50Border.png");
 
+	// Create Logo image
+	Image logoImage;
+	logoImage.read("images/a.png");
 
+	// Scale and composite the product image
+	sscaleImage(&productImage, 42);
+	backgroundImage.composite(productImage, 4, 4, OverCompositeOp);
 
-	//Scale the product image
-	Geometry sz = product_image.size();
-	int scle = (int)( ((double) 44/(double)sz.height() ) * 100);
-	std::ostringstream s;
-	s << scle ;
-	product_image.scale( Geometry(s.str()) );
+	// Scale and composite the logo image
+	sscaleImage(&logoImage, 50);
+	backgroundImage.composite(logoImage, NorthEastGravity, OverCompositeOp);
 
-	//Test overlay/composite
-	background_image.composite(product_image, 3, 3,OverCompositeOp);
+	// Add title and description
+	/*MagickCore::MagickWand *mw = NULL;
+	size_t width,height;
 
+	MagickCore::MagickWandGenesis();
+	mw = MagickCore::NewMagickWand();
 
-//
-//	/* Draw some text */
-//	cairo_select_font_face (cr, "sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL);
-//	cairo_set_font_size (cr, 10);
-//	cairo_set_source_rgb(cr, 0, 0, 0);
-//	cairo_move_to (cr, 80, 20);
-//	cairo_show_text (cr, ad_text);
+	MagickCore::MagickSetSize(mw,200,30);
+	MagickCore::MagickSetFont(mw,"@/Users/chantat/kosei/AdCreator/6457.ttf");
+	MagickCore::MagickSetOption(mw,"fill","red");
+	MagickCore::MagickSetOption(mw,"background","white");
+	MagickCore::MagickSetOption(mw,"weight","Bold");
 
-	background_image.write(output);
+	MagickCore::MagickSetGravity(mw,CenterGravity);
+	MagickCore::MagickReadImage(mw,"caption:jelly");
+	    	MagickCore::MagickWriteImage(mw,"caption2.gif");
+		    if(mw)DestroyMagickWand(mw);
+*/
+
+	//backgroundImage.boxColor("green");
+	list<Drawable> textDrawList;
+	textDrawList.push_back(DrawableFont("@/Users/chantat/kosei/AdCreator/6457.ttf", NormalStyle, 600, NormalStretch));
+	textDrawList.push_back(DrawablePointSize(20));
+	textDrawList.push_back(DrawableText(60, 23,"Headline goes here"));
+	backgroundImage.draw(textDrawList);
+
+	textDrawList.clear();
+	textDrawList.push_back(DrawableFont("@/Users/chantat/kosei/AdCreator/6457.ttf", NormalStyle, 400, NormalStretch));
+	textDrawList.push_back(DrawablePointSize(12));
+	textDrawList.push_back(DrawableText(60, 42,ad_text));
+	backgroundImage.draw(textDrawList);
+	//backgroundImage.annotate(string(ad_text), Geometry(200, 20, 60, 28));
+
+	backgroundImage.write(output);
 
 	return 0;
 }

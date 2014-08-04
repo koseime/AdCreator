@@ -100,6 +100,14 @@ int LayoutEngineManager::importImagesAndLayouts(const string &path) {
 	return 0;
 }
 
+void LayoutEngineManager::getAdLayouts(vector<AdLayoutEntry> &_adLayouts) {
+	_adLayouts.clear();
+	_adLayouts.reserve(_adLayouts.size());
+	for (int i = 0; i < adLayouts.size(); i++) {
+		_adLayouts.push_back(adLayouts[i]);
+	}
+}
+
 Blob* LayoutEngineManager::getImageBlob(const string &filename) {
 	map<string, Blob>::iterator it = idToBlob.find(filename);
 	if (it == idToBlob.end()) { return NULL; }
