@@ -13,20 +13,17 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include <stdio.h>
+#include <cstdio>
 #include <sstream>
 #include <string>
 #include <cstring>
-#include <assert.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
 
-#include <wand/magick_wand.h>
+#include "magick/MagickCore.h"
+#include "Magick++.h"
 
 #include "AdComponentsMessages.pb.h"
 #include "LayoutEngineManager.h"
-#include <Magick++.h>
-
 #include "AdLayoutEntry.h"
 
 using namespace std;
