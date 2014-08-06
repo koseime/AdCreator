@@ -19,10 +19,11 @@ BulkProcessor::~BulkProcessor() {
 }
 
 void BulkProcessor::start(std::string const& input,
-		std::string const& resultOutputDir,  std::string const& inputImageDir) {
+		std::string const& resultOutputDir, std::string const& inputImageDir, std::string const& resourceDir) {
 	std::cout << "STARTING TO PROCESS..." << std::endl;
 	_outputDir = resultOutputDir;
 	_inputImageDir =  inputImageDir;
+	layoutEngine.importResources(resourceDir);
 
 	process(input);
 
@@ -31,7 +32,7 @@ void BulkProcessor::start(std::string const& input,
 
 }
 
-void BulkProcessor::parseline(std::string& line, std::string& id, std::string& productPic, std::string& productDescription) {
+void BulkProcessor::parseline(std::string& line, std::string& id, std::string& productPic, std::string& productTitle, std::string& productCopy) {
 	if (line.size() < 2) {
 		return;
 	}
@@ -43,7 +44,8 @@ void BulkProcessor::parseline(std::string& line, std::string& id, std::string& p
 	if (!parsedFields.empty()) {
 		id = parsedFields[0].data();
 		productPic = _inputImageDir + "/" + parsedFields[1].data();
-		productDescription = parsedFields[2].data();
+		productTitle = parsedFields[2].data();
+		productCopy = parsedFields[3].data();
 	}
 }
 
@@ -51,16 +53,17 @@ void BulkProcessor::parseline(std::string& line, std::string& id, std::string& p
 
 void BulkProcessor::invoke() {
 	std::string productPic;
-	std::string productDescription;
+	std::string productTitle;
+	std::string productCopy;
 	std::string id;
 
 	if (_line == NULL || _line->size() < 2)
 		return;
 
-	parseline(*_line, id, productPic, productDescription);
+	parseline(*_line, id, productPic, productTitle, productCopy);
 	std::string output = _outputDir + "/" + id + ".png";
 
-	layoutEngine.create((const char*) productPic.c_str(),  productDescription.c_str(),  output.c_str());
+	layoutEngine.create((const char*) productPic.c_str(),  productTitle.c_str(), productCopy.c_str(),  output.c_str());
 
 }
 
@@ -75,7 +78,6 @@ void BulkProcessor::process(std::string const& inputFile) {
 void BulkProcessor::setLine(std::string* line, int lineCount) {
 	_line = line;
 	_lineCount = lineCount;
-
 }
 
 

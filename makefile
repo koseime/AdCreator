@@ -47,8 +47,8 @@ else
 
 
 PROTOSRCS = $(ACPROTO)/AdComponentsMessages.pb.cc
-SRCS =  ImageMagickLayoutEngine.cpp LayoutEngineManager.cpp AdCreator.cpp
-CLISRCS = ImageMagickLayoutEngine.cpp LayoutEngineManager.cpp BulkProcessor.cpp FileProcessor.cpp AdCreatorCLI.cpp
+SRCS =  ImageMagickLayoutEngine.cpp LayoutEngineManager.cpp AdLayoutEntry.cpp AdCreator.cpp
+CLISRCS = ImageMagickLayoutEngine.cpp LayoutEngineManager.cpp AdLayoutEntry.cpp BulkProcessor.cpp FileProcessor.cpp AdCreatorCLI.cpp
 
 PROTOOBJS = $(PROTOSRCS:.cc=.o)
 OBJS = $(SRCS:.cpp=.o) $(PROTOOBJS)

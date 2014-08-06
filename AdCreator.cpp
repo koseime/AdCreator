@@ -47,6 +47,10 @@ public:
 		com::kosei::proto::AdComponents adComponents;
 		adComponents.ParseFromString(line);
 
+		// TODO: Ask Lance for correct values
+		adComponents.set_title("Here Goes the Header");
+		adComponents.set_description("Copy goes here, copy goes here");
+
 		// Generate Ads
 		vector<pair<string, Blob> > generatedJpgAds;
 		engine.createFromLayouts((const com::kosei::proto::AdComponents*)&adComponents,

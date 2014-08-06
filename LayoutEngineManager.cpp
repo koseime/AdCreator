@@ -10,6 +10,7 @@
 #include "archive.h"
 #include "archive_entry.h"
 
+#include "AdLayoutEntry.h"
 
 using namespace std;
 using namespace Magick;
@@ -23,6 +24,7 @@ LayoutEngineManager::~LayoutEngineManager() {
 }
 
 void LayoutEngineManager::importAdLayouts(char *fileContent, size_t fileLen) {
+	// TODO: write new function
 	istringstream adLayoutFile(string(fileContent, fileLen));
 	string line;
 	while (getline(adLayoutFile, line)) {
@@ -43,6 +45,14 @@ void LayoutEngineManager::importAdLayouts(char *fileContent, size_t fileLen) {
 		}
 		delete[] line_cstr;
 	}
+}
+
+int LayoutEngineManager::getAdLayoutsSize() {
+	return adLayouts.size();
+}
+
+AdLayoutEntry LayoutEngineManager::getAdLayouts(int index) {
+	return adLayouts[index];
 }
 
 int LayoutEngineManager::importImagesAndLayouts(const string &path) {
@@ -98,14 +108,6 @@ int LayoutEngineManager::importImagesAndLayouts(const string &path) {
 	}
 
 	return 0;
-}
-
-void LayoutEngineManager::getAdLayouts(vector<AdLayoutEntry> &_adLayouts) {
-	_adLayouts.clear();
-	_adLayouts.reserve(_adLayouts.size());
-	for (int i = 0; i < adLayouts.size(); i++) {
-		_adLayouts.push_back(adLayouts[i]);
-	}
 }
 
 Blob* LayoutEngineManager::getImageBlob(const string &filename) {

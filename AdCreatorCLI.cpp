@@ -42,9 +42,9 @@ static void usage(const char *prog) {
 
 int main(int argc, char *argv[])
 {
-	std::string input, inputimagedir, outputdir, exectype, prodimage, adtext, adresult;
+	std::string input, inputimagedir, outputdir, exectype, prodimage, title, copy, adresult;
 	int opt;
-	while ((opt = getopt(argc, argv, "x:i:o:p:d:r:g:h")) != -1) {
+	while ((opt = getopt(argc, argv, "x:i:o:p:t:c:r:g:h")) != -1) {
 		switch (opt) {
 		case 'x':
 			exectype = optarg;
@@ -58,8 +58,11 @@ int main(int argc, char *argv[])
 		case 'p':
 			prodimage = optarg;
 			break;
-		case 'd':
-			adtext = optarg;
+		case 't':
+			title = optarg;
+			break;
+		case 'c':
+			copy = optarg;
 			break;
 		case 'r':
 			adresult = optarg;
@@ -77,17 +80,17 @@ int main(int argc, char *argv[])
 
 
 	if (exectype.compare("single") == 0) {
-		std::cout << "Create an ad from parts - single use: " << "image: " << prodimage << " text:" << adtext << std::endl;
-		//Load a few images from files
+		std::cout << "Create an ad from parts - single use: " << std::endl
+				<< "image: " << prodimage << std::endl
+				<< "title: " << title << std::endl
+				<< "copy: " << copy << std::endl;
 
 		ImageMagickLayoutEngine engine;
-		return engine.create(prodimage.c_str(),  adtext.c_str(),  adresult.c_str());
+		engine.importResources("resources.tar.gz");
+		return engine.create(prodimage.c_str(),  title.c_str(), copy.c_str(),  adresult.c_str());
 	} else if (exectype.compare("bulk") == 0) {
-		std::cout << "Create an ad from parts - single use: " << "image: " << prodimage << " text:" << adtext << std::endl;
-		//Load a few images from files
-
 		BulkProcessor engine;
-		engine.start(input, outputdir, inputimagedir);
+		engine.start(input, outputdir, inputimagedir, "resources.tar.gz");
 		return 0;
 	}
 

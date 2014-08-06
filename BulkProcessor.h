@@ -24,11 +24,11 @@ public:
 
 
 	void invoke();
-	void start(std::string const& input, std::string const& resultOutputDir, std::string const& inputImageDir);
+	void start(std::string const& input, std::string const& resultOutputDir, std::string const& inputImageDir, std::string const& resourceDir);
 	void setLine(std::string* line, int lineCount);
 
 private:
-	void parseline(std::string& line, std::string& id, std::string& productPic, std::string& productDescription);
+	void parseline(std::string& line, std::string& id, std::string& productPic, std::string& productTitle, std::string& productCopy);
 	void process(std::string const& fileToProcess);
 
 	std::string _outputDir;

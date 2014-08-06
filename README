@@ -16,7 +16,7 @@ options:
 
 
 example single use:
-./ad-creator-client -x single -p ./images/vacuum1.jpg -d "Here is a jpg" -r output/out-single.png
+./ad-creator-client -x single -p ./images/vacuum1.jpg -t "Here is a jpg" -c "Here is some description" -r output/out-single.png
 
 example bulk use:
 ./ad-creator-client -x bulk -o ./output -i ./samples/sample.tsv -g ./images
