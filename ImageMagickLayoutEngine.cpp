@@ -60,30 +60,6 @@ void ImageMagickLayoutEngine::createFromLayouts(const com::kosei::proto::AdCompo
 	}
 }
 
-void ImageMagickLayoutEngine::drawText(MagickWand *backgroundMagickWand, DrawingWand *drawingWand, const AdLayoutEntry::TextEntry &textEntry, char *text) {
-	DrawSetFontSize(drawingWand, textEntry.fontSize);
-	DrawSetFontWeight(drawingWand, textEntry.fontWeight);
-	DrawSetFont(drawingWand, textEntry.fontName.c_str());
-	MagickAnnotateImage(backgroundMagickWand, drawingWand, textEntry.pos_x, textEntry.pos_y, 0, text);
-	// TODO: clear DrawingWand and check textbox is within the specified bounding box
-}
-
-void ImageMagickLayoutEngine::scaleAndPlaceImage(MagickWand *backgroundMagickWand, MagickWand *magickWand, const AdLayoutEntry::ImageEntry &imageEntry) {
-	double width = (double)MagickGetImageWidth(magickWand);
-	double height = (double)MagickGetImageHeight(magickWand);
-	// TODO: compute scale correctly
-	double scale = ((double)imageEntry.size_x) / max(height, width);
-	int newWidth = floor(width * scale + 0.5);
-	int newHeight = floor(height * scale + 0.5);
-
-	// TODO: select appropriate filter
-	MagickResizeImage(magickWand, newWidth, newHeight, LanczosFilter, 1);
-	// TODO: extend image correctly
-	MagickExtentImage(magickWand, imageEntry.size_x, imageEntry.size_x, -(imageEntry.size_x-newWidth)/2,-(imageEntry.size_x-newHeight)/2);
-	MagickCompositeImage(backgroundMagickWand, magickWand, OverCompositeOp, imageEntry.pos_x, imageEntry.pos_y);
-}
-
-
 int ImageMagickLayoutEngine::create(const char* product_image_file, const char* title, const char* copy, const char* output) {
 	// Load file content into byte array
 	std::ifstream fl(product_image_file);
@@ -111,6 +87,43 @@ int ImageMagickLayoutEngine::create(const char* product_image_file, const char* 
 	return retVal;
 }
 
+
+void ImageMagickLayoutEngine::drawText(MagickWand *backgroundMagickWand, DrawingWand *drawingWand, PixelWand *pixelWand, const AdLayoutEntry::TextEntry &textEntry, char *text) {
+	PixelSetColor(pixelWand, "black");
+	DrawSetFillColor(drawingWand, pixelWand);
+	DrawSetFontSize(drawingWand, textEntry.fontSize);
+	DrawSetFontWeight(drawingWand, textEntry.fontWeight);
+	DrawSetFont(drawingWand, textEntry.fontName.c_str());
+	MagickAnnotateImage(backgroundMagickWand, drawingWand, textEntry.pos_x, textEntry.pos_y, 0, text);
+	// TODO: clear DrawingWand and check textbox is within the specified bounding box
+}
+
+void ImageMagickLayoutEngine::scaleAndExtendImage(MagickWand *backgroundMagickWand, MagickWand *magickWand, const AdLayoutEntry::ImageEntry &imageEntry) {
+	double width = (double)MagickGetImageWidth(magickWand);
+	double height = (double)MagickGetImageHeight(magickWand);
+	// TODO: compute scale correctly
+	double scale = ((double)imageEntry.size_x) / max(height, width);
+	int newWidth = floor(width * scale + 0.5);
+	int newHeight = floor(height * scale + 0.5);
+
+	// TODO: select appropriate filter
+	MagickResizeImage(magickWand, newWidth, newHeight, LanczosFilter, 1);
+	// TODO: extend image correctly
+	MagickExtentImage(magickWand, imageEntry.size_x, imageEntry.size_x, -(imageEntry.size_x-newWidth)/2,-(imageEntry.size_x-newHeight)/2);
+}
+
+void ImageMagickLayoutEngine::createRoundedRectangleMask(MagickWand *maskMagickWand, PixelWand *pixelWand, DrawingWand *drawingWand, int size_x, int size_y) {
+	PixelSetColor(pixelWand, "none");
+	MagickNewImage(maskMagickWand, size_x, size_y, pixelWand);
+	PixelSetColor(pixelWand, "white");
+	DrawSetFillColor(drawingWand, pixelWand);
+
+	int rx = size_x / 8;
+	int ry = size_y / 8;
+	DrawRoundRectangle(drawingWand, 1, 1, size_x - 1, size_y - 1, rx, ry);
+	MagickDrawImage(maskMagickWand, drawingWand);
+}
+
 int ImageMagickLayoutEngine::create(Blob *productImage, const AdLayoutEntry &adLayoutEntry,
 		const char *title, const char *copy, Blob *outputBlob) {
 	// Initialization
@@ -120,6 +133,7 @@ int ImageMagickLayoutEngine::create(Blob *productImage, const AdLayoutEntry &adL
 	MagickWand *backgroundMagickWand = NewMagickWand();
 	MagickWand *productMagickWand = NewMagickWand();
 	MagickWand *logoMagickWand = NewMagickWand();
+	MagickWand *maskMagickWand = NewMagickWand();
 	DrawingWand *drawingWand = NewDrawingWand();
 	PixelSetColor(pixelWand, "white");
 
@@ -131,22 +145,30 @@ int ImageMagickLayoutEngine::create(Blob *productImage, const AdLayoutEntry &adL
 		MagickReadImageBlob(backgroundMagickWand, backgroundBlob->data(), backgroundBlob->length());
 	}
 
-	// Create, scale and composite product image
+	// Create, scale, round corners and composite product image
 	if (adLayoutEntry.product.fileName.compare("valid") == 0) {
 		MagickCore::MagickReadImageBlob(productMagickWand, productImage->data(), productImage->length());
-		scaleAndPlaceImage(backgroundMagickWand, productMagickWand, adLayoutEntry.product);
+		scaleAndExtendImage(backgroundMagickWand, productMagickWand, adLayoutEntry.product);
+		createRoundedRectangleMask(maskMagickWand, pixelWand, drawingWand, adLayoutEntry.product.size_x, adLayoutEntry.product.size_y);
+		MagickCompositeImage(maskMagickWand, productMagickWand, SrcInCompositeOp, 0, 0);
+		MagickCompositeImage(backgroundMagickWand, maskMagickWand, OverCompositeOp,
+				adLayoutEntry.product.pos_x, adLayoutEntry.product.pos_y);
+
+
 	}
 
 	// Create, scale and composite the logo image
 	Blob *logoBlob = layoutEngineManager.getImageBlob(adLayoutEntry.logo.fileName);
 	if (logoBlob != NULL) {
 		MagickReadImageBlob(logoMagickWand, logoBlob->data(), logoBlob->length());
-		scaleAndPlaceImage(backgroundMagickWand, logoMagickWand, adLayoutEntry.logo);
+		scaleAndExtendImage(backgroundMagickWand, logoMagickWand, adLayoutEntry.logo);
+		MagickCompositeImage(backgroundMagickWand, logoMagickWand, OverCompositeOp,
+				adLayoutEntry.logo.pos_x, adLayoutEntry.logo.pos_y);
 	}
 
 	// Add title and description
-	drawText(backgroundMagickWand, drawingWand, adLayoutEntry.title, (char *)title);
-	drawText(backgroundMagickWand, drawingWand, adLayoutEntry.description, (char *)copy);
+	drawText(backgroundMagickWand, drawingWand, pixelWand, adLayoutEntry.title, (char *)title);
+	drawText(backgroundMagickWand, drawingWand, pixelWand, adLayoutEntry.description, (char *)copy);
 
 	// Write image and clean up
 	char *backgroundBytes;

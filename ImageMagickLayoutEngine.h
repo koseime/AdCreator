@@ -25,8 +25,10 @@ class ImageMagickLayoutEngine {
 private:
 	LayoutEngineManager layoutEngineManager;
 
-	void drawText(MagickWand *backgroundMagickWand, DrawingWand *drawingWand, const AdLayoutEntry::TextEntry &textEntry, char *text);
-	void scaleAndPlaceImage(MagickWand *backgroundMagickWand, MagickWand *magickWand, const AdLayoutEntry::ImageEntry &imageEntry);
+	void drawText(MagickWand *backgroundMagickWand, DrawingWand *drawingWand, PixelWand *pixelWand, const AdLayoutEntry::TextEntry &textEntry, char *text);
+	void scaleAndExtendImage(MagickWand *backgroundMagickWand, MagickWand *magickWand, const AdLayoutEntry::ImageEntry &imageEntry);
+	void createRoundedRectangleMask(MagickWand *maskMagickWand, PixelWand *pixelWand, DrawingWand *drawingWand, int size_x, int size_y);
+
 public:
 	ImageMagickLayoutEngine();
 	virtual ~ImageMagickLayoutEngine();
