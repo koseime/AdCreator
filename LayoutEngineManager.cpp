@@ -5,6 +5,7 @@
 #include <fstream>
 #include <stdlib.h>
 #include <string>
+#include <cstring>
 
 #include "Magick++.h"
 #include "archive.h"
