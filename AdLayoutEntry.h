@@ -10,44 +10,37 @@
 
 #include <string>
 
+#include "jsonxx.h"
+
 using namespace std;
+using namespace jsonxx;
 
 class AdLayoutEntry {
 public:
-	struct ImageEntry {
+	class ImageEntry {
+	public:
 		string fileName;
 		int size_x;
 		int size_y;
 		int pos_x;
 		int pos_y;
-		ImageEntry() {}
-		ImageEntry(const string &_fileName, int _size_x, int _size_y, int _pos_x, int _pos_y) {
-			fileName = _fileName;
-			size_x = _size_x;
-			size_y = _size_y;
-			pos_x = _pos_x;
-			pos_y = _pos_y;
-		};
+		ImageEntry() {};
+		ImageEntry(const string &_fileName, int _size_x, int _size_y, int _pos_x, int _pos_y);
 	};
 
-	struct TextEntry {
+	class TextEntry {
+	public:
 		string fontName;
 		int fontSize;
 		int fontWeight;
+		string fontColor;
+		string fontType;
 		int size_x;
 		int size_y;
 		int pos_x;
 		int pos_y;
-		TextEntry() {}
-		TextEntry(const string &_fontName, int _fontSize, int _fontWeight, int _size_x, int _size_y, int _pos_x, int _pos_y) {
-			fontName = _fontName;
-			fontSize = _fontSize;
-			fontWeight = _fontWeight;
-			size_x = _size_x;
-			size_y = _size_y;
-			pos_x = _pos_x;
-			pos_y = _pos_y;
-		}
+		TextEntry() {};
+		TextEntry(const Object &fontJsonObject, int _size_x, int _size_y, int _pos_x, int _pos_y);
 	};
 
 	string name;
@@ -58,7 +51,7 @@ public:
 
 	TextEntry title;
 	TextEntry description;
-	AdLayoutEntry(const string &_name, const string &template_id, const string &backgroundFilename, const string &logoFilename);
+	AdLayoutEntry(const string &jsonString);
 };
 
 

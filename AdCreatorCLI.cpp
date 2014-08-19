@@ -86,11 +86,11 @@ int main(int argc, char *argv[])
 				<< "copy: " << copy << std::endl;
 
 		ImageMagickLayoutEngine engine;
-		engine.importResources("resources.tar.gz");
+		engine.importResources("images/layout_resource.tar.gz");
 		return engine.create(prodimage.c_str(),  title.c_str(), copy.c_str(),  adresult.c_str());
 	} else if (exectype.compare("bulk") == 0) {
 		BulkProcessor engine;
-		engine.start(input, outputdir, inputimagedir, "resources.tar.gz");
+		engine.start(input, outputdir, inputimagedir, "images/layout_resource.tar.gz");
 		return 0;
 	}
 

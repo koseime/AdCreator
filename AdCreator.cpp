@@ -35,7 +35,7 @@ public:
 	AdCreatorMapper(HadoopPipes::TaskContext& context) {
 		int retVal = engine.importResources(context.getJobConf()->get("layout.resource.tar"));
 		if (retVal != 0) {
-			cerr << "Error importing images and layouts";
+			cerr << "Error importing images and layouts" << endl;
 			exit(-1);
 		}
 	}

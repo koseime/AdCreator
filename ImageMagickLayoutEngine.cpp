@@ -74,10 +74,9 @@ int ImageMagickLayoutEngine::create(const char* product_image_file, const char* 
 	productBlob.update(product_image, len);
 
 	int retVal;
-	AdLayoutEntry adLayoutEntry = AdLayoutEntry("Ad", "template_1", "null", "dd.jpg");
 
 	Blob ad;
-	retVal = create(&productBlob, adLayoutEntry, title, copy, &ad);
+	retVal = create(&productBlob, layoutEngineManager.getAdLayouts(0), title, copy, &ad);
 
 	ofstream outputStream(output);
 	outputStream.write((const char *)ad.data(), ad.length());
@@ -89,11 +88,16 @@ int ImageMagickLayoutEngine::create(const char* product_image_file, const char* 
 
 
 void ImageMagickLayoutEngine::drawText(MagickWand *backgroundMagickWand, DrawingWand *drawingWand, PixelWand *pixelWand, const AdLayoutEntry::TextEntry &textEntry, char *text) {
-	PixelSetColor(pixelWand, "black");
+	PixelSetColor(pixelWand, textEntry.fontColor.c_str());
 	DrawSetFillColor(drawingWand, pixelWand);
 	DrawSetFontSize(drawingWand, textEntry.fontSize);
 	DrawSetFontWeight(drawingWand, textEntry.fontWeight);
-	DrawSetFont(drawingWand, textEntry.fontName.c_str());
+	string type = "";
+	if (textEntry.fontType.compare("normal")) {
+		type = "-" + textEntry.fontType;
+	}
+
+	DrawSetFont(drawingWand, ("@fonts/" + textEntry.fontName + type + ".ttf").c_str());
 	MagickAnnotateImage(backgroundMagickWand, drawingWand, textEntry.pos_x, textEntry.pos_y, 0, text);
 	// TODO: clear DrawingWand and check textbox is within the specified bounding box
 }
@@ -135,11 +139,11 @@ int ImageMagickLayoutEngine::create(Blob *productImage, const AdLayoutEntry &adL
 	MagickWand *logoMagickWand = NewMagickWand();
 	MagickWand *maskMagickWand = NewMagickWand();
 	DrawingWand *drawingWand = NewDrawingWand();
-	PixelSetColor(pixelWand, "white");
 
 	// Create Background image
 	Blob *backgroundBlob = layoutEngineManager.getImageBlob(adLayoutEntry.background.fileName);
 	if (backgroundBlob == NULL) {
+		PixelSetColor(pixelWand, "white");
 		MagickNewImage(backgroundMagickWand, 320, 50, pixelWand);
 	} else {
 		MagickReadImageBlob(backgroundMagickWand, backgroundBlob->data(), backgroundBlob->length());

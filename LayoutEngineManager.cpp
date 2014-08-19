@@ -24,26 +24,10 @@ LayoutEngineManager::~LayoutEngineManager() {
 }
 
 void LayoutEngineManager::importAdLayouts(char *fileContent, size_t fileLen) {
-	// TODO: write new function
 	istringstream adLayoutFile(string(fileContent, fileLen));
 	string line;
 	while (getline(adLayoutFile, line)) {
-		char *line_cstr = new char[line.length() + 1];
-		strcpy(line_cstr, line.c_str());
-
-		vector<string> tokens;
-		char *pch = strtok(line_cstr, "\t");
-		while (pch != NULL) {
-			tokens.push_back(pch);
-			pch = strtok(NULL, "\t");
-		}
-
-		if (tokens.size() == 4) {
-			adLayouts.push_back(AdLayoutEntry(tokens[0], tokens[1], tokens[2], tokens[3]));
-		} else {
-			cerr << "Trouble parsing line: " + line << endl;
-		}
-		delete[] line_cstr;
+		adLayouts.push_back(AdLayoutEntry(line));
 	}
 }
 
