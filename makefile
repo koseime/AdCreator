@@ -35,13 +35,15 @@ else
     CFLAGS = -Wall -c -g \
     	  $(INCPATH)
     LDFLAGS = -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/pipes/api \
-    	-I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/utils/api -L /usr/lib64  \
-            -Wl,-Bstatic -L $(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/target/native -lhadooppipes -lhadooputils -ljpeg \
-            /usr/local/lib/libMagick++-6.Q16.a \
-        	/usr/local/lib/libMagickWand-6.Q16.a \
-    		/usr/local/lib/libMagickCore-6.Q16.a \
-          -Wl,-Bdynamic -lpthread -lcrypto -lssl \       
-          	-lm -lpthread
+              -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/utils/api -L /usr/lib64  \
+              -Wl,-Bstatic -L /home/kosei/tools/lib/hadoop/lib/native -lhadooppipes -lhadooputils \
+              /usr/lib64/libjpeg.a \
+              /usr/local/lib/libMagick++-6.Q16.a \
+              /usr/local/lib/libMagickWand-6.Q16.a \
+              /usr/local/lib/libMagickCore-6.Q16.a \
+              /usr/local/lib/libarchive.a \
+              -Wl,-Bdynamic -lpthread -lcrypto -lssl \
+              -lm -lpthread
  endif
 
 
