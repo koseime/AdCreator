@@ -38,11 +38,12 @@ else
               -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/utils/api -L /usr/lib64  \
               -Wl,-Bstatic -L /home/kosei/tools/lib/hadoop/lib/native -lhadooppipes -lhadooputils \
               /usr/lib64/libjpeg.a \
+              /usr/local/lib/libprotobuf.a \
               /usr/local/lib/libMagick++-6.Q16.a \
               /usr/local/lib/libMagickWand-6.Q16.a \
               /usr/local/lib/libMagickCore-6.Q16.a \
               /usr/local/lib/libarchive.a \
-              -Wl,-Bdynamic -lpthread -lcrypto -lssl \
+              -Wl,-Bdynamic -lfontconfig -lfreetype -lXext -llcms -lgomp -lX11 -lbz2 -ltiff -lpng -lpthread -lcrypto -lssl \
               -lm -lpthread
  endif
 
