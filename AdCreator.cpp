@@ -47,20 +47,22 @@ public:
 		com::kosei::proto::AdComponents adComponents;
 		adComponents.ParseFromString(line);
 
-		// TODO: Ask Lance for correct values
-		adComponents.set_title("Here Goes the Header");
-		adComponents.set_description("Copy goes here, copy goes here");
+		if (!isDeleted(adComponents)) {
+			// TODO: Ask Lance for correct values
+			adComponents.set_title("Here Goes the Header");
+			adComponents.set_description("Copy goes here, copy goes here");
 
-		// Generate Ads
-		vector<pair<string, Blob> > generatedJpgAds;
-		engine.createFromLayouts((const com::kosei::proto::AdComponents*)&adComponents,
-				generatedJpgAds);
+			// Generate Ads
+			vector<pair<string, Blob> > generatedJpgAds;
+			engine.createFromLayouts((const com::kosei::proto::AdComponents*)&adComponents,
+					generatedJpgAds);
 
-		// Add to AdComponents protobuf
-		for (int i = 0; i < generatedJpgAds.size(); i++) {
-			com::kosei::proto::AdComponents_Ad* ad = adComponents.add_generatedads();
-			ad->set_adjpg(generatedJpgAds[i].second.data(), generatedJpgAds[i].second.length());
-			ad->set_layoutname(generatedJpgAds[i].first);
+			// Add to AdComponents protobuf
+			for (int i = 0; i < generatedJpgAds.size(); i++) {
+				com::kosei::proto::AdComponents_Ad* ad = adComponents.add_generatedads();
+				ad->set_adjpg(generatedJpgAds[i].second.data(), generatedJpgAds[i].second.length());
+				ad->set_layoutname(generatedJpgAds[i].first);
+			}
 		}
 
 		// Serialize and write output
@@ -69,6 +71,16 @@ public:
 		adComponents.SerializeToArray(buffer, size);
 		context.emit(context.getInputKey(), string(buffer, size));
 		delete[] buffer;
+	}
+
+	bool isDeleted(const com::kosei::proto::AdComponents &adComponents) {
+		for (int i = 0; i < adComponents.meta_size(); i++) {
+			const com::kosei::proto::AdComponents_Meta &metaEntry = adComponents.meta(i);
+			if (metaEntry.key().compare("deleted") == 0) {
+				return true;
+			}
+		}
+		return false;
 	}
 };
 
