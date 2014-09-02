@@ -53,14 +53,14 @@ public:
 			adComponents.set_description("Copy goes here, copy goes here");
 
 			// Generate Ads
-			vector<pair<string, Blob> > generatedJpgAds;
-			engine.createFromLayouts((const com::kosei::proto::AdComponents*)&adComponents,
-					generatedJpgAds);
+			vector<pair<string, string> > generatedJpgAds;
+			engine.createAllLayouts(adComponents.productjpg(), adComponents.title(),
+					adComponents.description(), &generatedJpgAds);
 
 			// Add to AdComponents protobuf
 			for (int i = 0; i < generatedJpgAds.size(); i++) {
 				com::kosei::proto::AdComponents_Ad* ad = adComponents.add_generatedads();
-				ad->set_adjpg(generatedJpgAds[i].second.data(), generatedJpgAds[i].second.length());
+				ad->set_adjpg(generatedJpgAds[i].second);
 				ad->set_layoutname(generatedJpgAds[i].first);
 			}
 		}
