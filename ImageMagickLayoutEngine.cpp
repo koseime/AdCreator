@@ -64,7 +64,7 @@ int ImageMagickLayoutEngine::create(const string &product_image_file, const stri
 		const string &copy, const string &output_file) {
 	// Load file content into string
 
-	ifstream fs(product_image_file);
+	ifstream fs(product_image_file.c_str());
 	string productBlob((istreambuf_iterator<char>(fs)), istreambuf_iterator<char>());
 
 	int retVal;
@@ -72,7 +72,7 @@ int ImageMagickLayoutEngine::create(const string &product_image_file, const stri
 	string ad;
 	retVal = create(productBlob, layoutEngineManager.getAdLayouts(0), title, copy, &ad);
 
-	ofstream outputStream(output_file);
+	ofstream outputStream(output_file.c_str());
 	outputStream.write(ad.data(), ad.size());
 	outputStream.close();
 
