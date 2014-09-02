@@ -11,8 +11,7 @@ export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig
    INCPATH += -I. -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/pipes/api \
    -I/usr/local/include/ImageMagick-6/magick  -I/usr/local/include/ImageMagick-6 \
    -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/utils/api \
-   -I/usr/local/include \
-   -I/usr/include/protobuf -I$(ACPROTO)
+   -I/usr/local/include -I/usr/include/protobuf -I$(ACPROTO)
  else
    OSARCH=linux
    INCPATH = -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/pipes/api \
@@ -21,9 +20,8 @@ export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig
  endif
 
  ifeq ($(OSARCH),osx)
-    CFLAGS = -Wall -c -g -std=c++0x \
-    	 `pkg-config --cflags protobuf` $(INCPATH)
-    LDFLAGS = -mmacosx-version-min=10.8  -ljpeg  \
+    CFLAGS = -Wall -c -g -std=c++0x $(INCPATH)
+    LDFLAGS = -mmacosx-version-min=10.8 \
               -lm -lpthread \
               `pkg-config --libs protobuf` \
               `Magick++-config --ldflags --libs` \
@@ -32,12 +30,10 @@ export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig
               /usr/local/lib/libarchive.a -lz -lbz2 \
               -lpthread -lcrypto -lssl -lc++
 else
-    CFLAGS = -Wall -c -g \
-    	  $(INCPATH)
+    CFLAGS = -Wall -c -g $(INCPATH)
     LDFLAGS = -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/pipes/api \
               -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/utils/api -L /usr/lib64  \
               -Wl,-Bstatic -L /home/kosei/tools/lib/hadoop/lib/native -lhadooppipes -lhadooputils \
-              /usr/lib64/libjpeg.a \
               /usr/local/lib/libprotobuf.a \
               /usr/local/lib/libMagick++-6.Q16.a \
               /usr/local/lib/libMagickWand-6.Q16.a \

@@ -9,24 +9,26 @@ export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig
    -I/usr/local/include -I/usr/include/boost -I/usr/local/include/thrift -I$(VPATH) 
  else
    OSARCH=linux
-   INCPATH = -I/usr/local/include/ImageMagick-6/magick  -I/usr/local/include/ImageMagick-6
+   INCPATH = -I/usr/local/include/ImageMagick-6/magick  -I/usr/local/include/ImageMagick-6 \
+   -I/usr/local/include -I/usr/include/boost -I/usr/local/include/thrift -I$(VPATH)
  endif
 
  ifeq ($(OSARCH),osx)
     CFLAGS = -Wall -c -g -std=c++0x $(INCPATH)
-    LDFLAGS = -mmacosx-version-min=10.8  -ljpeg  \
+    LDFLAGS = -mmacosx-version-min=10.8 \
               -lm -lpthread -lthrift \
               `Magick++-config --ldflags --libs` \
               /usr/local/lib/libarchive.a -lz -lbz2 \
               -lpthread -lcrypto -lssl -lc++
 else
     CFLAGS = -Wall -c -g $(INCPATH)
+    COMMON_DEF = -DHAVE_INTTYPES_H -DHAVE_NETINET_IN_H
     LDFLAGS = -L /usr/lib64  \
-              -Wl,-Bstatic \
-              /usr/lib64/libjpeg.a \
+              -Wl,-Bstatic -lthrift \
               /usr/local/lib/libMagick++-6.Q16.a \
               /usr/local/lib/libMagickWand-6.Q16.a \
               /usr/local/lib/libMagickCore-6.Q16.a \
+              /usr/local/lib/libarchive.a \
               -Wl,-Bdynamic -lfontconfig -lfreetype -lXext -llcms -lgomp -lX11 -lbz2 -ltiff -lpng -lpthread -lcrypto -lssl \
               -lm -lpthread
  endif
@@ -39,11 +41,11 @@ AC_OBJS = ../AdLayoutEntry.o ../ImageMagickLayoutEngine.o ../LayoutEngineManager
 all: $(APP)
 
 .cpp.o:
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(COMMON_DEF) $(CFLAGS) -c $< -o $@
 
 # it is important that $(OBJS) stands _before_ $(LDFLAGS)
 $(APP):	$(OBJS)
-	$(CC) $(OBJS) $(AC_OBJS) $(LDFLAGS) -o$(APP)  
+	$(CC) $(COMMON_DEF) $(OBJS) $(AC_OBJS) $(LDFLAGS) -o$(APP)  
 
 clean:
 	rm -f *.o  *~ $(APP)
