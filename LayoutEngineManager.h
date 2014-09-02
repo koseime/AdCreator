@@ -4,28 +4,26 @@
 #include <map>
 #include <string>
 
-#include "Magick++.h"
-
 #include "AdLayoutEntry.h"
 
 using namespace std;
-using namespace Magick;
 
 class LayoutEngineManager {
 public:
+	static const string NOT_EXIST;
 
 private:
-	map <string, Blob> idToBlob;
+	map <string, string> idToBlob;
 	vector<AdLayoutEntry> adLayouts;
 
 	void importAdLayouts(char *fileContent, size_t fileLen);
 public:
-
 	LayoutEngineManager();
 	virtual ~LayoutEngineManager();
 
 	int importImagesAndLayouts(const string &path);
-	Blob *getImageBlob(const string &filename);
+	void addImageBlob(const string &name, const string &blob);
+	const string &getImageBlob(const string &filename);
 	int getAdLayoutsSize();
 	AdLayoutEntry getAdLayouts(int index);
 };

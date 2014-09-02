@@ -8,8 +8,6 @@
 #ifndef IMAGEMAGICKLAYOUTENGINE_H_
 #define IMAGEMAGICKLAYOUTENGINE_H_
 
-#include "AdComponentsMessages.pb.h"
-
 #include "LayoutEngineManager.h"
 #include "Magick++.h"
 
@@ -25,7 +23,9 @@ class ImageMagickLayoutEngine {
 private:
 	LayoutEngineManager layoutEngineManager;
 
-	void drawText(MagickWand *backgroundMagickWand, DrawingWand *drawingWand, PixelWand *pixelWand, const AdLayoutEntry::TextEntry &textEntry, char *text);
+	void drawText(MagickWand *backgroundMagickWand, DrawingWand *drawingWand,
+			PixelWand *pixelWand, const AdLayoutEntry::TextEntry &textEntry,
+			const string &text);
 	void scaleAndExtendImage(MagickWand *backgroundMagickWand, MagickWand *magickWand, const AdLayoutEntry::ImageEntry &imageEntry);
 	void createRoundedRectangleMask(MagickWand *maskMagickWand, PixelWand *pixelWand, DrawingWand *drawingWand, int size_x, int size_y);
 
@@ -35,10 +35,15 @@ public:
 
 	int importResources(const string &path);
 
-	int create(const char* product_image_file, const char* title, const char* copy, const char* output);
-	int create(Blob *productImage, const AdLayoutEntry &adLayoutEntry,
-			const char *title, const char *copy, Blob *outputBlob);
-	void createFromLayouts(const com::kosei::proto::AdComponents* product_info, vector<pair<string, Blob> > &generatedAds);
+	int create(const string &product_image_file, const string &title,
+			const string &copy, const string &output_file);
+	int create(const string &productImage, const string &backgroundBlob,
+			const string &logoBlob, const AdLayoutEntry &adLayoutEntry, const string &title,
+			const string &copy, string *outputBlob);
+	int create(const string &productImage, const AdLayoutEntry &adLayoutEntry,
+			const string &title, const string &copy, string *outputBlob);
+	void createAllLayouts(const string &productImage, const string &title,
+			const string &copy, vector<pair<string, string> > *generatedAds);
 };
 
 #endif /* IMAGEMAGICKLAYOUTENGINE_H_ */

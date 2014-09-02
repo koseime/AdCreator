@@ -7,15 +7,14 @@
 #include <string>
 #include <cstring>
 
-#include "Magick++.h"
 #include "archive.h"
 #include "archive_entry.h"
 
 #include "AdLayoutEntry.h"
 
 using namespace std;
-using namespace Magick;
 
+const string LayoutEngineManager::NOT_EXIST = "";
 
 LayoutEngineManager::LayoutEngineManager() {
 }
@@ -75,7 +74,7 @@ int LayoutEngineManager::importImagesAndLayouts(const string &path) {
 			manFileFound = true;
 			importAdLayouts(fileContents, entry_size);
 		} else {
-			idToBlob[string(entry_pathname)].update(fileContents, entry_size);
+			idToBlob[string(entry_pathname)] = string(fileContents, entry_size);
 		}
 
 		delete[] fileContents;
@@ -95,8 +94,12 @@ int LayoutEngineManager::importImagesAndLayouts(const string &path) {
 	return 0;
 }
 
-Blob* LayoutEngineManager::getImageBlob(const string &filename) {
-	map<string, Blob>::iterator it = idToBlob.find(filename);
-	if (it == idToBlob.end()) { return NULL; }
-	return &(it->second);
+const string& LayoutEngineManager::getImageBlob(const string &filename) {
+	map<string, string>::iterator it = idToBlob.find(filename);
+	if (it == idToBlob.end()) { return NOT_EXIST; }
+	return it->second;
+}
+
+void LayoutEngineManager::addImageBlob(const string &name, const string &blob) {
+	idToBlob[name] = blob;
 }
