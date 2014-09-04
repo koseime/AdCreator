@@ -24,6 +24,7 @@ AdLayoutEntry::ImageEntry::ImageEntry(const string &_fileName, int _size_x, int 
 }
 
 AdLayoutEntry::TextEntry::TextEntry(const Object &jsonObject, int _size_x, int _size_y, int _pos_x, int _pos_y) {
+	defaultText = jsonObject.has<String>("text")?jsonObject.get<String>("text"):"No default text";
 	fontName = jsonObject.has<String>("name")?jsonObject.get<String>("name"):"Arial";
 	fontSize = jsonObject.has<Number>("size")?jsonObject.get<Number>("size"):20;
 	fontWeight = jsonObject.has<Number>("weight")?jsonObject.get<Number>("weight"):400;
