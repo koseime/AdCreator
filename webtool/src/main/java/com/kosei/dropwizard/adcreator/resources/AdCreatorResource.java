@@ -39,9 +39,11 @@ public class AdCreatorResource {
                                          @QueryParam("headerFont") String headerFont,
                                          @QueryParam("headerFontSize") String headerFontSize,
                                          @QueryParam("headerFontWeight") String headerFontWeight,
+                                         @QueryParam("headerFontColor") String headerFontColor,
                                          @QueryParam("descriptionFont") String descriptionFont,
                                          @QueryParam("descriptionFontSize") String descriptionFontSize,
                                          @QueryParam("descriptionFontWeight") String descriptionFontWeight,
+                                         @QueryParam("descriptionFontColor") String descriptionFontColor,
                                          @QueryParam("descriptionText") String descriptionText,
                                          @QueryParam("headerText") String headerText ,
                                          @QueryParam("backgroundColor") String backgroundColor
@@ -58,8 +60,15 @@ public class AdCreatorResource {
         }
         if (backgroundColor==null) backgroundColor = "white";
         String sBackgroundColor = backgroundColor;
+        if (descriptionFontColor==null) descriptionFontColor = "black";
+        String sDescriptionFontColor = descriptionFontColor;
+        if (headerFontColor==null) headerFontColor = "black";
+        String sHeaderFontColor = headerFontColor;
 
         if (backgroundColor.length()==6) sBackgroundColor = "#"+sBackgroundColor;
+        if (descriptionFontColor.length()==6) sDescriptionFontColor = "#"+sDescriptionFontColor;
+        if (backgroundColor.length()==6) sHeaderFontColor = "#"+sHeaderFontColor;
+
 
         long start = System.currentTimeMillis();
         ByteBuffer bb = client.generate(
@@ -70,9 +79,11 @@ public class AdCreatorResource {
                 preCannedImagesAndFonts.getFonts().get(headerFont),
                 Integer.parseInt(headerFontSize),
                 Integer.parseInt(headerFontWeight),
+                sHeaderFontColor,
                 preCannedImagesAndFonts.getFonts().get(descriptionFont),
                 Integer.parseInt(descriptionFontSize),
                 Integer.parseInt(descriptionFontWeight),
+                sDescriptionFontColor,
                 sBackgroundColor);
         adCreator.setId(counter++);
         System.out.println("Time to generate:" + (System.currentTimeMillis()-start));
@@ -90,10 +101,12 @@ public class AdCreatorResource {
         view.selectedDescriptionFont  = descriptionFont;
         view.selectedDescriptionFontSize =descriptionFontSize;
         view.selectedDescriptionFontWeight =descriptionFontWeight;
+        view.descriptionFontColor = descriptionFontColor;
 
         view.selectedHeaderFont=headerFont;
         view.selectedHeaderFontSize=headerFontSize;
         view.selectedHeaderFontWeight=headerFontWeight;
+        view.headerFontColor = headerFontColor;
 
         view.selectedLogo = logoImage;
         view.selectedProduct = product;

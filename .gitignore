@@ -6,4 +6,6 @@ output/*.png
 .idea/
 *.iml
 .gradle
+*.jar
+*.class
 

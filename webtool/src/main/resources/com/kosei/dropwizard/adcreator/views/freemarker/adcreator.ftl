@@ -11,15 +11,20 @@
             var headerFont = document.getElementById('headerFont').value;
             var headerFontSize = document.getElementById('headerFontSize').value;
             var headerFontWeight = document.getElementById('headerFontWeight').value;
+            var headerFontColor = document.getElementById('headerFontColor').value;
+
             var descriptionFont = document.getElementById('descriptionFont').value;
             var descriptionFontSize = document.getElementById('descriptionFontSize').value;
             var descriptionFontWeight = document.getElementById('descriptionFontWeight').value;
+            var descriptionFontColor = document.getElementById('descriptionFontColor').value;
+
             var backgroundColor = document.getElementById('backgroundColor').value;
 
 
             var url =  "/adcreator/create?productImage=" + productImageFile +"&logoImage="+logoImageFile+ "&headerFont="+headerFont+
-                   "&headerFontSize="+headerFontSize+"&headerFontWeight="+headerFontWeight+"&descriptionFont="+descriptionFont+
-                 "&descriptionFontSize=" + descriptionFontSize +"&descriptionFontWeight="+descriptionFontWeight +
+                   "&headerFontSize="+headerFontSize+"&headerFontWeight="+headerFontWeight+"&headerFontColor="+headerFontColor+
+                    "&descriptionFont="+descriptionFont+"&descriptionFontSize=" + descriptionFontSize +"&descriptionFontWeight="+descriptionFontWeight +
+                    "&descriptionFontColor="+descriptionFontColor +
                     "&descriptionText="+body + "&headerText=" + title + "&backgroundColor="+backgroundColor;
             window.location.href = url;
         }
@@ -79,6 +84,9 @@
                 <option value="${weight}" <#if selectedHeaderFontWeight(weight)??> selected</#if>>${weight}</option>
             </#list>
             </select>
+
+            Font Color: <input type="text" name="headerFontColor" id="headerFontColor" size="60" <#if headerFontColor??> value="${headerFontColor}"</#if>/>
+
             <br/>
             Description Font<br/>
             <select id="descriptionFont">
@@ -104,6 +112,9 @@
                 <option value="${weight}" <#if selectedDescriptionFontWeight(weight)??> selected</#if>>${weight}</option>
             </#list>
             </select>
+
+            Font Color: <input type="text" name="descriptionFontColor" id="descriptionFontColor" size="60" <#if descriptionFontColor??> value="${descriptionFontColor}"</#if>/>
+
 
             <br/>
             Background Color: <input type="text" name="backgroundColor" id="backgroundColor" size="60"  <#if backgroundColor??> value="${backgroundColor}"</#if>/> <br/>

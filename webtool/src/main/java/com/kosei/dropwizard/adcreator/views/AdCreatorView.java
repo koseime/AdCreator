@@ -29,6 +29,11 @@ public class AdCreatorView extends View {
     public String selectedLogo;
     public String selectedProduct;
 
+    public String headerFontColor;
+    public String descriptionFontColor;
+
+
+
     public String descriptionText;
     public String headerText;
 
@@ -107,6 +112,7 @@ public class AdCreatorView extends View {
         return null;
     }
 
+
     public String selectedDescriptionFont(String val) {
         if (selectedDescriptionFont == null) return null;
         else if (selectedDescriptionFont.equals(val))
@@ -127,6 +133,16 @@ public class AdCreatorView extends View {
             return "selected";
         return null;
     }
+
+
+    public String getDescriptionFontColor() {
+        return descriptionFontColor;
+    }
+
+    public String getHeaderFontColor() {
+        return headerFontColor;
+    }
+
 
     public String getHeaderText() {
         return headerText;

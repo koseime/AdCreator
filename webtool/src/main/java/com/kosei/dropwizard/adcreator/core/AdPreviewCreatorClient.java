@@ -17,8 +17,10 @@ import java.nio.channels.FileChannel;
  * Created by lanceriedel on 9/4/14.
  */
 public class AdPreviewCreatorClient {
-    public ByteBuffer generate(String headerText, String descriptionText, String productImageFile, String logoImageFile, String headerFont, int headerFontSize, int headerFontWeight,
-                               String descriptionFont, int descriptionFontSize, int descriptionFontWeight, String backgroundColor) throws Exception {
+    public ByteBuffer generate(String headerText, String descriptionText, String productImageFile, String logoImageFile,
+                               String headerFont, int headerFontSize, int headerFontWeight, String headerFontColor,
+                               String descriptionFont, int descriptionFontSize, int descriptionFontWeight, String descriptionFontColor,
+                               String backgroundColor) throws Exception {
         try {
             String backgroundImageFile = "invalid";
             String sample = "{\"name\":\"ad2\", \"template_id\":\"template_1\", " +
@@ -33,6 +35,9 @@ public class AdPreviewCreatorClient {
             if (descriptionText!=null) copy = descriptionText;
 
             if (backgroundColor==null || backgroundColor.isEmpty()) backgroundColor = "white";
+            if (headerFontColor==null || headerFontColor.isEmpty()) headerFontColor = "black";
+            if (descriptionFontColor==null || descriptionFontColor.isEmpty()) descriptionFontColor = "black";
+
 
 
 
@@ -48,11 +53,14 @@ public class AdPreviewCreatorClient {
             layout.title_font.name = headerFont;
             layout.title_font.size = headerFontSize;
             layout.title_font.weight = headerFontWeight;
+            layout.title_font.color = headerFontColor;
 
             layout.description_font = new FontHolder();
             layout.description_font.name = descriptionFont;
             layout.description_font.size = descriptionFontSize;
             layout.description_font.weight = descriptionFontWeight;
+            layout.description_font.color = descriptionFontColor;
+
 
 
             String adLayoutJsonString = Jackson.newObjectMapper().writeValueAsString(layout);
@@ -134,5 +142,6 @@ public class AdPreviewCreatorClient {
         public String name;
         public int size;
         public int weight;
+        public String color;
     }
 }
