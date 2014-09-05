@@ -49,8 +49,8 @@ public:
 
 		if (!isDeleted(adComponents)) {
 			// TODO: Ask Lance for correct values
-			adComponents.set_title("Here Goes the Header");
-			adComponents.set_description("Copy goes here, copy goes here");
+			adComponents.set_title("");
+			adComponents.set_description("");
 
 			// Generate Ads
 			vector<pair<string, string> > generatedJpgAds;

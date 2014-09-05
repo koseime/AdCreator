@@ -92,7 +92,12 @@ void ImageMagickLayoutEngine::drawText(MagickWand *backgroundMagickWand, Drawing
 	}
 
 	DrawSetFont(drawingWand, ("@fonts/" + textEntry.fontName + type + ".ttf").c_str());
-	MagickAnnotateImage(backgroundMagickWand, drawingWand, textEntry.pos_x, textEntry.pos_y, 0, text.c_str());
+
+	if (text.empty()) {
+		MagickAnnotateImage(backgroundMagickWand, drawingWand, textEntry.pos_x, textEntry.pos_y, 0, textEntry.defaultText.c_str());
+	} else {
+		MagickAnnotateImage(backgroundMagickWand, drawingWand, textEntry.pos_x, textEntry.pos_y, 0, text.c_str());
+	}
 	// TODO: clear DrawingWand and check textbox is within the specified bounding box
 }
 

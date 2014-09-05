@@ -27,7 +27,9 @@ void LayoutEngineManager::importAdLayouts(char *fileContent, size_t fileLen) {
 	istringstream adLayoutFile(string(fileContent, fileLen));
 	string line;
 	while (getline(adLayoutFile, line)) {
-		adLayouts.push_back(AdLayoutEntry(line));
+		if (!line.empty()) {
+			adLayouts.push_back(AdLayoutEntry(line));
+		}
 	}
 }
 

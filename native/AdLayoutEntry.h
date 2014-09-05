@@ -30,6 +30,7 @@ public:
 
 	class TextEntry {
 	public:
+		string defaultText;
 		string fontName;
 		int fontSize;
 		int fontWeight;
