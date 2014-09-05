@@ -40,7 +40,7 @@ int ImageMagickLayoutEngine::importResources(const string &path) {
 }
 
 void ImageMagickLayoutEngine::createAllLayouts(const string &productImage, const string &title,
-		const string &copy, const string &backgroundColor, vector<pair<string, string> > *generatedAds) {
+		const string &copy, vector<pair<string, string> > *generatedAds) {
 	generatedAds->clear();
 	generatedAds->reserve(layoutEngineManager.getAdLayoutsSize());
 	for (int i = 0; i < layoutEngineManager.getAdLayoutsSize(); i++) {
@@ -50,7 +50,7 @@ void ImageMagickLayoutEngine::createAllLayouts(const string &productImage, const
 		generatedAds->push_back(pair<string, string>());
 		int last = generatedAds->size() - 1;
 		generatedAds->at(last).first = adLayoutEntry.name;
-		create(productImage, adLayoutEntry, title, copy, backgroundColor, &generatedAds->at(last).second);
+		create(productImage, adLayoutEntry, title, copy, adLayoutEntry.backgroundColor, &generatedAds->at(last).second);
 	}
 }
 

@@ -43,7 +43,7 @@ public:
 	int create(const string &productImage, const AdLayoutEntry &adLayoutEntry,
 			const string &title, const string &copy, const string &backgroundColor, string *outputBlob);
 	void createAllLayouts(const string &productImage, const string &title,
-			const string &copy, const string &backgroundColor, vector<pair<string, string> > *generatedAds);
+			const string &copy, vector<pair<string, string> > *generatedAds);
 };
 
 #endif /* IMAGEMAGICKLAYOUTENGINE_H_ */
