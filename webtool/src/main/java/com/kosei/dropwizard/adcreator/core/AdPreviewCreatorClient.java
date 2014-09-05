@@ -35,7 +35,10 @@ public class AdPreviewCreatorClient {
             if (backgroundColor==null || backgroundColor.isEmpty()) backgroundColor = "white";
 
 
+
+
             AdLayout layout = new AdLayout();
+            layout.background_color = backgroundColor;
             layout.background_filename="null";
             layout.name="ad2";
             layout.template_id="template_1";
@@ -123,6 +126,7 @@ public class AdPreviewCreatorClient {
         public FontHolder description_font;
         public String background_filename;
         public String logo_filename;
+        public String background_color;
 
     }
 
