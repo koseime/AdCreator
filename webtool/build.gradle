@@ -45,10 +45,16 @@ dependencies {
             'io.dropwizard:dropwizard-assets:0.7.0',
             'io.dropwizard:dropwizard-views-freemarker:0.7.0',
             'io.dropwizard:dropwizard-views-mustache:0.7.0',
-            'org.apache.thrift:libthrift:0.9.1'
 
 
     )
+
+  compile ('org.apache.thrift:libthrift:0.9.1') {
+            exclude group: 'com.google.code.gson'
+            exclude group: 'ch.qos.logback'
+            exclude group: 'org.slf4j'
+            exclude group: 'log4j'
+        }
 
     compile project(":api")
 
@@ -61,8 +67,8 @@ project.ext {
 }
 
 shadowJar {
-    classifier = 'standalone'
-
+  classifier = 'standalone'
+  mergeServiceFiles()
 }
 
 artifacts {

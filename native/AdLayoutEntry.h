@@ -46,6 +46,8 @@ public:
 
 	string name;
 
+	string backgroundColor;
+
 	ImageEntry background;
 	ImageEntry logo;
 	ImageEntry product;
