@@ -50,7 +50,7 @@ public class PreCannedImagesAndFonts {
         File dir = new File(logoDir);
         File[] files = dir.listFiles(new FilenameFilter() {
             public boolean accept(File dir, String name) {
-                return name.toLowerCase().endsWith(".jpg");
+                return name.toLowerCase().endsWith(".jpg") || name.toLowerCase().endsWith(".png");
             }
         });
         for (File f : files) {
@@ -64,7 +64,7 @@ public class PreCannedImagesAndFonts {
         File dir = new File(productsDir);
         File[] files = dir.listFiles(new FilenameFilter() {
             public boolean accept(File dir, String name) {
-                return name.toLowerCase().endsWith(".jpg");
+                return name.toLowerCase().endsWith(".jpg") || name.toLowerCase().endsWith(".png");
             }
         });
         for (File f : files) {
