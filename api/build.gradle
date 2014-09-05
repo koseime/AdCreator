@@ -1,0 +1,100 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'thrift'
+
+
+sourceCompatibility = 1.7
+
+
+repositories {
+    mavenCentral()
+}
+
+
+
+
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "com.github.jengelman.gradle.plugins:shadow:1.1.1"
+        classpath 'co.tomlee.gradle.plugins:gradle-thrift-plugin:0.0.4'
+
+    }
+}
+
+apply plugin: "com.github.johnrengelman.shadow"
+
+dependencies {
+    testCompile (
+            'junit:junit:4.11',
+            'org.reflections:reflections:0.9.9-RC1',
+            'org.mockito:mockito-all:1.9.5'
+    )
+
+
+    compile(
+        'commons-lang:commons-lang:2.6',
+        'org.yaml:snakeyaml:1.13',
+        'org.slf4j:slf4j-simple:1.6.1',
+         'org.apache.thrift:libthrift:0.9.1'
+
+
+    )
+
+}
+
+// Set our project variables
+project.ext {
+    mainClassName = "com.kosei.generator.loadtest.GenerateCatalog"
+}
+
+shadowJar {
+    classifier = 'standalone'
+
+}
+
+artifacts {
+    archives shadowJar
+}
+
+generateThriftSource {
+    generators {
+        java {
+            option 'hashcode'
+            option 'beans'
+        }
+    }
+
+    generators {
+        cpp {
+            option 'hashcode'
+            option 'beans'
+        }
+    }
+}
+
+sourceSets {
+    codeGen {
+        java.srcDir "${buildDir}/generated-src/"
+    }
+    main {
+        runtimeClasspath += sourceSets.codeGen.output
+    }
+}
+
+
+idea {
+    module {
+        excludeDirs = [file(".gradle")]
+        ["classes", "docs", "dependency-cache", "libs", "reports", "resources", "test-results", "tmp", "poms"].each {
+            excludeDirs << file("$buildDir/$it")
+        }
+        sourceDirs += file('build/generated-src/thrift/main')
+
+    }
+}
+
+
