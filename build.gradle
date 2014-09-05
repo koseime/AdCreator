@@ -1,0 +1,31 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+
+sourceCompatibility = 1.7
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+    }
+}
+
+allprojects {
+    version = '1.0'
+
+    repositories {
+        mavenCentral()
+    }
+
+    apply plugin: "idea"
+}
+
+idea {
+    module {
+        excludeDirs = [file(".gradle")]
+        ["classes", "docs", "dependency-cache", "libs", "reports", "resources", "test-results", "tmp", "poms"].each {
+            excludeDirs << file("$buildDir/$it")
+        }
+    }
+}

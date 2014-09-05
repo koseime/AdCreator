@@ -1,0 +1,5 @@
+rootProject.name = 'adcreatorbackup-api'
+include 'api'
+
+include 'webtool'
+
