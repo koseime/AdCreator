@@ -1,4 +1,4 @@
-rootProject.name = 'adcreatorbackup-api'
+rootProject.name = 'adcreator-api'
 include 'api'
 
 include 'webtool'

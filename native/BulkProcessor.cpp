@@ -63,7 +63,7 @@ void BulkProcessor::invoke() {
 	parseline(*_line, id, productPic, productTitle, productCopy);
 	std::string output = _outputDir + "/" + id + ".png";
 
-	layoutEngine.create((const char*) productPic.c_str(),  productTitle.c_str(), productCopy.c_str(),  output.c_str());
+	layoutEngine.create((const char*) productPic.c_str(),  productTitle.c_str(), productCopy.c_str(),  "white", output.c_str());
 
 }
 

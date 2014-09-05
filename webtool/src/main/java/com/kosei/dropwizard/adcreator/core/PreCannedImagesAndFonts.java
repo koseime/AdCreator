@@ -2,6 +2,7 @@ package com.kosei.dropwizard.adcreator.core;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,11 +16,19 @@ public class PreCannedImagesAndFonts {
     private final String logoDir;
     private final String productsDir;
 
+    private final List<String> sizes;
+    private final List<String> weights;
+
+
 
     public PreCannedImagesAndFonts(String fontDir, String logoDir, String productsDir) {
         this.fontDir = fontDir;
         this.logoDir = logoDir;
         this.productsDir = productsDir;
+
+        sizes = Arrays.asList("2","3","4","5","6","7","8","9","10","11","12","14","16","18","22","24","28");
+        weights = Arrays.asList("50", "100", "200","400","600","800","1000");
+
     }
 
     public Map<String,String> getFonts() {
@@ -31,7 +40,7 @@ public class PreCannedImagesAndFonts {
             }
         });
         for (File f : files) {
-            fonts.put(f.getName(),f.getAbsolutePath());
+            fonts.put(f.getName(),f.getName().replace(".ttf",""));
         }
         return fonts;
     }
@@ -62,6 +71,14 @@ public class PreCannedImagesAndFonts {
             fonts.put(f.getName(),f.getAbsolutePath());
         }
         return fonts;
+    }
+
+    public List<String> getSizes() {
+        return sizes;
+    }
+
+    public List<String> getWeights() {
+        return weights;
     }
 
 

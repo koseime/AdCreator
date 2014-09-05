@@ -34,22 +34,73 @@ public class AdCreatorResource {
     @GET
     @Path("/create")
     @Produces(MediaType.TEXT_HTML)
-    public AdCreatorView createAdCreator(@QueryParam("productImageFile") String product,
-                                         @QueryParam("logoImageFile") String logoImage)  throws Exception {
+    public AdCreatorView createAdCreator(@QueryParam("productImage") String product,
+                                         @QueryParam("logoImage") String logoImage,
+                                         @QueryParam("headerFont") String headerFont,
+                                         @QueryParam("headerFontSize") String headerFontSize,
+                                         @QueryParam("headerFontWeight") String headerFontWeight,
+                                         @QueryParam("descriptionFont") String descriptionFont,
+                                         @QueryParam("descriptionFontSize") String descriptionFontSize,
+                                         @QueryParam("descriptionFontWeight") String descriptionFontWeight,
+                                         @QueryParam("descriptionText") String descriptionText,
+                                         @QueryParam("headerText") String headerText ,
+                                         @QueryParam("backgroundColor") String backgroundColor
+
+
+    )  throws Exception {
         AdCreator adCreator = new AdCreator();
 
-        if (product==null || product.isEmpty() || logoImage==null || logoImage.isEmpty()) {
+        if (product==null || product.isEmpty() || logoImage==null || logoImage.isEmpty() || descriptionFontWeight ==null || descriptionFont == null
+                || descriptionFontSize == null || headerFont ==null || headerFontSize ==null || headerFontWeight == null) {
             return new AdCreatorView(adCreator, preCannedImagesAndFonts.getFonts().keySet(),
-                    preCannedImagesAndFonts.getLogos().keySet(), preCannedImagesAndFonts.getProducts().keySet());
+                    preCannedImagesAndFonts.getLogos().keySet(), preCannedImagesAndFonts.getProducts().keySet(),
+                    preCannedImagesAndFonts.getSizes(), preCannedImagesAndFonts.getWeights());
         }
+        if (backgroundColor==null) backgroundColor = "white";
+        String sBackgroundColor = backgroundColor;
 
-        ByteBuffer bb = client.generate(preCannedImagesAndFonts.getProducts().get(product), preCannedImagesAndFonts.getLogos().get(logoImage));
+        if (backgroundColor.length()==6) sBackgroundColor = "#"+sBackgroundColor;
+
+        long start = System.currentTimeMillis();
+        ByteBuffer bb = client.generate(
+                headerText,
+                descriptionText,
+                preCannedImagesAndFonts.getProducts().get(product),
+                preCannedImagesAndFonts.getLogos().get(logoImage),
+                preCannedImagesAndFonts.getFonts().get(headerFont),
+                Integer.parseInt(headerFontSize),
+                Integer.parseInt(headerFontWeight),
+                preCannedImagesAndFonts.getFonts().get(descriptionFont),
+                Integer.parseInt(descriptionFontSize),
+                Integer.parseInt(descriptionFontWeight),
+                sBackgroundColor);
         adCreator.setId(counter++);
+        System.out.println("Time to generate:" + (System.currentTimeMillis()-start));
 
         cache.put(adCreator.getId() + "", bb);
         adCreator.setImageUrl("/adcreator/" + adCreator.getId()+".jpg");
-        return new AdCreatorView(adCreator, preCannedImagesAndFonts.getFonts().keySet(),
-                preCannedImagesAndFonts.getLogos().keySet(), preCannedImagesAndFonts.getProducts().keySet());
+        AdCreatorView view = new AdCreatorView(adCreator,
+                preCannedImagesAndFonts.getFonts().keySet(),
+                preCannedImagesAndFonts.getLogos().keySet(),
+                preCannedImagesAndFonts.getProducts().keySet(),
+                preCannedImagesAndFonts.getSizes(),
+                preCannedImagesAndFonts.getWeights());
+
+
+        view.selectedDescriptionFont  = descriptionFont;
+        view.selectedDescriptionFontSize =descriptionFontSize;
+        view.selectedDescriptionFontWeight =descriptionFontWeight;
+
+        view.selectedHeaderFont=headerFont;
+        view.selectedHeaderFontSize=headerFontSize;
+        view.selectedHeaderFontWeight=headerFontWeight;
+
+        view.selectedLogo = logoImage;
+        view.selectedProduct = product;
+        view.descriptionText = descriptionText;
+        view.headerText = headerText;
+        view.backgroundColor = backgroundColor;
+        return view;
     }
 
 

@@ -10,8 +10,8 @@
 
 
 
-const char* PreviewInfo::ascii_fingerprint = "873CB9E5A4C10A7ECE7476FD192F55EE";
-const uint8_t PreviewInfo::binary_fingerprint[16] = {0x87,0x3C,0xB9,0xE5,0xA4,0xC1,0x0A,0x7E,0xCE,0x74,0x76,0xFD,0x19,0x2F,0x55,0xEE};
+const char* PreviewInfo::ascii_fingerprint = "5DA595EAE7ECCE4D6C8D61AD15427AFF";
+const uint8_t PreviewInfo::binary_fingerprint[16] = {0x5D,0xA5,0x95,0xEA,0xE7,0xEC,0xCE,0x4D,0x6C,0x8D,0x61,0xAD,0x15,0x42,0x7A,0xFF};
 
 uint32_t PreviewInfo::read(::apache::thrift::protocol::TProtocol* iprot) {
 
@@ -81,6 +81,14 @@ uint32_t PreviewInfo::read(::apache::thrift::protocol::TProtocol* iprot) {
           xfer += iprot->skip(ftype);
         }
         break;
+      case 7:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->backgroundColor);
+          this->__isset.backgroundColor = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -121,6 +129,10 @@ uint32_t PreviewInfo::write(::apache::thrift::protocol::TProtocol* oprot) const 
   xfer += oprot->writeString(this->copy);
   xfer += oprot->writeFieldEnd();
 
+  xfer += oprot->writeFieldBegin("backgroundColor", ::apache::thrift::protocol::T_STRING, 7);
+  xfer += oprot->writeString(this->backgroundColor);
+  xfer += oprot->writeFieldEnd();
+
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
@@ -134,6 +146,7 @@ void swap(PreviewInfo &a, PreviewInfo &b) {
   swap(a.adEntryJsonString, b.adEntryJsonString);
   swap(a.title, b.title);
   swap(a.copy, b.copy);
+  swap(a.backgroundColor, b.backgroundColor);
   swap(a.__isset, b.__isset);
 }
 

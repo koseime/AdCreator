@@ -15,14 +15,14 @@ export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig
  endif
 
  ifeq ($(OSARCH),osx)
-    CFLAGS = -Wall -c -g -std=c++0x $(INCPATH)
+    CFLAGS = -Wall -O3 -c -g -std=c++0x $(INCPATH)
     LDFLAGS = -mmacosx-version-min=10.8 \
               -lm -lpthread -lthrift \
               `Magick++-config --ldflags --libs` \
               /usr/local/lib/libarchive.a -lz -lbz2 \
               -lpthread -lcrypto -lssl -lc++
 else
-    CFLAGS = -Wall -c -g $(INCPATH)
+    CFLAGS = -Wall -O3 -c -g $(INCPATH)
     COMMON_DEF = -DHAVE_INTTYPES_H -DHAVE_NETINET_IN_H
     LDFLAGS = -L /usr/lib64  \
               -Wl,-Bstatic -lthrift \

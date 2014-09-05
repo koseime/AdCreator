@@ -18,22 +18,23 @@
 
 
 typedef struct _PreviewInfo__isset {
-  _PreviewInfo__isset() : productBlob(false), backgroundBlob(false), logoBlob(false), adEntryJsonString(false), title(false), copy(false) {}
+  _PreviewInfo__isset() : productBlob(false), backgroundBlob(false), logoBlob(false), adEntryJsonString(false), title(false), copy(false), backgroundColor(false) {}
   bool productBlob;
   bool backgroundBlob;
   bool logoBlob;
   bool adEntryJsonString;
   bool title;
   bool copy;
+  bool backgroundColor;
 } _PreviewInfo__isset;
 
 class PreviewInfo {
  public:
 
-  static const char* ascii_fingerprint; // = "873CB9E5A4C10A7ECE7476FD192F55EE";
-  static const uint8_t binary_fingerprint[16]; // = {0x87,0x3C,0xB9,0xE5,0xA4,0xC1,0x0A,0x7E,0xCE,0x74,0x76,0xFD,0x19,0x2F,0x55,0xEE};
+  static const char* ascii_fingerprint; // = "5DA595EAE7ECCE4D6C8D61AD15427AFF";
+  static const uint8_t binary_fingerprint[16]; // = {0x5D,0xA5,0x95,0xEA,0xE7,0xEC,0xCE,0x4D,0x6C,0x8D,0x61,0xAD,0x15,0x42,0x7A,0xFF};
 
-  PreviewInfo() : productBlob(), backgroundBlob(), logoBlob(), adEntryJsonString(), title(), copy() {
+  PreviewInfo() : productBlob(), backgroundBlob(), logoBlob(), adEntryJsonString(), title(), copy(), backgroundColor() {
   }
 
   virtual ~PreviewInfo() throw() {}
@@ -44,6 +45,7 @@ class PreviewInfo {
   std::string adEntryJsonString;
   std::string title;
   std::string copy;
+  std::string backgroundColor;
 
   _PreviewInfo__isset __isset;
 
@@ -71,6 +73,10 @@ class PreviewInfo {
     copy = val;
   }
 
+  void __set_backgroundColor(const std::string& val) {
+    backgroundColor = val;
+  }
+
   bool operator == (const PreviewInfo & rhs) const
   {
     if (!(productBlob == rhs.productBlob))
@@ -84,6 +90,8 @@ class PreviewInfo {
     if (!(title == rhs.title))
       return false;
     if (!(copy == rhs.copy))
+      return false;
+    if (!(backgroundColor == rhs.backgroundColor))
       return false;
     return true;
   }

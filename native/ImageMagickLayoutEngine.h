@@ -36,14 +36,14 @@ public:
 	int importResources(const string &path);
 
 	int create(const string &product_image_file, const string &title,
-			const string &copy, const string &output_file);
+			const string &copy, const string &backgroundColor, const string &output_file);
 	int create(const string &productImage, const string &backgroundBlob,
 			const string &logoBlob, const AdLayoutEntry &adLayoutEntry, const string &title,
-			const string &copy, string *outputBlob);
+			const string &copy, const string &backgroundColor, string *outputBlob);
 	int create(const string &productImage, const AdLayoutEntry &adLayoutEntry,
-			const string &title, const string &copy, string *outputBlob);
+			const string &title, const string &copy, const string &backgroundColor, string *outputBlob);
 	void createAllLayouts(const string &productImage, const string &title,
-			const string &copy, vector<pair<string, string> > *generatedAds);
+			const string &copy, const string &backgroundColor, vector<pair<string, string> > *generatedAds);
 };
 
 #endif /* IMAGEMAGICKLAYOUTENGINE_H_ */

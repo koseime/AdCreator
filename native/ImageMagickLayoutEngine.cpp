@@ -40,7 +40,7 @@ int ImageMagickLayoutEngine::importResources(const string &path) {
 }
 
 void ImageMagickLayoutEngine::createAllLayouts(const string &productImage, const string &title,
-		const string &copy, vector<pair<string, string> > *generatedAds) {
+		const string &copy, const string &backgroundColor, vector<pair<string, string> > *generatedAds) {
 	generatedAds->clear();
 	generatedAds->reserve(layoutEngineManager.getAdLayoutsSize());
 	for (int i = 0; i < layoutEngineManager.getAdLayoutsSize(); i++) {
@@ -50,18 +50,19 @@ void ImageMagickLayoutEngine::createAllLayouts(const string &productImage, const
 		generatedAds->push_back(pair<string, string>());
 		int last = generatedAds->size() - 1;
 		generatedAds->at(last).first = adLayoutEntry.name;
-		create(productImage, adLayoutEntry, title, copy, &generatedAds->at(last).second);
+		create(productImage, adLayoutEntry, title, copy, backgroundColor, &generatedAds->at(last).second);
 	}
 }
 
 int ImageMagickLayoutEngine::create(const string &productImage, const AdLayoutEntry &adLayoutEntry,
-		const string &title, const string &copy, string *outputBlob) {
+		const string &title, const string &copy, const string &backgroundColor, string *outputBlob) {
 	return create(productImage, layoutEngineManager.getImageBlob(adLayoutEntry.background.fileName),
-			layoutEngineManager.getImageBlob(adLayoutEntry.logo.fileName), adLayoutEntry, title, copy, outputBlob);
+			layoutEngineManager.getImageBlob(adLayoutEntry.logo.fileName), adLayoutEntry, title, copy, backgroundColor,
+			outputBlob);
 }
 
 int ImageMagickLayoutEngine::create(const string &product_image_file, const string &title,
-		const string &copy, const string &output_file) {
+		const string &copy, const string &backgroundColor, const string &output_file) {
 	// Load file content into string
 
 	ifstream fs(product_image_file.c_str());
@@ -70,7 +71,7 @@ int ImageMagickLayoutEngine::create(const string &product_image_file, const stri
 	int retVal;
 
 	string ad;
-	retVal = create(productBlob, layoutEngineManager.getAdLayouts(0), title, copy, &ad);
+	retVal = create(productBlob, layoutEngineManager.getAdLayouts(0), title, copy, backgroundColor, &ad);
 
 	ofstream outputStream(output_file.c_str());
 	outputStream.write(ad.data(), ad.size());
@@ -130,7 +131,7 @@ void ImageMagickLayoutEngine::createRoundedRectangleMask(MagickWand *maskMagickW
 
 int ImageMagickLayoutEngine::create(const string &productImage, const string &backgroundBlob,
 		const string &logoBlob, const AdLayoutEntry &adLayoutEntry, const string &title,
-		const string &copy, string *outputBlob) {
+		const string &copy, const string &backgroundColor, string *outputBlob) {
 	// Initialization
 	// TODO: create them once per object?
 	MagickWandGenesis();
@@ -144,7 +145,7 @@ int ImageMagickLayoutEngine::create(const string &productImage, const string &ba
 	// Create Background image
 	//Blob *backgroundBlob = layoutEngineManager.getImageBlob(adLayoutEntry.background.fileName);
 	if (backgroundBlob.empty()) {
-		PixelSetColor(pixelWand, "white");
+		PixelSetColor(pixelWand, backgroundColor.data());
 		MagickNewImage(backgroundMagickWand, 320, 50, pixelWand);
 	} else {
 		MagickReadImageBlob(backgroundMagickWand, backgroundBlob.data(), backgroundBlob.size());

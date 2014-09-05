@@ -55,7 +55,7 @@ public:
 			// Generate Ads
 			vector<pair<string, string> > generatedJpgAds;
 			engine.createAllLayouts(adComponents.productjpg(), adComponents.title(),
-					adComponents.description(), &generatedJpgAds);
+					adComponents.description(), "white", &generatedJpgAds);
 
 			// Add to AdComponents protobuf
 			for (int i = 0; i < generatedJpgAds.size(); i++) {

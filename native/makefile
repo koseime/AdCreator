@@ -21,7 +21,7 @@ HADOOP_SRC_DIR = $(HADOOP_SRC)
  endif
 
  ifeq ($(OSARCH),osx)
-    CFLAGS = -Wall -c -g -std=c++0x $(INCPATH)
+    CFLAGS = -Wall -O3 -c -g -std=c++0x $(INCPATH)
     LDFLAGS = -mmacosx-version-min=10.8 \
               -lm -lpthread \
               `pkg-config --libs protobuf` \
@@ -31,7 +31,7 @@ HADOOP_SRC_DIR = $(HADOOP_SRC)
               /usr/local/lib/libarchive.a -lz -lbz2 \
               -lpthread -lcrypto -lssl -lc++
 else
-    CFLAGS = -Wall -c -g $(INCPATH)
+    CFLAGS = -Wall -O3 -c -g $(INCPATH)
     LDFLAGS = -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/pipes/api \
               -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/utils/api -L /usr/lib64  \
               -Wl,-Bstatic -L /home/kosei/tools/lib/hadoop/lib/native -lhadooppipes -lhadooputils \

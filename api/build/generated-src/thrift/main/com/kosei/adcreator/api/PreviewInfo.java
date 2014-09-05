@@ -42,6 +42,7 @@ public class PreviewInfo implements org.apache.thrift.TBase<PreviewInfo, Preview
   private static final org.apache.thrift.protocol.TField AD_ENTRY_JSON_STRING_FIELD_DESC = new org.apache.thrift.protocol.TField("adEntryJsonString", org.apache.thrift.protocol.TType.STRING, (short)4);
   private static final org.apache.thrift.protocol.TField TITLE_FIELD_DESC = new org.apache.thrift.protocol.TField("title", org.apache.thrift.protocol.TType.STRING, (short)5);
   private static final org.apache.thrift.protocol.TField COPY_FIELD_DESC = new org.apache.thrift.protocol.TField("copy", org.apache.thrift.protocol.TType.STRING, (short)6);
+  private static final org.apache.thrift.protocol.TField BACKGROUND_COLOR_FIELD_DESC = new org.apache.thrift.protocol.TField("backgroundColor", org.apache.thrift.protocol.TType.STRING, (short)7);
 
   private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
   static {
@@ -55,6 +56,7 @@ public class PreviewInfo implements org.apache.thrift.TBase<PreviewInfo, Preview
   private String adEntryJsonString; // required
   private String title; // required
   private String copy; // required
+  private String backgroundColor; // required
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
@@ -63,7 +65,8 @@ public class PreviewInfo implements org.apache.thrift.TBase<PreviewInfo, Preview
     LOGO_BLOB((short)3, "logoBlob"),
     AD_ENTRY_JSON_STRING((short)4, "adEntryJsonString"),
     TITLE((short)5, "title"),
-    COPY((short)6, "copy");
+    COPY((short)6, "copy"),
+    BACKGROUND_COLOR((short)7, "backgroundColor");
 
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -90,6 +93,8 @@ public class PreviewInfo implements org.apache.thrift.TBase<PreviewInfo, Preview
           return TITLE;
         case 6: // COPY
           return COPY;
+        case 7: // BACKGROUND_COLOR
+          return BACKGROUND_COLOR;
         default:
           return null;
       }
@@ -145,6 +150,8 @@ public class PreviewInfo implements org.apache.thrift.TBase<PreviewInfo, Preview
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
     tmpMap.put(_Fields.COPY, new org.apache.thrift.meta_data.FieldMetaData("copy", org.apache.thrift.TFieldRequirementType.DEFAULT, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+    tmpMap.put(_Fields.BACKGROUND_COLOR, new org.apache.thrift.meta_data.FieldMetaData("backgroundColor", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(PreviewInfo.class, metaDataMap);
   }
@@ -158,7 +165,8 @@ public class PreviewInfo implements org.apache.thrift.TBase<PreviewInfo, Preview
     ByteBuffer logoBlob,
     String adEntryJsonString,
     String title,
-    String copy)
+    String copy,
+    String backgroundColor)
   {
     this();
     this.productBlob = productBlob;
@@ -167,6 +175,7 @@ public class PreviewInfo implements org.apache.thrift.TBase<PreviewInfo, Preview
     this.adEntryJsonString = adEntryJsonString;
     this.title = title;
     this.copy = copy;
+    this.backgroundColor = backgroundColor;
   }
 
   /**
@@ -194,6 +203,9 @@ public class PreviewInfo implements org.apache.thrift.TBase<PreviewInfo, Preview
     if (other.isSetCopy()) {
       this.copy = other.copy;
     }
+    if (other.isSetBackgroundColor()) {
+      this.backgroundColor = other.backgroundColor;
+    }
   }
 
   public PreviewInfo deepCopy() {
@@ -208,6 +220,7 @@ public class PreviewInfo implements org.apache.thrift.TBase<PreviewInfo, Preview
     this.adEntryJsonString = null;
     this.title = null;
     this.copy = null;
+    this.backgroundColor = null;
   }
 
   public byte[] getProductBlob() {
@@ -375,6 +388,29 @@ public class PreviewInfo implements org.apache.thrift.TBase<PreviewInfo, Preview
     }
   }
 
+  public String getBackgroundColor() {
+    return this.backgroundColor;
+  }
+
+  public void setBackgroundColor(String backgroundColor) {
+    this.backgroundColor = backgroundColor;
+  }
+
+  public void unsetBackgroundColor() {
+    this.backgroundColor = null;
+  }
+
+  /** Returns true if field backgroundColor is set (has been assigned a value) and false otherwise */
+  public boolean isSetBackgroundColor() {
+    return this.backgroundColor != null;
+  }
+
+  public void setBackgroundColorIsSet(boolean value) {
+    if (!value) {
+      this.backgroundColor = null;
+    }
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case PRODUCT_BLOB:
@@ -425,6 +461,14 @@ public class PreviewInfo implements org.apache.thrift.TBase<PreviewInfo, Preview
       }
       break;
 
+    case BACKGROUND_COLOR:
+      if (value == null) {
+        unsetBackgroundColor();
+      } else {
+        setBackgroundColor((String)value);
+      }
+      break;
+
     }
   }
 
@@ -447,6 +491,9 @@ public class PreviewInfo implements org.apache.thrift.TBase<PreviewInfo, Preview
 
     case COPY:
       return getCopy();
+
+    case BACKGROUND_COLOR:
+      return getBackgroundColor();
 
     }
     throw new IllegalStateException();
@@ -471,6 +518,8 @@ public class PreviewInfo implements org.apache.thrift.TBase<PreviewInfo, Preview
       return isSetTitle();
     case COPY:
       return isSetCopy();
+    case BACKGROUND_COLOR:
+      return isSetBackgroundColor();
     }
     throw new IllegalStateException();
   }
@@ -542,6 +591,15 @@ public class PreviewInfo implements org.apache.thrift.TBase<PreviewInfo, Preview
         return false;
     }
 
+    boolean this_present_backgroundColor = true && this.isSetBackgroundColor();
+    boolean that_present_backgroundColor = true && that.isSetBackgroundColor();
+    if (this_present_backgroundColor || that_present_backgroundColor) {
+      if (!(this_present_backgroundColor && that_present_backgroundColor))
+        return false;
+      if (!this.backgroundColor.equals(that.backgroundColor))
+        return false;
+    }
+
     return true;
   }
 
@@ -578,6 +636,11 @@ public class PreviewInfo implements org.apache.thrift.TBase<PreviewInfo, Preview
     builder.append(present_copy);
     if (present_copy)
       builder.append(copy);
+
+    boolean present_backgroundColor = true && (isSetBackgroundColor());
+    builder.append(present_backgroundColor);
+    if (present_backgroundColor)
+      builder.append(backgroundColor);
 
     return builder.toHashCode();
   }
@@ -650,6 +713,16 @@ public class PreviewInfo implements org.apache.thrift.TBase<PreviewInfo, Preview
         return lastComparison;
       }
     }
+    lastComparison = Boolean.valueOf(isSetBackgroundColor()).compareTo(other.isSetBackgroundColor());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetBackgroundColor()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.backgroundColor, other.backgroundColor);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
     return 0;
   }
 
@@ -715,6 +788,14 @@ public class PreviewInfo implements org.apache.thrift.TBase<PreviewInfo, Preview
       sb.append("null");
     } else {
       sb.append(this.copy);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("backgroundColor:");
+    if (this.backgroundColor == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.backgroundColor);
     }
     first = false;
     sb.append(")");
@@ -808,6 +889,14 @@ public class PreviewInfo implements org.apache.thrift.TBase<PreviewInfo, Preview
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
+          case 7: // BACKGROUND_COLOR
+            if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+              struct.backgroundColor = iprot.readString();
+              struct.setBackgroundColorIsSet(true);
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+            }
+            break;
           default:
             org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
         }
@@ -851,6 +940,11 @@ public class PreviewInfo implements org.apache.thrift.TBase<PreviewInfo, Preview
         oprot.writeString(struct.copy);
         oprot.writeFieldEnd();
       }
+      if (struct.backgroundColor != null) {
+        oprot.writeFieldBegin(BACKGROUND_COLOR_FIELD_DESC);
+        oprot.writeString(struct.backgroundColor);
+        oprot.writeFieldEnd();
+      }
       oprot.writeFieldStop();
       oprot.writeStructEnd();
     }
@@ -887,7 +981,10 @@ public class PreviewInfo implements org.apache.thrift.TBase<PreviewInfo, Preview
       if (struct.isSetCopy()) {
         optionals.set(5);
       }
-      oprot.writeBitSet(optionals, 6);
+      if (struct.isSetBackgroundColor()) {
+        optionals.set(6);
+      }
+      oprot.writeBitSet(optionals, 7);
       if (struct.isSetProductBlob()) {
         oprot.writeBinary(struct.productBlob);
       }
@@ -906,12 +1003,15 @@ public class PreviewInfo implements org.apache.thrift.TBase<PreviewInfo, Preview
       if (struct.isSetCopy()) {
         oprot.writeString(struct.copy);
       }
+      if (struct.isSetBackgroundColor()) {
+        oprot.writeString(struct.backgroundColor);
+      }
     }
 
     @Override
     public void read(org.apache.thrift.protocol.TProtocol prot, PreviewInfo struct) throws org.apache.thrift.TException {
       TTupleProtocol iprot = (TTupleProtocol) prot;
-      BitSet incoming = iprot.readBitSet(6);
+      BitSet incoming = iprot.readBitSet(7);
       if (incoming.get(0)) {
         struct.productBlob = iprot.readBinary();
         struct.setProductBlobIsSet(true);
@@ -935,6 +1035,10 @@ public class PreviewInfo implements org.apache.thrift.TBase<PreviewInfo, Preview
       if (incoming.get(5)) {
         struct.copy = iprot.readString();
         struct.setCopyIsSet(true);
+      }
+      if (incoming.get(6)) {
+        struct.backgroundColor = iprot.readString();
+        struct.setBackgroundColorIsSet(true);
       }
     }
   }
