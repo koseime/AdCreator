@@ -46,7 +46,9 @@ public class AdCreatorResource {
                                          @QueryParam("descriptionFontColor") String descriptionFontColor,
                                          @QueryParam("descriptionText") String descriptionText,
                                          @QueryParam("headerText") String headerText ,
-                                         @QueryParam("backgroundColor") String backgroundColor
+                                         @QueryParam("backgroundColor") String backgroundColor,
+                                         @QueryParam("templateId") String templateId
+
 
 
     )  throws Exception {
@@ -56,7 +58,7 @@ public class AdCreatorResource {
                 || descriptionFontSize == null || headerFont ==null || headerFontSize ==null || headerFontWeight == null) {
             return new AdCreatorView(adCreator, preCannedImagesAndFonts.getFonts().keySet(),
                     preCannedImagesAndFonts.getLogos().keySet(), preCannedImagesAndFonts.getProducts().keySet(),
-                    preCannedImagesAndFonts.getSizes(), preCannedImagesAndFonts.getWeights());
+                    preCannedImagesAndFonts.getSizes(), preCannedImagesAndFonts.getWeights(), preCannedImagesAndFonts.templateIds());
         }
         if (backgroundColor==null) backgroundColor = "white";
         String sBackgroundColor = backgroundColor;
@@ -84,7 +86,8 @@ public class AdCreatorResource {
                 Integer.parseInt(descriptionFontSize),
                 Integer.parseInt(descriptionFontWeight),
                 sDescriptionFontColor,
-                sBackgroundColor);
+                sBackgroundColor,
+                templateId);
         adCreator.setId(counter++);
         System.out.println("Time to generate:" + (System.currentTimeMillis()-start));
 
@@ -95,7 +98,8 @@ public class AdCreatorResource {
                 preCannedImagesAndFonts.getLogos().keySet(),
                 preCannedImagesAndFonts.getProducts().keySet(),
                 preCannedImagesAndFonts.getSizes(),
-                preCannedImagesAndFonts.getWeights());
+                preCannedImagesAndFonts.getWeights(),
+                preCannedImagesAndFonts.templateIds());
 
 
         view.selectedDescriptionFont  = descriptionFont;
@@ -106,6 +110,7 @@ public class AdCreatorResource {
         view.selectedHeaderFont=headerFont;
         view.selectedHeaderFontSize=headerFontSize;
         view.selectedHeaderFontWeight=headerFontWeight;
+        view.selectedTemplateId = templateId;
         view.headerFontColor = headerFontColor;
 
         view.selectedLogo = logoImage;
@@ -113,6 +118,7 @@ public class AdCreatorResource {
         view.descriptionText = descriptionText;
         view.headerText = headerText;
         view.backgroundColor = backgroundColor;
+
         return view;
     }
 

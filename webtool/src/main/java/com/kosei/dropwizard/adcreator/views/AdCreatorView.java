@@ -18,6 +18,8 @@ public class AdCreatorView extends View {
     private final Collection<String> products;
     private final Collection<String> sizes;
     private final Collection<String> weights;
+    private final Collection<String> templateIds;
+
 
 
     public String selectedDescriptionFont;
@@ -28,6 +30,7 @@ public class AdCreatorView extends View {
     public String selectedHeaderFontSize;
     public String selectedLogo;
     public String selectedProduct;
+    public String selectedTemplateId;
 
     public String headerFontColor;
     public String descriptionFontColor;
@@ -41,7 +44,7 @@ public class AdCreatorView extends View {
 
 
     public AdCreatorView(AdCreator adCreator, Collection<String> fonts, Collection<String> logos, Collection<String> products,
-                         Collection<String> sizes, Collection<String> weights
+                         Collection<String> sizes, Collection<String> weights, Collection<String> templateIds
     ) {
         super(template);
         this.adCreator = adCreator;
@@ -50,6 +53,7 @@ public class AdCreatorView extends View {
         this.logos = logos;
         this.sizes = sizes;
         this.weights = weights;
+        this.templateIds = templateIds;
     }
 
     public AdCreator getAdCreator() {
@@ -76,6 +80,9 @@ public class AdCreatorView extends View {
     public Collection<String> getWeights() {
         return weights;
     }
+
+    public Collection<String> getTemplateIds() { return templateIds; }
+
 
     public String selectedProduct(String val) {
         if (selectedProduct == null) return null;
@@ -130,6 +137,14 @@ public class AdCreatorView extends View {
     public String selectedDescriptionFontWeight(String val) {
         if (selectedDescriptionFontWeight == null) return null;
         else if (selectedDescriptionFontWeight.equals(val))
+            return "selected";
+        return null;
+    }
+
+
+    public String selectedTemplateId(String val) {
+        if (selectedTemplateId == null) return null;
+        else if (selectedTemplateId.equals(val))
             return "selected";
         return null;
     }

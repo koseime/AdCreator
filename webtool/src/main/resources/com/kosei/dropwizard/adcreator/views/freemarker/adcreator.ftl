@@ -6,6 +6,9 @@
             var title = document.getElementById('title').value;
             var body = document.getElementById('body').value;
 
+            var templateId = document.getElementById('templateId').value;
+
+
             var productImageFile = document.getElementById('productImage').value;
             var logoImageFile = document.getElementById('logoImage').value;
             var headerFont = document.getElementById('headerFont').value;
@@ -25,7 +28,7 @@
                    "&headerFontSize="+headerFontSize+"&headerFontWeight="+headerFontWeight+"&headerFontColor="+headerFontColor+
                     "&descriptionFont="+descriptionFont+"&descriptionFontSize=" + descriptionFontSize +"&descriptionFontWeight="+descriptionFontWeight +
                     "&descriptionFontColor="+descriptionFontColor +
-                    "&descriptionText="+body + "&headerText=" + title + "&backgroundColor="+backgroundColor;
+                    "&descriptionText="+body + "&headerText=" + title + "&backgroundColor="+backgroundColor + "&templateId="+templateId;
             window.location.href = url;
         }
     </script>
@@ -39,6 +42,16 @@
             <input type="button" value="Submit" onclick="doit()"><br>
             Header Text: <input type="text" name="title" id="title" size="60"  <#if headerText??> value="${headerText}"</#if>/> <br/>
             Description: <input type="text" name="body" id="body" size="60" <#if descriptionText??> value="${descriptionText}"</#if>/>
+
+            <br/>
+            Template:
+            <select id="templateId">
+            <option value="">-- templates --</option>
+
+                <#list templateIds as templateId>
+                    <option value="${templateId}" <#if selectedTemplateId(templateId)??> selected</#if>>${templateId}</option>
+                </#list>
+            </select>
 
 
           <br/>

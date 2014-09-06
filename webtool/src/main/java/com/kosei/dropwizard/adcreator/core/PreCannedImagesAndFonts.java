@@ -16,8 +16,12 @@ public class PreCannedImagesAndFonts {
     private final String logoDir;
     private final String productsDir;
 
+
     private final List<String> sizes;
     private final List<String> weights;
+    private final List<String> templateIds;
+
+
 
 
 
@@ -28,6 +32,7 @@ public class PreCannedImagesAndFonts {
 
         sizes = Arrays.asList("2","3","4","5","6","7","8","9","10","11","12","14","16","18","22","24","28");
         weights = Arrays.asList("50", "100", "200","400","600","800","1000");
+        templateIds = Arrays.asList("template_1","template_2","template_3","template_4","template_5","template_6","template_7");
 
     }
 
@@ -80,6 +85,8 @@ public class PreCannedImagesAndFonts {
     public List<String> getWeights() {
         return weights;
     }
+
+    public List<String> templateIds() { return templateIds; }
 
 
 }

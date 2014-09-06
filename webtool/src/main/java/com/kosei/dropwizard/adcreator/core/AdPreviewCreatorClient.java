@@ -20,7 +20,7 @@ public class AdPreviewCreatorClient {
     public ByteBuffer generate(String headerText, String descriptionText, String productImageFile, String logoImageFile,
                                String headerFont, int headerFontSize, int headerFontWeight, String headerFontColor,
                                String descriptionFont, int descriptionFontSize, int descriptionFontWeight, String descriptionFontColor,
-                               String backgroundColor) throws Exception {
+                               String backgroundColor, String template_id) throws Exception {
         try {
             String backgroundImageFile = "invalid";
             String sample = "{\"name\":\"ad2\", \"template_id\":\"template_1\", " +
@@ -46,7 +46,8 @@ public class AdPreviewCreatorClient {
             layout.background_color = backgroundColor;
             layout.background_filename="null";
             layout.name="ad2";
-            layout.template_id="template_1";
+            layout.template_id=template_id;
+            if (layout.template_id == null ) layout.template_id = "template_1";
             layout.background_filename = "null" ;
             layout.logo_filename = "dd.jpg";
             layout.title_font = new FontHolder();
