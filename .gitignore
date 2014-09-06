@@ -8,4 +8,7 @@ output/*.png
 .gradle
 *.jar
 *.class
+build/
+api/build/
+webtool/build/
 
