@@ -162,6 +162,10 @@ int ImageMagickLayoutEngine::create(const string &productImage, const string &ba
 	MagickWand *logoMagickWand = NewMagickWand();
 	MagickWand *maskMagickWand = NewMagickWand();
 	DrawingWand *drawingWand = NewDrawingWand();
+	MagickSetCompressionQuality(backgroundMagickWand,100);
+    MagickSetCompressionQuality(logoMagickWand,100);
+    MagickSetCompressionQuality(productMagickWand,100);
+
 
 	// Create Background image
 	//Blob *backgroundBlob = layoutEngineManager.getImageBlob(adLayoutEntry.background.fileName);
@@ -202,6 +206,7 @@ int ImageMagickLayoutEngine::create(const string &productImage, const string &ba
 	size_t backgroundBytesLen;
 	// TODO: ask what format to use
 	MagickSetImageFormat(backgroundMagickWand, "jpg");
+	MagickSetCompressionQuality(backgroundMagickWand,100);
 	MagickResetIterator(backgroundMagickWand);
 	backgroundBytes = (char *)MagickGetImagesBlob(backgroundMagickWand, &backgroundBytesLen);
 	*outputBlob = string(backgroundBytes, backgroundBytesLen);
