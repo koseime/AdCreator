@@ -102,19 +102,38 @@ void ImageMagickLayoutEngine::drawText(MagickWand *backgroundMagickWand, Drawing
 	// TODO: clear DrawingWand and check textbox is within the specified bounding box
 }
 
+void ImageMagickLayoutEngine::cropSquare(MagickWand *magickWand) {
+    size_t width = (size_t)MagickGetImageWidth(magickWand);
+	size_t height = (size_t)MagickGetImageHeight(magickWand);
+
+	size_t min = std::min(height, width);
+
+	//TODO: if ratio is too great, we may need to back fill with a color to get more square first
+	//TODO: acutally detect the important parts of the picture
+
+    MagickCropImage(magickWand,
+        min,min,0,0);
+
+
+}
+
 void ImageMagickLayoutEngine::scaleAndExtendImage(MagickWand *backgroundMagickWand, MagickWand *magickWand,
 		const AdLayoutEntry::ImageEntry &imageEntry) {
 	double width = (double)MagickGetImageWidth(magickWand);
 	double height = (double)MagickGetImageHeight(magickWand);
 	// TODO: compute scale correctly
+
 	double scale = ((double)imageEntry.size_x) / max(height, width);
 	int newWidth = floor(width * scale + 0.5);
 	int newHeight = floor(height * scale + 0.5);
 
+
 	// TODO: select appropriate filter
 	MagickResizeImage(magickWand, newWidth, newHeight, LanczosFilter, 1);
+
 	// TODO: extend image correctly
 	MagickExtentImage(magickWand, imageEntry.size_x, imageEntry.size_x, -(imageEntry.size_x-newWidth)/2,-(imageEntry.size_x-newHeight)/2);
+
 }
 
 void ImageMagickLayoutEngine::createRoundedRectangleMask(MagickWand *maskMagickWand, PixelWand *pixelWand, DrawingWand *drawingWand, int size_x, int size_y) {
@@ -125,6 +144,8 @@ void ImageMagickLayoutEngine::createRoundedRectangleMask(MagickWand *maskMagickW
 
 	int rx = size_x / 8;
 	int ry = size_y / 8;
+
+
 	DrawRoundRectangle(drawingWand, 1, 1, size_x - 1, size_y - 1, rx, ry);
 	MagickDrawImage(maskMagickWand, drawingWand);
 }
@@ -154,6 +175,7 @@ int ImageMagickLayoutEngine::create(const string &productImage, const string &ba
 	// Create, scale, round corners and composite product image
 	if (adLayoutEntry.product.fileName.compare("valid") == 0) {
 		MagickCore::MagickReadImageBlob(productMagickWand, productImage.data(), productImage.size());
+        cropSquare(productMagickWand);
 		scaleAndExtendImage(backgroundMagickWand, productMagickWand, adLayoutEntry.product);
 		createRoundedRectangleMask(maskMagickWand, pixelWand, drawingWand,
 				adLayoutEntry.product.size_x, adLayoutEntry.product.size_y);

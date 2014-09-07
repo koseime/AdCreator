@@ -26,6 +26,8 @@ private:
 	void drawText(MagickWand *backgroundMagickWand, DrawingWand *drawingWand,
 			PixelWand *pixelWand, const AdLayoutEntry::TextEntry &textEntry,
 			const string &text);
+	void cropSquare(MagickWand *magickWand);
+
 	void scaleAndExtendImage(MagickWand *backgroundMagickWand, MagickWand *magickWand, const AdLayoutEntry::ImageEntry &imageEntry);
 	void createRoundedRectangleMask(MagickWand *maskMagickWand, PixelWand *pixelWand, DrawingWand *drawingWand, int size_x, int size_y);
 
