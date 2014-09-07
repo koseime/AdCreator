@@ -102,9 +102,11 @@ public class AdPreviewCreatorClient {
                 fIn.close();
 
             } catch (Exception exc) {
-                System.out.println(exc);
-                System.exit(1);
+                System.out.println("Could Not get files");
+                transport.close();
+                return null;
             }
+
 
             TProtocol protocol = new TBinaryProtocol(transport);
             AdPreviewCreator.Client client = new AdPreviewCreator.Client(protocol);

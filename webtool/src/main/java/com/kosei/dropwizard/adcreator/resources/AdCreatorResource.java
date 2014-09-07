@@ -56,9 +56,26 @@ public class AdCreatorResource {
 
         if (product==null || product.isEmpty() || logoImage==null || logoImage.isEmpty() || descriptionFontWeight ==null || descriptionFont == null
                 || descriptionFontSize == null || headerFont ==null || headerFontSize ==null || headerFontWeight == null) {
-            return new AdCreatorView(adCreator, preCannedImagesAndFonts.getFonts().keySet(),
+            AdCreatorView view =  new AdCreatorView(adCreator, preCannedImagesAndFonts.getFonts().keySet(),
                     preCannedImagesAndFonts.getLogos().keySet(), preCannedImagesAndFonts.getProducts().keySet(),
                     preCannedImagesAndFonts.getSizes(), preCannedImagesAndFonts.getWeights(), preCannedImagesAndFonts.templateIds());
+            view.selectedDescriptionFont  = descriptionFont;
+            view.selectedDescriptionFontSize =descriptionFontSize;
+            view.selectedDescriptionFontWeight =descriptionFontWeight;
+            view.descriptionFontColor = descriptionFontColor;
+
+            view.selectedHeaderFont=headerFont;
+            view.selectedHeaderFontSize=headerFontSize;
+            view.selectedHeaderFontWeight=headerFontWeight;
+            view.selectedTemplateId = templateId;
+            view.headerFontColor = headerFontColor;
+
+            view.selectedLogo = logoImage;
+            view.selectedProduct = product;
+            view.descriptionText = descriptionText;
+            view.headerText = headerText;
+            view.backgroundColor = backgroundColor;
+            return view;
         }
         if (backgroundColor==null) backgroundColor = "white";
         String sBackgroundColor = backgroundColor;

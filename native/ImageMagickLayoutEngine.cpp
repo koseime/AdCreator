@@ -164,7 +164,7 @@ int ImageMagickLayoutEngine::create(const string &productImage, const string &ba
 
 	// Create, scale and composite the logo image
 	//Blob *logoBlob = layoutEngineManager.getImageBlob(adLayoutEntry.logo.fileName);
-	if (!logoBlob.empty()) {
+	if (!logoBlob.empty() && !adLayoutEntry.logo.fileName.compare("invalid") == 0) {
 		MagickReadImageBlob(logoMagickWand, logoBlob.data(), logoBlob.size());
 		scaleAndExtendImage(backgroundMagickWand, logoMagickWand, adLayoutEntry.logo);
 		MagickCompositeImage(backgroundMagickWand, logoMagickWand, OverCompositeOp,
