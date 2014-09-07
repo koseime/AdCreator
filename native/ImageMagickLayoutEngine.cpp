@@ -166,7 +166,6 @@ int ImageMagickLayoutEngine::create(const string &productImage, const string &ba
     MagickSetCompressionQuality(logoMagickWand,100);
     MagickSetCompressionQuality(productMagickWand,100);
 
-
 	// Create Background image
 	//Blob *backgroundBlob = layoutEngineManager.getImageBlob(adLayoutEntry.background.fileName);
 	if (backgroundBlob.empty()) {
