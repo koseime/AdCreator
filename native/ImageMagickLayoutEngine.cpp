@@ -96,7 +96,7 @@ void ImageMagickLayoutEngine::drawText(MagickWand *backgroundMagickWand, Drawing
     MagickWandGenesis();
     mw = NewMagickWand();
 
-    MagickSetSize(mw,200,20);
+    MagickSetSize(mw,210,20);
     if (textEntry.fontSize!=0) {
         MagickSetPointsize(mw, textEntry.fontSize);
     }
