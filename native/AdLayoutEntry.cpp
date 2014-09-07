@@ -23,6 +23,7 @@ AdLayoutEntry::ImageEntry::ImageEntry(const string &_fileName, int _size_x, int 
 	pos_y = _pos_y;
 }
 
+//TODO: ADD CENTERED, LEFT,RIGHT
 AdLayoutEntry::TextEntry::TextEntry(const Object &jsonObject, int _size_x, int _size_y, int _pos_x, int _pos_y) {
 	defaultText = jsonObject.has<String>("text")?jsonObject.get<String>("text"):"No default text";
 	fontName = jsonObject.has<String>("name")?jsonObject.get<String>("name"):"Arial";

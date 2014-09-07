@@ -103,7 +103,7 @@ void ImageMagickLayoutEngine::drawText(MagickWand *backgroundMagickWand, Drawing
     MagickSetFont(mw,("@fonts/" + textEntry.fontName + type + ".ttf").c_str());
     MagickSetOption(mw,"fill",textEntry.fontColor.c_str());
     MagickSetOption(mw,"background","none");
-    MagickSetGravity(mw,NorthGravity);
+    MagickSetGravity(mw,NorthWestGravity);
 
 
 
