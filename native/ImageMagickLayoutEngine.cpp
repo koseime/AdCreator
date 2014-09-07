@@ -92,13 +92,47 @@ void ImageMagickLayoutEngine::drawText(MagickWand *backgroundMagickWand, Drawing
 		type = "-" + textEntry.fontType;
 	}
 
-	DrawSetFont(drawingWand, ("@fonts/" + textEntry.fontName + type + ".ttf").c_str());
+    MagickWand *mw = NULL;
+    MagickWandGenesis();
+    mw = NewMagickWand();
+
+    MagickSetSize(mw,200,20);
+    if (textEntry.fontSize!=0) {
+        MagickSetPointsize(mw, textEntry.fontSize);
+    }
+    MagickSetFont(mw,("@fonts/" + textEntry.fontName + type + ".ttf").c_str());
+    MagickSetOption(mw,"fill",textEntry.fontColor.c_str());
+    MagickSetOption(mw,"background","none");
+    MagickSetGravity(mw,NorthGravity);
+
+
+
+    DrawSetFont(drawingWand, ("@fonts/" + textEntry.fontName + type + ".ttf").c_str());
 
 	if (text.empty()) {
-		MagickAnnotateImage(backgroundMagickWand, drawingWand, textEntry.pos_x, textEntry.pos_y, 0, textEntry.defaultText.c_str());
+	    MagickReadImage(mw,("caption:" + textEntry.defaultText).c_str());
+
+		//MagickAnnotateImage(backgroundMagickWand, drawingWand, textEntry.pos_x, textEntry.pos_y, 0, textEntry.defaultText.c_str());
 	} else {
-		MagickAnnotateImage(backgroundMagickWand, drawingWand, textEntry.pos_x, textEntry.pos_y, 0, text.c_str());
+		    MagickReadImage(mw,("caption:" + text).c_str());
+
+		//MagickAnnotateImage(backgroundMagickWand, drawingWand, textEntry.pos_x, textEntry.pos_y, 0, text.c_str());
 	}
+
+	MagickCompositeImage(backgroundMagickWand, mw, OverCompositeOp,
+    				textEntry.pos_x, textEntry.pos_y);
+        //////////////
+//	FormatMagickCaption(Image *,DrawInfo *,const MagickBooleanType,TypeMetric *,
+//        char **);
+//
+//
+//      MagickAnnotateImage(MagickWand *,const DrawingWand *,const double,
+//         const double,const double,const char *),
+//
+//	FormatMagickCaption
+
+
+	///////////
 	// TODO: clear DrawingWand and check textbox is within the specified bounding box
 }
 

@@ -54,8 +54,8 @@ AdLayoutEntry::AdLayoutEntry(const string &jsonString) {
 		logo = ImageEntry(logoFilename, 50, 50, 320 - 50, 0);
 		product = ImageEntry("valid", 46, 46, 2, 2);
 
-		description = TextEntry(descriptionFontJson, 0 ,0 , 55, 40);
-		title = TextEntry(titleFontJson, 0 ,0 , 55, 19);
+		description = TextEntry(descriptionFontJson, 0 ,0 , 55, 31);
+		title = TextEntry(titleFontJson, 0 ,0 , 55, 10);
 	} else if (templateId.compare("template_2") == 0) {
 		background = ImageEntry(backgroundFilename, -1, -1, -1, -1);
 		logo = ImageEntry(logoFilename, 50, 50, 0, 0);
