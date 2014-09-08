@@ -43,7 +43,7 @@ AdLayoutEntry::AdLayoutEntry(const string &jsonString) {
 	object.parse(jsonString);
 
 	name = object.get<String>("name");
-	string backgroundColor = object.get<String>("background_color");
+	backgroundColor = object.get<String>("background_color");
 	string backgroundFilename = object.get<String>("background_filename");
 	string logoFilename = object.get<String>("logo_filename");
 	string templateId = object.get<String>("template_id");
