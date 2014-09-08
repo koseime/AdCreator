@@ -47,7 +47,11 @@ public:
 		com::kosei::proto::AdComponents adComponents;
 		adComponents.ParseFromString(line);
 
-		if (!isDeleted(adComponents)) {
+		if (adComponents.status() == com::kosei::proto::AdComponents_Status_IMAGE_RETRIEVAL_FAILURE) {
+			return;
+		}
+		if (!isDeleted(adComponents) &&
+				adComponents.status() == com::kosei::proto::AdComponents_Status_IMAGE_RETRIEVED) {
 			// TODO: Ask Lance for correct values
 			adComponents.set_title("");
 			adComponents.set_description("");
@@ -63,6 +67,7 @@ public:
 				ad->set_adjpg(generatedJpgAds[i].second);
 				ad->set_layoutname(generatedJpgAds[i].first);
 			}
+			adComponents.set_status(com::kosei::proto::AdComponents_Status_AD_GENERATED);
 		}
 
 		// Serialize and write output
