@@ -47,9 +47,6 @@ public:
 		com::kosei::proto::AdComponents adComponents;
 		adComponents.ParseFromString(line);
 
-		if (adComponents.status() == com::kosei::proto::AdComponents_Status_IMAGE_RETRIEVAL_FAILURE) {
-			return;
-		}
 		if (!isDeleted(adComponents) &&
 				adComponents.status() == com::kosei::proto::AdComponents_Status_IMAGE_RETRIEVED) {
 			// TODO: Ask Lance for correct values
