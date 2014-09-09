@@ -9,6 +9,7 @@
 
 #include <vector>
 #include <string>
+#include <cassert>
 
 #include "jsonxx.h"
 
@@ -42,14 +43,18 @@ AdLayoutEntry::AdLayoutEntry(const string &jsonString) {
 	Object object;
 	object.parse(jsonString);
 
+	assert(object.has<String>("name"));
 	name = object.get<String>("name");
-	backgroundColor = object.get<String>("background_color");
-	string backgroundFilename = object.get<String>("background_filename");
-	string logoFilename = object.get<String>("logo_filename");
-	string templateId = object.get<String>("template_id");
+	backgroundColor = object.has<String>("background_color")?object.get<String>("background_color"):"white";
+	string backgroundFilename = object.has<String>("background_filename")?object.get<String>("background_filename"):"null";
+	string logoFilename = object.has<String>("logo_filename")?object.get<String>("logo_filename"):"null";
+	string templateId = object.has<String>("template_id")?object.get<String>("template_id"):"template_1";
+	assert(object.has<Object>("title_font"));
 	const Object &titleFontJson = object.get<Object>("title_font");
+	assert(object.has<Object>("description_font"));
 	const Object &descriptionFontJson = object.get<Object>("description_font");
 
+	bool isTemplateSet = false;
 	if (templateId.compare("template_1") == 0) {
 		background = ImageEntry(backgroundFilename, -1, -1, -1, -1);
 		logo = ImageEntry(logoFilename, 50, 50, 320 - 50, 0);
@@ -57,6 +62,7 @@ AdLayoutEntry::AdLayoutEntry(const string &jsonString) {
 
 		description = TextEntry(descriptionFontJson, 0 ,0 , 55, 31);
 		title = TextEntry(titleFontJson, 0 ,0 , 55, 10);
+		isTemplateSet = true;
 	} else if (templateId.compare("template_2") == 0) {
 		background = ImageEntry(backgroundFilename, -1, -1, -1, -1);
 		logo = ImageEntry(logoFilename, 50, 50, 0, 0);
@@ -64,6 +70,7 @@ AdLayoutEntry::AdLayoutEntry(const string &jsonString) {
 
 		description = TextEntry(descriptionFontJson, 0 ,0 , 60, 31);
 		title = TextEntry(titleFontJson, 0 ,0 , 60, 10);
+		isTemplateSet = true;
 	} else if (templateId.compare("template_3") == 0) {
 		background = ImageEntry(backgroundFilename, -1, -1, -1, -1);
 		logo = ImageEntry(logoFilename, 50, 50, 320 - 50, 0);
@@ -71,6 +78,7 @@ AdLayoutEntry::AdLayoutEntry(const string &jsonString) {
 
 		description = TextEntry(descriptionFontJson, 0 ,0 , 10, 31);
 		title = TextEntry(titleFontJson, 0 ,0 , 10, 10);
+		isTemplateSet = true;
 	} else if (templateId.compare("template_4") == 0) {
 		background = ImageEntry(backgroundFilename, -1, -1, -1, -1);
 		logo = ImageEntry("invalid", -1, -1, -1, -1);
@@ -78,6 +86,7 @@ AdLayoutEntry::AdLayoutEntry(const string &jsonString) {
 
 		description = TextEntry(descriptionFontJson, 0 ,0 , 10, 31);
 		title = TextEntry(titleFontJson, 0 ,0 , 10, 10);
+		isTemplateSet = true;
 	} else if (templateId.compare("template_5") == 0) {
 		background = ImageEntry(backgroundFilename, -1, -1, -1, -1);
 		logo = ImageEntry(logoFilename, 50, 50, 320 - 50, 0);
@@ -85,6 +94,7 @@ AdLayoutEntry::AdLayoutEntry(const string &jsonString) {
 
 		description = TextEntry(descriptionFontJson, 0 ,0 , 10, 31);
 		title = TextEntry(titleFontJson, 0 ,0 , 10, 10);
+		isTemplateSet = true;
 	} else if (templateId.compare("template_6") == 0) {
 		background = ImageEntry(backgroundFilename, -1, -1, -1, -1);
 		logo = ImageEntry(logoFilename, 50, 50, 0, 0);
@@ -92,6 +102,7 @@ AdLayoutEntry::AdLayoutEntry(const string &jsonString) {
 
 		description = TextEntry(descriptionFontJson, 0 ,0 , 60, 31);
 		title = TextEntry(titleFontJson, 0 ,0 , 60, 10);
+		isTemplateSet = true;
 	} else if (templateId.compare("template_7") == 0) {
 		background = ImageEntry(backgroundFilename, -1, -1, -1, -1);
 		logo = ImageEntry("invalid", -1, -1, -1, -1);
@@ -99,7 +110,9 @@ AdLayoutEntry::AdLayoutEntry(const string &jsonString) {
 
 		description = TextEntry(descriptionFontJson, 0 ,0 , 60, 31);
 		title = TextEntry(titleFontJson, 0 ,0 , 60, 10);
+		isTemplateSet = true;
 	}
+	assert(isTemplateSet);
 }
 
 

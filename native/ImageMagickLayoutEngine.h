@@ -22,14 +22,15 @@ using namespace MagickCore;
 class ImageMagickLayoutEngine {
 private:
 	LayoutEngineManager layoutEngineManager;
+	PixelWand *pixelWand = NULL;
+	DrawingWand *drawingWand = NULL;
 
-	void drawText(MagickWand *backgroundMagickWand, DrawingWand *drawingWand,
-			PixelWand *pixelWand, const AdLayoutEntry::TextEntry &textEntry,
-			const string &text);
+	void drawText(MagickWand *backgroundMagickWand, const AdLayoutEntry::TextEntry &textEntry, const string &text);
 	void cropSquare(MagickWand *magickWand);
 
-	void scaleAndExtendImage(MagickWand *backgroundMagickWand, MagickWand *magickWand, const AdLayoutEntry::ImageEntry &imageEntry);
-	void createRoundedRectangleMask(MagickWand *maskMagickWand, PixelWand *pixelWand, DrawingWand *drawingWand, int size_x, int size_y);
+	void scaleAndExtendImage(MagickWand *backgroundMagickWand, MagickWand *magickWand,
+			const AdLayoutEntry::ImageEntry &imageEntry);
+	void createRoundedRectangleMask(MagickWand *maskMagickWand, int size_x, int size_y);
 
 public:
 	ImageMagickLayoutEngine();

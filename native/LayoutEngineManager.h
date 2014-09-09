@@ -16,7 +16,7 @@ private:
 	map <string, string> idToBlob;
 	vector<AdLayoutEntry> adLayouts;
 
-	void importAdLayouts(char *fileContent, size_t fileLen);
+	void importAdLayouts(const char *fileContent, size_t fileLen);
 public:
 	LayoutEngineManager();
 	virtual ~LayoutEngineManager();

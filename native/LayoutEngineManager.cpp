@@ -3,7 +3,7 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
-#include <stdlib.h>
+#include <cstdlib>
 #include <string>
 #include <cstring>
 
@@ -23,7 +23,7 @@ LayoutEngineManager::~LayoutEngineManager() {
 
 }
 
-void LayoutEngineManager::importAdLayouts(char *fileContent, size_t fileLen) {
+void LayoutEngineManager::importAdLayouts(const char *fileContent, size_t fileLen) {
 	istringstream adLayoutFile(string(fileContent, fileLen));
 	string line;
 	while (getline(adLayoutFile, line)) {
@@ -52,13 +52,13 @@ int LayoutEngineManager::importImagesAndLayouts(const string &path) {
 
 	FILE *fin = fopen(path.c_str(), "r");
 	if (fin == NULL) {
-		cerr << path + " not found";
+		cerr << path + " not found" << endl;
 		return -1;
 	}
 
 	r = archive_read_open_FILE(a, fin);
 	if (r != ARCHIVE_OK) {
-		cerr << "Error reading " + path;
+		cerr << "Error reading " + path << endl;
 		return -1;
 	}
 
@@ -83,13 +83,13 @@ int LayoutEngineManager::importImagesAndLayouts(const string &path) {
 	}
 
 	if (!manFileFound) {
-		cerr << "manifest.properties not found";
+		cerr << "manifest.properties not found" << endl;
 		return -1;
 	}
 
 	r = archive_read_free(a);
 	if (r != ARCHIVE_OK) {
-		cerr << "Error reading " + path;
+		cerr << "Error reading " + path << endl;
 		return -1;
 	}
 

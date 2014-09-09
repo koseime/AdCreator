@@ -28,11 +28,15 @@ using namespace std;
 using namespace MagickCore;
 
 ImageMagickLayoutEngine::ImageMagickLayoutEngine() {
-	MagickCoreGenesis(NULL, MagickTrue);
+	MagickWandGenesis();
+	pixelWand = NewPixelWand();
+	drawingWand = NewDrawingWand();
 }
 
 ImageMagickLayoutEngine::~ImageMagickLayoutEngine() {
-	MagickCoreTerminus();
+	if (drawingWand) { drawingWand = DestroyDrawingWand(drawingWand); }
+	if (pixelWand) { pixelWand = DestroyPixelWand(pixelWand); }
+	MagickWandTerminus();
 }
 
 int ImageMagickLayoutEngine::importResources(const string &path) {
@@ -81,8 +85,8 @@ int ImageMagickLayoutEngine::create(const string &product_image_file, const stri
 }
 
 
-void ImageMagickLayoutEngine::drawText(MagickWand *backgroundMagickWand, DrawingWand *drawingWand,
-		PixelWand *pixelWand, const AdLayoutEntry::TextEntry &textEntry, const string &text) {
+void ImageMagickLayoutEngine::drawText(MagickWand *backgroundMagickWand, const AdLayoutEntry::TextEntry &textEntry,
+		const string &text) {
 	PixelSetColor(pixelWand, textEntry.fontColor.c_str());
 	DrawSetFillColor(drawingWand, pixelWand);
 	DrawSetFontSize(drawingWand, textEntry.fontSize);
@@ -170,7 +174,7 @@ void ImageMagickLayoutEngine::scaleAndExtendImage(MagickWand *backgroundMagickWa
 
 }
 
-void ImageMagickLayoutEngine::createRoundedRectangleMask(MagickWand *maskMagickWand, PixelWand *pixelWand, DrawingWand *drawingWand, int size_x, int size_y) {
+void ImageMagickLayoutEngine::createRoundedRectangleMask(MagickWand *maskMagickWand, int size_x, int size_y) {
 	PixelSetColor(pixelWand, "none");
 	MagickNewImage(maskMagickWand, size_x, size_y, pixelWand);
 	PixelSetColor(pixelWand, "white");
@@ -178,7 +182,6 @@ void ImageMagickLayoutEngine::createRoundedRectangleMask(MagickWand *maskMagickW
 
 	int rx = size_x / 8;
 	int ry = size_y / 8;
-
 
 	DrawRoundRectangle(drawingWand, 1, 1, size_x - 1, size_y - 1, rx, ry);
 	MagickDrawImage(maskMagickWand, drawingWand);
@@ -189,19 +192,16 @@ int ImageMagickLayoutEngine::create(const string &productImage, const string &ba
 		const string &copy, const string &backgroundColor, string *outputBlob) {
 	// Initialization
 	// TODO: create them once per object?
-	MagickWandGenesis();
-	PixelWand *pixelWand = NewPixelWand();
 	MagickWand *backgroundMagickWand = NewMagickWand();
 	MagickWand *productMagickWand = NewMagickWand();
 	MagickWand *logoMagickWand = NewMagickWand();
 	MagickWand *maskMagickWand = NewMagickWand();
-	DrawingWand *drawingWand = NewDrawingWand();
+
 	MagickSetCompressionQuality(backgroundMagickWand,100);
     MagickSetCompressionQuality(logoMagickWand,100);
     MagickSetCompressionQuality(productMagickWand,100);
 
 	// Create Background image
-	//Blob *backgroundBlob = layoutEngineManager.getImageBlob(adLayoutEntry.background.fileName);
 	if (backgroundBlob.empty()) {
 		PixelSetColor(pixelWand, backgroundColor.data());
 		MagickNewImage(backgroundMagickWand, 320, 50, pixelWand);
@@ -211,19 +211,17 @@ int ImageMagickLayoutEngine::create(const string &productImage, const string &ba
 
 	// Create, scale, round corners and composite product image
 	if (adLayoutEntry.product.fileName.compare("valid") == 0) {
-		MagickCore::MagickReadImageBlob(productMagickWand, productImage.data(), productImage.size());
+		MagickReadImageBlob(productMagickWand, productImage.data(), productImage.size());
         cropSquare(productMagickWand);
 		scaleAndExtendImage(backgroundMagickWand, productMagickWand, adLayoutEntry.product);
-		createRoundedRectangleMask(maskMagickWand, pixelWand, drawingWand,
-				adLayoutEntry.product.size_x, adLayoutEntry.product.size_y);
+		createRoundedRectangleMask(maskMagickWand, adLayoutEntry.product.size_x, adLayoutEntry.product.size_y);
 		MagickCompositeImage(maskMagickWand, productMagickWand, SrcInCompositeOp, 0, 0);
 		MagickCompositeImage(backgroundMagickWand, maskMagickWand, OverCompositeOp,
 				adLayoutEntry.product.pos_x, adLayoutEntry.product.pos_y);
 	}
 
 	// Create, scale and composite the logo image
-	//Blob *logoBlob = layoutEngineManager.getImageBlob(adLayoutEntry.logo.fileName);
-	if (!logoBlob.empty() && !adLayoutEntry.logo.fileName.compare("invalid") == 0) {
+	if (!logoBlob.empty() && adLayoutEntry.logo.fileName.compare("invalid") != 0) {
 		MagickReadImageBlob(logoMagickWand, logoBlob.data(), logoBlob.size());
 		scaleAndExtendImage(backgroundMagickWand, logoMagickWand, adLayoutEntry.logo);
 		MagickCompositeImage(backgroundMagickWand, logoMagickWand, OverCompositeOp,
@@ -231,8 +229,8 @@ int ImageMagickLayoutEngine::create(const string &productImage, const string &ba
 	}
 
 	// Add title and description
-	drawText(backgroundMagickWand, drawingWand, pixelWand, adLayoutEntry.title, title);
-	drawText(backgroundMagickWand, drawingWand, pixelWand, adLayoutEntry.description, copy);
+	drawText(backgroundMagickWand, adLayoutEntry.title, title);
+	drawText(backgroundMagickWand, adLayoutEntry.description, copy);
 
 	// Write image and clean up
 	char *backgroundBytes;
@@ -248,9 +246,7 @@ int ImageMagickLayoutEngine::create(const string &productImage, const string &ba
 	if (backgroundMagickWand) { backgroundMagickWand = DestroyMagickWand(backgroundMagickWand); }
 	if (productMagickWand) { productMagickWand = DestroyMagickWand(productMagickWand); }
 	if (logoMagickWand) { logoMagickWand = DestroyMagickWand(logoMagickWand); }
-	if (pixelWand) { pixelWand = DestroyPixelWand(pixelWand); }
-	if (drawingWand) { drawingWand = DestroyDrawingWand(drawingWand); }
-	MagickWandTerminus();
+	if (maskMagickWand) { maskMagickWand = DestroyMagickWand(maskMagickWand); }
 
 	return 0;
 }
