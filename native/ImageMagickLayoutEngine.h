@@ -21,10 +21,10 @@ using namespace MagickCore;
 
 class ImageMagickLayoutEngine {
 private:
-	bool isResourceImported = false;
+	bool isResourceImported;
 	LayoutEngineManager layoutEngineManager;
-	PixelWand *pixelWand = NULL;
-	DrawingWand *drawingWand = NULL;
+	PixelWand *pixelWand;
+	DrawingWand *drawingWand;
 
 	void drawText(MagickWand *backgroundMagickWand, const AdLayoutEntry::TextEntry &textEntry, const string &text);
 	void cropSquare(MagickWand *magickWand);

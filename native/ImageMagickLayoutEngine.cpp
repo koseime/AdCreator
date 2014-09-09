@@ -29,6 +29,9 @@ using namespace std;
 using namespace MagickCore;
 
 ImageMagickLayoutEngine::ImageMagickLayoutEngine() {
+	pixelWand = NewPixelWand();
+	drawingWand = NewDrawingWand();
+	isResourceImported = false;
 	MagickWandGenesis();
 }
 
@@ -39,8 +42,6 @@ ImageMagickLayoutEngine::~ImageMagickLayoutEngine() {
 }
 
 int ImageMagickLayoutEngine::importResources(const string &path) {
-	pixelWand = NewPixelWand();
-	drawingWand = NewDrawingWand();
 	isResourceImported = true;
 	return layoutEngineManager.importImagesAndLayouts(path);
 }
