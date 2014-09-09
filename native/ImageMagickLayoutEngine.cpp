@@ -90,10 +90,7 @@ int ImageMagickLayoutEngine::create(const string &product_image_file, const stri
 
 void ImageMagickLayoutEngine::drawText(MagickWand *backgroundMagickWand, const AdLayoutEntry::TextEntry &textEntry,
 		const string &text) {
-	PixelSetColor(pixelWand, textEntry.fontColor.c_str());
-	DrawSetFillColor(drawingWand, pixelWand);
-	DrawSetFontSize(drawingWand, textEntry.fontSize);
-	DrawSetFontWeight(drawingWand, textEntry.fontWeight);
+
 	string type = "";
 	if (textEntry.fontType.compare("normal")) {
 		type = "-" + textEntry.fontType;
@@ -103,6 +100,7 @@ void ImageMagickLayoutEngine::drawText(MagickWand *backgroundMagickWand, const A
     MagickWandGenesis();
     mw = NewMagickWand();
 
+//TODO: this is the text box - should be configurable!
     MagickSetSize(mw,210,20);
     if (textEntry.fontSize!=0) {
         MagickSetPointsize(mw, textEntry.fontSize);
@@ -112,34 +110,18 @@ void ImageMagickLayoutEngine::drawText(MagickWand *backgroundMagickWand, const A
     MagickSetOption(mw,"background","none");
     MagickSetGravity(mw,NorthWestGravity);
 
-
-
     DrawSetFont(drawingWand, ("@fonts/" + textEntry.fontName + type + ".ttf").c_str());
 
-	if (text.empty()) {
-	    MagickReadImage(mw,("caption:" + textEntry.defaultText).c_str());
-
-		//MagickAnnotateImage(backgroundMagickWand, drawingWand, textEntry.pos_x, textEntry.pos_y, 0, textEntry.defaultText.c_str());
+    //TODO: eventually explicitly signal which text to use
+	if (textEntry.defaultText.empty()) {
+		MagickReadImage(mw,("caption:" + text).c_str());
 	} else {
-		    MagickReadImage(mw,("caption:" + text).c_str());
-
-		//MagickAnnotateImage(backgroundMagickWand, drawingWand, textEntry.pos_x, textEntry.pos_y, 0, text.c_str());
+	    MagickReadImage(mw,("caption:" + textEntry.defaultText).c_str());
 	}
 
 	MagickCompositeImage(backgroundMagickWand, mw, OverCompositeOp,
     				textEntry.pos_x, textEntry.pos_y);
-        //////////////
-//	FormatMagickCaption(Image *,DrawInfo *,const MagickBooleanType,TypeMetric *,
-//        char **);
-//
-//
-//      MagickAnnotateImage(MagickWand *,const DrawingWand *,const double,
-//         const double,const double,const char *),
-//
-//	FormatMagickCaption
 
-
-	///////////
 	// TODO: clear DrawingWand and check textbox is within the specified bounding box
 }
 

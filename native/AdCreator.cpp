@@ -50,8 +50,8 @@ public:
 		if (!isDeleted(adComponents) &&
 				adComponents.status() == com::kosei::proto::AdComponents_Status_IMAGE_RETRIEVED) {
 			// TODO: Ask Lance for correct values
-			adComponents.set_title("");
-			adComponents.set_description("");
+			//adComponents.set_title("");
+			//adComponents.set_description("");
 
 			// Generate Ads
 			vector<pair<string, string> > generatedJpgAds;
