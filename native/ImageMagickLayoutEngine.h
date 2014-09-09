@@ -21,6 +21,7 @@ using namespace MagickCore;
 
 class ImageMagickLayoutEngine {
 private:
+	bool isResourceImported = false;
 	LayoutEngineManager layoutEngineManager;
 	PixelWand *pixelWand = NULL;
 	DrawingWand *drawingWand = NULL;

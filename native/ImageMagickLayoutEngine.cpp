@@ -18,6 +18,7 @@
 #include <string>
 #include <cstring>
 #include <cstdlib>
+#include <cassert>
 
 #include "Magick++.h"
 
@@ -29,8 +30,6 @@ using namespace MagickCore;
 
 ImageMagickLayoutEngine::ImageMagickLayoutEngine() {
 	MagickWandGenesis();
-	pixelWand = NewPixelWand();
-	drawingWand = NewDrawingWand();
 }
 
 ImageMagickLayoutEngine::~ImageMagickLayoutEngine() {
@@ -40,6 +39,9 @@ ImageMagickLayoutEngine::~ImageMagickLayoutEngine() {
 }
 
 int ImageMagickLayoutEngine::importResources(const string &path) {
+	pixelWand = NewPixelWand();
+	drawingWand = NewDrawingWand();
+	isResourceImported = true;
 	return layoutEngineManager.importImagesAndLayouts(path);
 }
 
@@ -192,6 +194,7 @@ int ImageMagickLayoutEngine::create(const string &productImage, const string &ba
 		const string &copy, const string &backgroundColor, string *outputBlob) {
 	// Initialization
 	// TODO: create them once per object?
+	assert(isResourceImported);
 	MagickWand *backgroundMagickWand = NewMagickWand();
 	MagickWand *productMagickWand = NewMagickWand();
 	MagickWand *logoMagickWand = NewMagickWand();
