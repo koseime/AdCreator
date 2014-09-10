@@ -26,7 +26,7 @@ AdLayoutEntry::ImageEntry::ImageEntry(const string &_fileName, int _size_x, int 
 
 //TODO: ADD CENTERED, LEFT,RIGHT
 AdLayoutEntry::TextEntry::TextEntry(const Object &jsonObject, int _size_x, int _size_y, int _pos_x, int _pos_y) {
-	defaultText = jsonObject.has<String>("text")?jsonObject.get<String>("text"):"No default text";
+	defaultText = jsonObject.has<String>("text")?jsonObject.get<String>("text"):"";
 	fontName = jsonObject.has<String>("name")?jsonObject.get<String>("name"):"Arial";
 	fontSize = jsonObject.has<Number>("size")?jsonObject.get<Number>("size"):20;
 	fontWeight = jsonObject.has<Number>("weight")?jsonObject.get<Number>("weight"):400;
@@ -37,6 +37,11 @@ AdLayoutEntry::TextEntry::TextEntry(const Object &jsonObject, int _size_x, int _
 	size_y = _size_y;
 	pos_x = _pos_x;
 	pos_y = _pos_y;
+	skip = false;
+}
+
+AdLayoutEntry::TextEntry::TextEntry() {
+    skip = true;
 }
 
 AdLayoutEntry::AdLayoutEntry(const string &jsonString) {
@@ -54,30 +59,32 @@ AdLayoutEntry::AdLayoutEntry(const string &jsonString) {
 	assert(object.has<Object>("description_font"));
 	const Object &descriptionFontJson = object.get<Object>("description_font");
 
+
+//NORMAL 210,20
 	bool isTemplateSet = false;
 	if (templateId.compare("template_1") == 0) {
 		background = ImageEntry(backgroundFilename, -1, -1, -1, -1);
 		logo = ImageEntry(logoFilename, 50, 50, 320 - 50, 0);
 		product = ImageEntry("valid", 46, 46, 2, 2);
 
-		description = TextEntry(descriptionFontJson, 0 ,0 , 55, 31);
-		title = TextEntry(titleFontJson, 0 ,0 , 55, 10);
+		description = TextEntry(descriptionFontJson, 210, 20, 55, 31);
+		title = TextEntry(titleFontJson, 210, 20, 55, 10);
 		isTemplateSet = true;
 	} else if (templateId.compare("template_2") == 0) {
 		background = ImageEntry(backgroundFilename, -1, -1, -1, -1);
 		logo = ImageEntry(logoFilename, 50, 50, 0, 0);
 		product = ImageEntry("valid", 46, 46, 320 - 46 - 2, 2);
 
-		description = TextEntry(descriptionFontJson, 0 ,0 , 60, 31);
-		title = TextEntry(titleFontJson, 0 ,0 , 60, 10);
+		description = TextEntry(descriptionFontJson, 210, 20, 60, 31);
+		title = TextEntry(titleFontJson, 210, 20, 60, 10);
 		isTemplateSet = true;
 	} else if (templateId.compare("template_3") == 0) {
 		background = ImageEntry(backgroundFilename, -1, -1, -1, -1);
 		logo = ImageEntry(logoFilename, 50, 50, 320 - 50, 0);
 		product = ImageEntry("invalid", -1, -1, -1, -1);
 
-		description = TextEntry(descriptionFontJson, 0 ,0 , 10, 31);
-		title = TextEntry(titleFontJson, 0 ,0 , 10, 10);
+		description = TextEntry(descriptionFontJson, 210, 20, 10, 31);
+		title = TextEntry(titleFontJson, 210, 20, 10, 10);
 		isTemplateSet = true;
 	} else if (templateId.compare("template_4") == 0) {
 		background = ImageEntry(backgroundFilename, -1, -1, -1, -1);
@@ -92,26 +99,34 @@ AdLayoutEntry::AdLayoutEntry(const string &jsonString) {
 		logo = ImageEntry(logoFilename, 50, 50, 320 - 50, 0);
 		product = ImageEntry("valid", 46, 46, 320 - 50 - 46 - 2, 2);
 
-		description = TextEntry(descriptionFontJson, 0 ,0 , 10, 31);
-		title = TextEntry(titleFontJson, 0 ,0 , 10, 10);
+		description = TextEntry(descriptionFontJson, 210, 20, 10, 31);
+		title = TextEntry(titleFontJson, 210, 20, 10, 10);
 		isTemplateSet = true;
 	} else if (templateId.compare("template_6") == 0) {
 		background = ImageEntry(backgroundFilename, -1, -1, -1, -1);
 		logo = ImageEntry(logoFilename, 50, 50, 0, 0);
 		product = ImageEntry("invalid", -1, -1, -1, -1);
 
-		description = TextEntry(descriptionFontJson, 0 ,0 , 60, 31);
-		title = TextEntry(titleFontJson, 0 ,0 , 60, 10);
+		description = TextEntry(descriptionFontJson, 210, 20, 60, 31);
+		title = TextEntry(titleFontJson, 210, 20, 60, 10);
 		isTemplateSet = true;
 	} else if (templateId.compare("template_7") == 0) {
 		background = ImageEntry(backgroundFilename, -1, -1, -1, -1);
 		logo = ImageEntry("invalid", -1, -1, -1, -1);
 		product = ImageEntry("valid", 46, 46, 2, 2);
 
-		description = TextEntry(descriptionFontJson, 0 ,0 , 60, 31);
-		title = TextEntry(titleFontJson, 0 ,0 , 60, 10);
+		description = TextEntry(descriptionFontJson, 210, 20, 60, 31);
+		title = TextEntry(titleFontJson, 210, 20, 60, 10);
 		isTemplateSet = true;
-	}
+	}  else if (templateId.compare("template_8") == 0) {
+        background = ImageEntry(backgroundFilename, -1, -1, -1, -1);
+        logo = ImageEntry(logoFilename, 50, 50, 320 - 50, 0);
+        product = ImageEntry("valid", 46, 46, 2, 2);
+
+        title = TextEntry(titleFontJson, 210, 40, 55, 10);
+        description = TextEntry();
+        isTemplateSet = true;
+    }
 	assert(isTemplateSet);
 }
 

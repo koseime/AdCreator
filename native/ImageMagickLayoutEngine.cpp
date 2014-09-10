@@ -101,7 +101,7 @@ void ImageMagickLayoutEngine::drawText(MagickWand *backgroundMagickWand, const A
     mw = NewMagickWand();
 
 //TODO: this is the text box - should be configurable!
-    MagickSetSize(mw,210,20);
+    MagickSetSize(mw,textEntry.size_x,textEntry.size_y);
     if (textEntry.fontSize!=0) {
         MagickSetPointsize(mw, textEntry.fontSize);
     }
@@ -177,7 +177,7 @@ int ImageMagickLayoutEngine::create(const string &productImage, const string &ba
 		const string &copy, const string &backgroundColor, string *outputBlob) {
 	// Initialization
 	// TODO: create them once per object?
-	assert(isResourceImported);
+	//assert(isResourceImported);
 	MagickWand *backgroundMagickWand = NewMagickWand();
 	MagickWand *productMagickWand = NewMagickWand();
 	MagickWand *logoMagickWand = NewMagickWand();
@@ -215,8 +215,12 @@ int ImageMagickLayoutEngine::create(const string &productImage, const string &ba
 	}
 
 	// Add title and description
-	drawText(backgroundMagickWand, adLayoutEntry.title, title);
-	drawText(backgroundMagickWand, adLayoutEntry.description, copy);
+	if (!adLayoutEntry.title.skip)  {
+	    drawText(backgroundMagickWand, adLayoutEntry.title, title);
+	}
+	if (!adLayoutEntry.description.skip)  {
+	    drawText(backgroundMagickWand, adLayoutEntry.description, copy);
+	}
 
 	// Write image and clean up
 	char *backgroundBytes;

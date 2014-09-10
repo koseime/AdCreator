@@ -40,9 +40,12 @@ public:
 		int size_y;
 		int pos_x;
 		int pos_y;
-		TextEntry() {};
+		bool skip;
+		TextEntry() ;
 		TextEntry(const Object &fontJsonObject, int _size_x, int _size_y, int _pos_x, int _pos_y);
 	};
+
+
 
 	string name;
 
