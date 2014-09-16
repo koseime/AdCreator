@@ -2,7 +2,8 @@ APPMR = ad-creator
 APPCLI = ad-creator-client
 CC = g++
 
-ACPROTO = $(AD_CREATOR_WORKFLOW)/build/generated-sources-cpp/
+ACPROTO = ./ad_creator_workflow
+ACPROTO_VERSION = 0.4
 export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig
 HADOOP_SRC_DIR = $(HADOOP_SRC)
 
@@ -16,7 +17,7 @@ HADOOP_SRC_DIR = $(HADOOP_SRC)
  else
    OSARCH=linux
    INCPATH = -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/pipes/api \
-   -I/usr/local/include/ImageMagick-6/magick  -I/usr/local/include/ImageMagick-6 \
+   -I/usr/include/ImageMagick/magick  -I/usr/include/ImageMagick \
     -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/utils/api   -I/usr/include/protobuf -I$(ACPROTO)
  endif
 
@@ -34,7 +35,7 @@ else
     CFLAGS = -Wall -O3 -c -g $(INCPATH)
     LDFLAGS = -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/pipes/api \
               -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/utils/api -L /usr/lib64  \
-              -Wl,-Bstatic -L /home/kosei/tools/lib/hadoop/lib/native -lhadooppipes -lhadooputils \
+              -Wl,-Bstatic -L $(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/target/native/ -lhadooppipes -lhadooputils \
               /usr/local/lib/libprotobuf.a \
               /usr/local/lib/libMagick++-6.Q16.a \
               /usr/local/lib/libMagickWand-6.Q16.a \
@@ -54,11 +55,11 @@ PROTOOBJS = $(PROTOSRCS:.cc=.o)
 OBJS = $(SRCS:.cpp=.o) $(PROTOOBJS)
 CLIOBJS = $(CLISRCS:.cpp=.o) $(PROTOOBJS)
 
-all: $(APPMR) $(APPCLI)
+all: ad_creator_workflow $(APPMR) $(APPCLI)
 
 .cc.o:
 	$(CC) $(CFLAGS) -c $< -o $@
-	
+
 .cpp.o:
 	$(CC) $(CFLAGS) -c $< -o $@
 
@@ -72,11 +73,14 @@ $(APPCLI):	$(CLIOBJS)
 clean:
 	rm -f *.o  *~ $(APPMR) $(APPCLI) output/*.*
 
+ad_creator_workflow:
+	mkdir -p $(ACPROTO); \
+	cd $(ACPROTO); \
+	wget http://repository-kosei.forge.cloudbees.com/release/com/kosei/jobs/ad-creator-workflow/$(ACPROTO_VERSION)/ad-creator-workflow-$(ACPROTO_VERSION)-sources.jar; \
+	jar xf ad-creator-workflow-$(ACPROTO_VERSION)-sources.jar
 
 check-env:
 ifndef HADOOP_SRC
     $(error HADOOP_SRC is undefined)
 endif
-ifndef AD_CREATOR_WORKFLOW
-    $(error AD_CREATOR_WORKFLOW is undefined)
-endif
+

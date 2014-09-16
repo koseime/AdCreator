@@ -19,6 +19,7 @@
 #include <cstring>
 #include <cstdlib>
 #include <cassert>
+#include <cmath>
 
 #include "Magick++.h"
 
