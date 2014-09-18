@@ -17,7 +17,7 @@ HADOOP_SRC_DIR = $(HADOOP_SRC)
  else
    OSARCH=linux
    INCPATH = -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/pipes/api \
-   -I/usr/include/ImageMagick/magick  -I/usr/include/ImageMagick \
+   -I/usr/local/include/ImageMagick-6/magick  -I/usr/local/include/ImageMagick-6 \
     -I$(HADOOP_SRC_DIR)/hadoop-tools/hadoop-pipes/src/main/native/utils/api   -I/usr/include/protobuf -I$(ACPROTO)
  endif
 
