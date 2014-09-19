@@ -35,7 +35,8 @@ static void usage(const char *prog) {
 			<< "\t-g <input image dir>  : directory with input images" << std::endl
 			<< "\t-x <eXecution type>  : bulk or single" << std::endl
 			<< "\t-p <product image>  : single - product image" << std::endl
-			<< "\t-d <ad text>  : single - ad text" << std::endl
+			<< "\t-t <ad title>  : single - ad title" << std::endl
+			<< "\t-c <ad copy>  : single - ad copy" << std::endl
 			<< "\t-r <ad result>  : single - ad result output" << std::endl
 			<< std::endl << std::endl;
 }
