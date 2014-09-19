@@ -71,7 +71,7 @@ $(APPCLI):	$(CLIOBJS)
 	$(CC) $(CLIOBJS) $(LDFLAGS) -o$(APPCLI)  
 
 clean:
-	rm -f *.o  *~ $(APPMR) $(APPCLI) output/*.*
+	rm -rf *.o  *~ $(ACPROTO) $(APPMR) $(APPCLI) output/*.*
 
 ad_creator_workflow:
 	mkdir -p $(ACPROTO); \
