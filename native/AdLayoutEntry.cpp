@@ -83,16 +83,16 @@ AdLayoutEntry::AdLayoutEntry(const string &jsonString) {
 		logo = ImageEntry(logoFilename, 50, 50, 320 - 50, 0);
 		product = ImageEntry("invalid", -1, -1, -1, -1);
 
-		description = TextEntry(descriptionFontJson, 210, 20, 10, 31);
-		title = TextEntry(titleFontJson, 210, 20, 10, 10);
+		description = TextEntry(descriptionFontJson, 250, 20, 10, 31);
+		title = TextEntry(titleFontJson, 250, 20, 10, 10);
 		isTemplateSet = true;
 	} else if (templateId.compare("template_4") == 0) {
 		background = ImageEntry(backgroundFilename, -1, -1, -1, -1);
 		logo = ImageEntry("invalid", -1, -1, -1, -1);
 		product = ImageEntry("valid", 46, 46, 320 - 46 - 2, 2);
 
-		description = TextEntry(descriptionFontJson, 0 ,0 , 10, 31);
-		title = TextEntry(titleFontJson, 0 ,0 , 10, 10);
+		description = TextEntry(descriptionFontJson, 250 ,20 , 10, 31);
+		title = TextEntry(titleFontJson, 250, 20 , 10, 10);
 		isTemplateSet = true;
 	} else if (templateId.compare("template_5") == 0) {
 		background = ImageEntry(backgroundFilename, -1, -1, -1, -1);
@@ -115,8 +115,8 @@ AdLayoutEntry::AdLayoutEntry(const string &jsonString) {
 		logo = ImageEntry("invalid", -1, -1, -1, -1);
 		product = ImageEntry("valid", 46, 46, 2, 2);
 
-		description = TextEntry(descriptionFontJson, 210, 20, 60, 31);
-		title = TextEntry(titleFontJson, 210, 20, 60, 10);
+		description = TextEntry(descriptionFontJson, 250, 20, 60, 31);
+		title = TextEntry(titleFontJson, 250, 20, 60, 10);
 		isTemplateSet = true;
 	}  else if (templateId.compare("template_8") == 0) {
         background = ImageEntry(backgroundFilename, -1, -1, -1, -1);
