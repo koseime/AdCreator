@@ -107,8 +107,8 @@ AdLayoutEntry::AdLayoutEntry(const string &jsonString) {
 		logo = ImageEntry(logoFilename, 50, 50, 0, 0);
 		product = ImageEntry("invalid", -1, -1, -1, -1);
 
-		description = TextEntry(descriptionFontJson, 210, 20, 60, 31);
-		title = TextEntry(titleFontJson, 210, 20, 60, 10);
+		description = TextEntry(descriptionFontJson, 210, 20, 80, 31);
+		title = TextEntry(titleFontJson, 210, 20, 80, 10);
 		isTemplateSet = true;
 	} else if (templateId.compare("template_7") == 0) {
 		background = ImageEntry(backgroundFilename, -1, -1, -1, -1);

@@ -195,7 +195,6 @@ int ImageMagickLayoutEngine::create(const string &productImage, const string &ba
 	} else {
 		MagickReadImageBlob(backgroundMagickWand, backgroundBlob.data(), backgroundBlob.size());
 	}
-	MagickWriteImage(backgroundMagickWand, "1.jpg");
 
 	// Create, scale, round corners and composite product image
 	if (adLayoutEntry.product.fileName.compare("valid") == 0) {
@@ -207,7 +206,6 @@ int ImageMagickLayoutEngine::create(const string &productImage, const string &ba
 		MagickCompositeImage(backgroundMagickWand, maskMagickWand, OverCompositeOp,
 				adLayoutEntry.product.pos_x, adLayoutEntry.product.pos_y);
 	}
-	MagickWriteImage(backgroundMagickWand, "2.jpg");
 
 	// Create, scale and composite the logo image
 	if (!logoBlob.empty() && adLayoutEntry.logo.fileName.compare("invalid") != 0) {
@@ -216,18 +214,15 @@ int ImageMagickLayoutEngine::create(const string &productImage, const string &ba
 		MagickCompositeImage(backgroundMagickWand, logoMagickWand, OverCompositeOp,
 				adLayoutEntry.logo.pos_x, adLayoutEntry.logo.pos_y);
 	}
-	MagickWriteImage(backgroundMagickWand, "3.jpg");
 
 	// Add title and description
 	if (!adLayoutEntry.title.skip)  {
 	    drawText(backgroundMagickWand, adLayoutEntry.title, title);
 	}
-	MagickWriteImage(backgroundMagickWand, "4.jpg");
 	if (!adLayoutEntry.description.skip)  {
 	    drawText(backgroundMagickWand, adLayoutEntry.description, copy);
 	}
 
-	MagickWriteImage(backgroundMagickWand, "5.jpg");
 	// Write image and clean up
 	char *backgroundBytes;
 	size_t backgroundBytesLen;
