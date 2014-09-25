@@ -86,7 +86,7 @@ public class AdCreatorResource {
 
         if (backgroundColor.length()==6) sBackgroundColor = "#"+sBackgroundColor;
         if (descriptionFontColor.length()==6) sDescriptionFontColor = "#"+sDescriptionFontColor;
-        if (backgroundColor.length()==6) sHeaderFontColor = "#"+sHeaderFontColor;
+        if (headerFontColor.length()==6) sHeaderFontColor = "#"+sHeaderFontColor;
 
 
         long start = System.currentTimeMillis();
