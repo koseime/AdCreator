@@ -65,65 +65,65 @@ AdLayoutEntry::AdLayoutEntry(const string &jsonString) {
 	if (templateId.compare("template_1") == 0) {
 		background = ImageEntry(backgroundFilename, -1, -1, -1, -1);
 		logo = ImageEntry(logoFilename, 50, 50, 320 - 50, 0);
-		product = ImageEntry("valid", 46, 46, 2, 2);
+		product = ImageEntry("valid", 45, 45, 2, 2);
 
-		description = TextEntry(descriptionFontJson, 210, 20, 55, 31);
-		title = TextEntry(titleFontJson, 210, 20, 55, 10);
+		description = TextEntry(descriptionFontJson, 210, 20, 55, 28);
+		title = TextEntry(titleFontJson, 210, 20, 55, 8);
 		isTemplateSet = true;
 	} else if (templateId.compare("template_2") == 0) {
 		background = ImageEntry(backgroundFilename, -1, -1, -1, -1);
 		logo = ImageEntry(logoFilename, 50, 50, 0, 0);
-		product = ImageEntry("valid", 46, 46, 320 - 46 - 2, 2);
+		product = ImageEntry("valid", 45, 45, 320 - 45 - 2, 2);
 
-		description = TextEntry(descriptionFontJson, 210, 20, 60, 31);
-		title = TextEntry(titleFontJson, 210, 20, 60, 10);
+		description = TextEntry(descriptionFontJson, 210, 20, 55, 28);
+		title = TextEntry(titleFontJson, 210, 20, 55, 8);
 		isTemplateSet = true;
 	} else if (templateId.compare("template_3") == 0) {
 		background = ImageEntry(backgroundFilename, -1, -1, -1, -1);
 		logo = ImageEntry(logoFilename, 50, 50, 320 - 50, 0);
 		product = ImageEntry("invalid", -1, -1, -1, -1);
 
-		description = TextEntry(descriptionFontJson, 250, 20, 10, 31);
-		title = TextEntry(titleFontJson, 250, 20, 10, 10);
+		description = TextEntry(descriptionFontJson, 250, 20, 10, 28);
+		title = TextEntry(titleFontJson, 250, 20, 10, 8);
 		isTemplateSet = true;
 	} else if (templateId.compare("template_4") == 0) {
 		background = ImageEntry(backgroundFilename, -1, -1, -1, -1);
 		logo = ImageEntry("invalid", -1, -1, -1, -1);
-		product = ImageEntry("valid", 46, 46, 320 - 46 - 2, 2);
+		product = ImageEntry("valid", 45, 45, 320 - 45 - 2, 2);
 
-		description = TextEntry(descriptionFontJson, 250 ,20 , 10, 31);
-		title = TextEntry(titleFontJson, 250, 20 , 10, 10);
+		description = TextEntry(descriptionFontJson, 250 ,20 , 10, 28);
+		title = TextEntry(titleFontJson, 250, 20 , 10, 8);
 		isTemplateSet = true;
 	} else if (templateId.compare("template_5") == 0) {
 		background = ImageEntry(backgroundFilename, -1, -1, -1, -1);
 		logo = ImageEntry(logoFilename, 50, 50, 320 - 50, 0);
-		product = ImageEntry("valid", 46, 46, 320 - 50 - 46 - 2, 2);
+		product = ImageEntry("valid", 45, 45, 320 - 50 - 45 - 2, 2);
 
-		description = TextEntry(descriptionFontJson, 210, 20, 10, 31);
-		title = TextEntry(titleFontJson, 210, 20, 10, 10);
+		description = TextEntry(descriptionFontJson, 210, 20, 10, 28);
+		title = TextEntry(titleFontJson, 210, 20, 10, 8);
 		isTemplateSet = true;
 	} else if (templateId.compare("template_6") == 0) {
 		background = ImageEntry(backgroundFilename, -1, -1, -1, -1);
 		logo = ImageEntry(logoFilename, 50, 50, 0, 0);
 		product = ImageEntry("invalid", -1, -1, -1, -1);
 
-		description = TextEntry(descriptionFontJson, 250, 20, 60, 31);
-		title = TextEntry(titleFontJson, 250, 20, 60, 10);
+		description = TextEntry(descriptionFontJson, 250, 20, 55, 28);
+		title = TextEntry(titleFontJson, 250, 20, 55, 8);
 		isTemplateSet = true;
 	} else if (templateId.compare("template_7") == 0) {
 		background = ImageEntry(backgroundFilename, -1, -1, -1, -1);
 		logo = ImageEntry("invalid", -1, -1, -1, -1);
-		product = ImageEntry("valid", 46, 46, 2, 2);
+		product = ImageEntry("valid", 45, 45, 2, 2);
 
-		description = TextEntry(descriptionFontJson, 250, 20, 60, 31);
-		title = TextEntry(titleFontJson, 250, 20, 60, 10);
+		description = TextEntry(descriptionFontJson, 250, 20, 55, 28);
+		title = TextEntry(titleFontJson, 250, 20, 55, 8);
 		isTemplateSet = true;
 	}  else if (templateId.compare("template_8") == 0) {
         background = ImageEntry(backgroundFilename, -1, -1, -1, -1);
         logo = ImageEntry(logoFilename, 50, 50, 320 - 50, 0);
-        product = ImageEntry("valid", 46, 46, 2, 2);
+        product = ImageEntry("valid", 45, 45, 2, 2);
 
-        title = TextEntry(titleFontJson, 210, 40, 55, 10);
+        title = TextEntry(titleFontJson, 210, 40, 55, 7);
         description = TextEntry();
         isTemplateSet = true;
     }
