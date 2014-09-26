@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
 
 		ImageMagickLayoutEngine engine;
 		engine.importResources("images/layout_resource.tar.gz");
-		return engine.create(prodimage,  title, copy,  "white", adresult);
+		return engine.create(prodimage, title, copy, adresult);
 	} else if (exectype.compare("bulk") == 0) {
 		BulkProcessor engine;
 		engine.start(input, outputdir, inputimagedir, "images/layout_resource.tar.gz");

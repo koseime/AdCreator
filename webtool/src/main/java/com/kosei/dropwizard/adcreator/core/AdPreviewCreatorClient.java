@@ -115,7 +115,7 @@ public class AdPreviewCreatorClient {
             backgroundImage.rewind();
             logoImage.rewind();
             PreviewInfo previewInfo = new PreviewInfo(productImage, backgroundImage, logoImage, adLayoutJsonString,
-                    title, copy, backgroundColor);
+                    title, copy);
             ByteBuffer output = client.createPreview(previewInfo);
             transport.close();
 

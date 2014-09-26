@@ -8,7 +8,6 @@ struct PreviewInfo {
   4: string adEntryJsonString,
   5: string title,
   6: string copy,
-  7: string backgroundColor,
 }
 
 service AdPreviewCreator {
