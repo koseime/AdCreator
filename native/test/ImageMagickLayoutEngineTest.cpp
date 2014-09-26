@@ -5,6 +5,7 @@
  *      Author: chantat
  */
 
+#define BOOST_TEST_DYN_LINK
 #define BOOST_TEST_MAIN
 
 #include "../ImageMagickLayoutEngine.h"

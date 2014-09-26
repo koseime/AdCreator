@@ -74,7 +74,7 @@ $(APPCLI):	$(CLIOBJS)
 	$(CC) $(CLIOBJS) $(LDFLAGS) -o$(APPCLI)  
 	
 $(TEST): $(TESTOBJS)
-	$(CC) $(TESTOBJS) /usr/local/lib/libboost_program_options.a /usr/local/lib/libboost_system.a /usr/local/lib/libboost_unit_test_framework.a $(LDFLAGS) -o$(TEST)
+	$(CC) $(TESTOBJS) $(LDFLAGS) -lboost_program_options -lboost_system -lboost_unit_test_framework -o$(TEST)
 
 clean:
 	rm -rf *.o  *~ $(ACPROTO) $(APPMR) $(APPCLI) output/*.*
