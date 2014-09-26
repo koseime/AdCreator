@@ -1,5 +1,6 @@
 APPMR = ad-creator
 APPCLI = ad-creator-client
+TEST = ad-creator-test
 CC = g++
 
 ACPROTO = ./ad_creator_workflow
@@ -50,12 +51,14 @@ else
 PROTOSRCS = $(ACPROTO)/AdComponentsMessages.pb.cc
 SRCS =  ImageMagickLayoutEngine.cpp LayoutEngineManager.cpp AdLayoutEntry.cpp AdCreator.cpp jsonxx.cpp
 CLISRCS = ImageMagickLayoutEngine.cpp LayoutEngineManager.cpp AdLayoutEntry.cpp BulkProcessor.cpp FileProcessor.cpp AdCreatorCLI.cpp jsonxx.cpp
+TESTSRCS = test/ImageMagickLayoutEngineTest.cpp ImageMagickLayoutEngine.cpp LayoutEngineManager.cpp AdLayoutEntry.cpp jsonxx.cpp
 
 PROTOOBJS = $(PROTOSRCS:.cc=.o)
 OBJS = $(SRCS:.cpp=.o) $(PROTOOBJS)
 CLIOBJS = $(CLISRCS:.cpp=.o) $(PROTOOBJS)
+TESTOBJS = $(TESTSRCS:.cpp=.o) $(PROTOOBJS)
 
-all: ad_creator_workflow $(APPMR) $(APPCLI)
+all: ad_creator_workflow $(APPMR) $(APPCLI) $(TEST)
 
 .cc.o:
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -69,6 +72,9 @@ $(APPMR):	$(OBJS)
 
 $(APPCLI):	$(CLIOBJS)
 	$(CC) $(CLIOBJS) $(LDFLAGS) -o$(APPCLI)  
+	
+$(TEST): $(TESTOBJS)
+	$(CC) $(TESTOBJS) /usr/local/lib/libboost_program_options.a /usr/local/lib/libboost_system.a /usr/local/lib/libboost_unit_test_framework.a $(LDFLAGS) -o$(TEST)
 
 clean:
 	rm -rf *.o  *~ $(ACPROTO) $(APPMR) $(APPCLI) output/*.*
