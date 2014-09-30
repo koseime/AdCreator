@@ -92,7 +92,7 @@ endif
 
 .PHONY: check
 check: all
-        set -e; \
-        for test in ./*-test ; do \
-                $$test --log_format=XML --log_sink=results.xml --log_level=all --report_level=no; \
-        done
+	set -e; \
+	for test in ./*-test ; do \
+		$$test --log_format=XML --log_sink=results.xml --log_level=all --report_level=no; \
+	done

@@ -9,7 +9,7 @@ RUN rpm -Uvh http://download.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.
 # make sure the package repository is up to date
 RUN yum upgrade -y
 
-RUN yum install -y which emacs-nox wget openssh-server git gcc gcc-c++ cmake openssl-devel fontconfig-devel libpng-devel tar bzip2 ghostscript ghostscript-devel libXext-devel lcms lcms-devel bzip2-devel libtiff-devel libjpeg-turbo-devel
+RUN yum install -y which emacs-nox wget openssh-server git gcc gcc-c++ cmake openssl-devel fontconfig-devel libpng-devel tar bzip2 ghostscript ghostscript-devel libXext-devel lcms lcms-devel bzip2-devel libtiff-devel libjpeg-turbo-devel boost-devel
 RUN wget -nv http://public-repo-1.hortonworks.com/HDP/centos6/2.x/updates/2.0.12.0/hdp.repo -O /etc/yum.repos.d/hdp.repo
 RUN wget http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo -O /etc/yum.repos.d/epel-apache-maven.repo
 RUN yum install -y hadoop-source apache-maven
