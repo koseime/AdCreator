@@ -94,5 +94,5 @@ endif
 check: all
 	set -e; \
 	for test in ./*-test ; do \
-		$$test --log_format=XML --log_sink=results.xml --log_level=all --report_level=no; \
+		$$test --log_format=XML --log_level=all --report_level=no >> results.xml; \
 	done
