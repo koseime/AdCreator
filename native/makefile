@@ -72,12 +72,12 @@ $(APPMR):	$(OBJS)
 
 $(APPCLI):	$(CLIOBJS)
 	$(CC) $(CLIOBJS) $(LDFLAGS) -o$(APPCLI)  
-	
+
 $(TEST): $(TESTOBJS)
 	$(CC) $(TESTOBJS) $(LDFLAGS) -lboost_program_options -lboost_system -lboost_unit_test_framework -o$(TEST)
 
 clean:
-	rm -rf *.o  *~ $(ACPROTO) $(APPMR) $(APPCLI) output/*.*
+	rm -rf *.o  *~ $(ACPROTO) $(APPMR) $(APPCLI) output/*.* results.xml
 
 ad_creator_workflow:
 	mkdir -p $(ACPROTO); \
@@ -90,3 +90,9 @@ ifndef HADOOP_SRC
     $(error HADOOP_SRC is undefined)
 endif
 
+.PHONY: check
+check: all
+        set -e; \
+        for test in ./*-test ; do \
+                $$test --log_format=XML --log_sink=results.xml --log_level=all --report_level=no; \
+        done
