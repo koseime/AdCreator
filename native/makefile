@@ -4,7 +4,7 @@ TEST = ad-creator-test
 CC = g++
 
 ACPROTO = ./ad_creator_workflow
-ACPROTO_VERSION = 0.4
+ACPROTO_VERSION = 0.5
 export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig
 HADOOP_SRC_DIR = $(HADOOP_SRC)
 
@@ -82,7 +82,7 @@ clean:
 ad_creator_workflow:
 	mkdir -p $(ACPROTO); \
 	cd $(ACPROTO); \
-	wget http://repository-kosei.forge.cloudbees.com/release/com/kosei/jobs/ad-creator-workflow/$(ACPROTO_VERSION)/ad-creator-workflow-$(ACPROTO_VERSION)-sources.jar; \
+	wget --http-user=koseideveloper --http-password='bu!ld4A11' https://repository-kosei.forge.cloudbees.com/private/com/kosei/jobs/ad-creator-workflow/$(ACPROTO_VERSION)/ad-creator-workflow-$(ACPROTO_VERSION)-sources.jar; \
 	jar xf ad-creator-workflow-$(ACPROTO_VERSION)-sources.jar
 
 check-env:
