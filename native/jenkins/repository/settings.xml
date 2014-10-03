@@ -5,7 +5,7 @@
   <interactiveMode>false</interactiveMode>
   <servers>
     <server>
-      <id>kosei.release</id>
+      <id>kosei.private</id>
       <username>koseideveloper</username>
       <password>bu!ld4A11</password>
       <filePermissions>664</filePermissions>
