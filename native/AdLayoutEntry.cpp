@@ -84,7 +84,7 @@ AdLayoutEntry::AdLayoutEntry(const string &jsonString) {
 		product = ImageEntry("invalid", -1, -1, -1, -1);
 
 		description = TextEntry(descriptionFontJson, 250, 20, 10, 28);
-		title = TextEntry(titleFontJson, 250, 20, 10, 8);
+		title = TextEntry(titleFontJson, 250, 30, 10, 8);
 		isTemplateSet = true;
 	} else if (templateId.compare("template_4") == 0) {
 		background = ImageEntry(backgroundFilename, -1, -1, -1, -1);
@@ -108,7 +108,7 @@ AdLayoutEntry::AdLayoutEntry(const string &jsonString) {
 		product = ImageEntry("invalid", -1, -1, -1, -1);
 
 		description = TextEntry(descriptionFontJson, 250, 20, 55, 28);
-		title = TextEntry(titleFontJson, 250, 20, 55, 8);
+		title = TextEntry(titleFontJson, 250, 30, 55, 8);
 		isTemplateSet = true;
 	} else if (templateId.compare("template_7") == 0) {
 		background = ImageEntry(backgroundFilename, -1, -1, -1, -1);
