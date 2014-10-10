@@ -68,7 +68,7 @@ AdLayoutEntry::AdLayoutEntry(const string &jsonString) {
 		product = ImageEntry("valid", 45, 45, 2, 2);
 
 		description = TextEntry(descriptionFontJson, 210, 20, 55, 28);
-		title = TextEntry(titleFontJson, 210, 20, 55, 8);
+		title = TextEntry(titleFontJson, 210, 23, 55, 8);
 		isTemplateSet = true;
 	} else if (templateId.compare("template_2") == 0) {
 		background = ImageEntry(backgroundFilename, -1, -1, -1, -1);
@@ -76,7 +76,7 @@ AdLayoutEntry::AdLayoutEntry(const string &jsonString) {
 		product = ImageEntry("valid", 45, 45, 320 - 45 - 2, 2);
 
 		description = TextEntry(descriptionFontJson, 210, 20, 55, 28);
-		title = TextEntry(titleFontJson, 210, 20, 55, 8);
+		title = TextEntry(titleFontJson, 210, 23, 55, 8);
 		isTemplateSet = true;
 	} else if (templateId.compare("template_3") == 0) {
 		background = ImageEntry(backgroundFilename, -1, -1, -1, -1);
@@ -84,7 +84,7 @@ AdLayoutEntry::AdLayoutEntry(const string &jsonString) {
 		product = ImageEntry("invalid", -1, -1, -1, -1);
 
 		description = TextEntry(descriptionFontJson, 250, 20, 10, 28);
-		title = TextEntry(titleFontJson, 250, 30, 10, 8);
+		title = TextEntry(titleFontJson, 250, 25, 10, 8);
 		isTemplateSet = true;
 	} else if (templateId.compare("template_4") == 0) {
 		background = ImageEntry(backgroundFilename, -1, -1, -1, -1);
@@ -92,7 +92,7 @@ AdLayoutEntry::AdLayoutEntry(const string &jsonString) {
 		product = ImageEntry("valid", 45, 45, 320 - 45 - 2, 2);
 
 		description = TextEntry(descriptionFontJson, 250 ,20 , 10, 28);
-		title = TextEntry(titleFontJson, 250, 20 , 10, 8);
+		title = TextEntry(titleFontJson, 250, 25 , 10, 8);
 		isTemplateSet = true;
 	} else if (templateId.compare("template_5") == 0) {
 		background = ImageEntry(backgroundFilename, -1, -1, -1, -1);
@@ -100,7 +100,7 @@ AdLayoutEntry::AdLayoutEntry(const string &jsonString) {
 		product = ImageEntry("valid", 45, 45, 320 - 50 - 45 - 2, 2);
 
 		description = TextEntry(descriptionFontJson, 210, 20, 10, 28);
-		title = TextEntry(titleFontJson, 210, 20, 10, 8);
+		title = TextEntry(titleFontJson, 210, 23, 10, 8);
 		isTemplateSet = true;
 	} else if (templateId.compare("template_6") == 0) {
 		background = ImageEntry(backgroundFilename, -1, -1, -1, -1);
@@ -108,7 +108,7 @@ AdLayoutEntry::AdLayoutEntry(const string &jsonString) {
 		product = ImageEntry("invalid", -1, -1, -1, -1);
 
 		description = TextEntry(descriptionFontJson, 250, 20, 55, 28);
-		title = TextEntry(titleFontJson, 250, 30, 55, 8);
+		title = TextEntry(titleFontJson, 250, 25, 55, 8);
 		isTemplateSet = true;
 	} else if (templateId.compare("template_7") == 0) {
 		background = ImageEntry(backgroundFilename, -1, -1, -1, -1);
@@ -116,7 +116,7 @@ AdLayoutEntry::AdLayoutEntry(const string &jsonString) {
 		product = ImageEntry("valid", 45, 45, 2, 2);
 
 		description = TextEntry(descriptionFontJson, 250, 20, 55, 28);
-		title = TextEntry(titleFontJson, 250, 20, 55, 8);
+		title = TextEntry(titleFontJson, 250, 25, 55, 8);
 		isTemplateSet = true;
 	}  else if (templateId.compare("template_8") == 0) {
         background = ImageEntry(backgroundFilename, -1, -1, -1, -1);
