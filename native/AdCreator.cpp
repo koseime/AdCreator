@@ -53,10 +53,11 @@ public:
 			//adComponents.set_title("");
 			//adComponents.set_description("");
 
+
 			// Generate Ads
 			vector<pair<string, string> > generatedJpgAds;
 			engine.createAllLayouts(adComponents.productjpg(), adComponents.title(),
-					adComponents.description(), &generatedJpgAds);
+					adComponents.description(), getPrice(adComponents), &generatedJpgAds);
 
 			// Add to AdComponents protobuf
 			for (int i = 0; i < generatedJpgAds.size(); i++) {
@@ -84,6 +85,16 @@ public:
 		}
 		return false;
 	}
+
+    string getPrice(const com::kosei::proto::AdComponents &adComponents) {
+        for (int i = 0; i < adComponents.meta_size(); i++) {
+            const com::kosei::proto::AdComponents_Meta &metaEntry = adComponents.meta(i);
+            if (metaEntry.key().compare("price") == 0) {
+                return metaEntry.value();
+            }
+        }
+        return "";
+    }
 };
 
 class AdCreatorReducer : public HadoopPipes::Reducer {

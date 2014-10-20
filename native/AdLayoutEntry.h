@@ -67,6 +67,7 @@ public:
 	ImageEntry product;
 
 	TextEntry title;
+    TextEntry price;
 	TextEntry description;
 	int size_x;
 	int size_y;

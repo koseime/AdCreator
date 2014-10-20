@@ -32,7 +32,7 @@ void BulkProcessor::start(std::string const& input,
 
 }
 
-void BulkProcessor::parseline(std::string& line, std::string& id, std::string& productPic, std::string& productTitle, std::string& productCopy) {
+void BulkProcessor::parseline(std::string& line, std::string& id, std::string& productPic, std::string& productTitle, std::string& productCopy, std::string& productPrice) {
 	if (line.size() < 2) {
 		return;
 	}
@@ -46,6 +46,7 @@ void BulkProcessor::parseline(std::string& line, std::string& id, std::string& p
 		productPic = _inputImageDir + "/" + parsedFields[1].data();
 		productTitle = parsedFields[2].data();
 		productCopy = parsedFields[3].data();
+		productPrice = "$0.00";
 	}
 }
 
@@ -55,15 +56,17 @@ void BulkProcessor::invoke() {
 	std::string productPic;
 	std::string productTitle;
 	std::string productCopy;
+	std::string productPrice;
+
 	std::string id;
 
 	if (_line == NULL || _line->size() < 2)
 		return;
 
-	parseline(*_line, id, productPic, productTitle, productCopy);
+	parseline(*_line, id, productPic, productTitle, productCopy, productPrice);
 	std::string output = _outputDir + "/" + id + ".png";
 
-	layoutEngine.create((const char*) productPic.c_str(),  productTitle.c_str(), productCopy.c_str(), output.c_str());
+	layoutEngine.create((const char*) productPic.c_str(),  productTitle.c_str(), productCopy.c_str(), productPrice.c_str(), output.c_str());
 
 }
 

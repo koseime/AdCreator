@@ -36,6 +36,7 @@ static void usage(const char *prog) {
 			<< "\t-x <eXecution type>  : bulk or single" << std::endl
 			<< "\t-p <product image>  : single - product image" << std::endl
 			<< "\t-t <ad title>  : single - ad title" << std::endl
+			<< "\t-m <price>  : single - price" << std::endl
 			<< "\t-c <ad copy>  : single - ad copy" << std::endl
 			<< "\t-s <template resource>  : path to resouce" << std::endl
 			<< "\t-r <ad result>  : single - ad result output" << std::endl
@@ -44,9 +45,9 @@ static void usage(const char *prog) {
 
 int main(int argc, char *argv[])
 {
-	std::string input, inputimagedir, outputdir, exectype, prodimage, title, copy, adresult,resource;
+	std::string input, inputimagedir, outputdir, exectype, prodimage, title, copy, adresult,resource,price;
 	int opt;
-	while ((opt = getopt(argc, argv, "x:i:o:p:t:c:r:g:s:h")) != -1) {
+	while ((opt = getopt(argc, argv, "x:i:o:p:t:c:r:g:s:m:h")) != -1) {
 		switch (opt) {
 		case 'x':
 			exectype = optarg;
@@ -75,6 +76,9 @@ int main(int argc, char *argv[])
 		case 's':
 		    resource = optarg;
 		    break;
+        case 'm':
+            price = optarg;
+            break;
 		case 'h':
 		default:
 			usage(argv[0]);
@@ -89,11 +93,13 @@ int main(int argc, char *argv[])
 				<< "image: " << prodimage << std::endl
 				<< "title: " << title << std::endl
 				<< "resource: " << resource << std::endl
-				<< "copy: " << copy << std::endl;
+				<< "copy: " << copy << std::endl
+				<< "price: " << price << std::endl;
+
 
 		ImageMagickLayoutEngine engine;
 		engine.importResources(resource);
-		return engine.create(prodimage, title, copy, adresult);
+		return engine.create(prodimage, title, copy, price, adresult);
 	} else if (exectype.compare("bulk") == 0) {
 		BulkProcessor engine;
 		engine.start(input, outputdir, inputimagedir, resource);

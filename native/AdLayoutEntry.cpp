@@ -77,6 +77,9 @@ AdLayoutEntry::AdLayoutEntry(const string &jsonString) {
 	assert(object.has<Object>("description_font"));
 	const Object &descriptionFontJson = object.get<Object>("description_font");
 
+	assert(object.has<Object>("price_font"));
+    const Object &priceFontJson = object.get<Object>("price_font");
+
     //NORMAL 210,20
      bool isTemplateSet = false;
 	if (templateId.compare("__embedded")== 0) {
@@ -89,8 +92,11 @@ AdLayoutEntry::AdLayoutEntry(const string &jsonString) {
         AdLayoutEntry::TemplateEntry productTemplateEntry = AdLayoutEntry::TemplateEntry( embedded_template.has<String>("product")?embedded_template.get<String>("product"):"null");
         product = ImageEntry("valid", productTemplateEntry.size_x, productTemplateEntry.size_y, productTemplateEntry.pos_x, productTemplateEntry.pos_y);
 
-        AdLayoutEntry::TemplateEntry descTemplateEntry = AdLayoutEntry::TemplateEntry( embedded_template.has<String>("description")?embedded_template.get<String>("description"):"null");
-        description = TextEntry(descriptionFontJson, descTemplateEntry.size_x, descTemplateEntry.size_y, descTemplateEntry.pos_x, descTemplateEntry.pos_y);
+        AdLayoutEntry::TemplateEntry priceTemplateEntry = AdLayoutEntry::TemplateEntry( embedded_template.has<String>("price")?embedded_template.get<String>("price"):"null");
+        price = TextEntry(priceFontJson, priceTemplateEntry.size_x, priceTemplateEntry.size_y, priceTemplateEntry.pos_x, priceTemplateEntry.pos_y);
+
+         AdLayoutEntry::TemplateEntry descTemplateEntry = AdLayoutEntry::TemplateEntry( embedded_template.has<String>("description")?embedded_template.get<String>("description"):"null");
+                description = TextEntry(descriptionFontJson, descTemplateEntry.size_x, descTemplateEntry.size_y, descTemplateEntry.pos_x, descTemplateEntry.pos_y);
 
         AdLayoutEntry::TemplateEntry titleTemplateEntry = AdLayoutEntry::TemplateEntry( embedded_template.has<String>("title")?embedded_template.get<String>("title"):"null");
         title = TextEntry(titleFontJson, titleTemplateEntry.size_x, titleTemplateEntry.size_y, titleTemplateEntry.pos_x, titleTemplateEntry.pos_y);
