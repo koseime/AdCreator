@@ -52,7 +52,7 @@ public:
  		    int pos_x;
  		    int pos_y;
     		TemplateEntry() ;
-    		TemplateEntry(const String &templateEntryAsString);
+    		TemplateEntry(const Object &jsonObject);
     	};
 
 

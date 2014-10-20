@@ -44,17 +44,22 @@ AdLayoutEntry::TextEntry::TextEntry(const Object &jsonObject, int _size_x, int _
 	skip = false;
 }
 
-AdLayoutEntry::TemplateEntry::TemplateEntry(const String &templateEntryAsString) {
+AdLayoutEntry::TemplateEntry::TemplateEntry(const Object &jsonObject) {
 
-	std::vector<std::string> parsedFields;
-    Tokenizer::tokenize(templateEntryAsString, parsedFields, ":");
+    size_x =  jsonObject.get<Number>("height", 0);
+    size_y =  jsonObject.get<Number>("width", 0);
+    pos_x =  jsonObject.get<Number>("origin_x", 0);
+    pos_y =  jsonObject.get<Number>("origin_y", 0);
 
-    assert(!parsedFields.empty());
-
-    size_x = atoi(parsedFields[0].data());
-	size_y = atoi(parsedFields[1].data());
-	pos_x = atoi(parsedFields[2].data());
-	pos_y = atoi(parsedFields[3].data());
+//	std::vector<std::string> parsedFields;
+//    Tokenizer::tokenize(templateEntryAsString, parsedFields, ":");
+//
+//    assert(!parsedFields.empty());
+//
+//    size_x = atoi(parsedFields[0].data());
+//	size_y = atoi(parsedFields[1].data());
+//	pos_x = atoi(parsedFields[2].data());
+//	pos_y = atoi(parsedFields[3].data());
 }
 
 AdLayoutEntry::TextEntry::TextEntry() {
@@ -86,31 +91,42 @@ AdLayoutEntry::AdLayoutEntry(const string &jsonString) {
 	   	assert(object.has<Object>("embedded_template"));
         const Object &embedded_template = object.get<Object>("embedded_template");
 
-        AdLayoutEntry::TemplateEntry logoTemplateEntry = AdLayoutEntry::TemplateEntry( embedded_template.has<String>("logo")?embedded_template.get<String>("logo"):"null");
-        logo = ImageEntry(logoFilename, logoTemplateEntry.size_x,logoTemplateEntry.size_y,logoTemplateEntry.pos_x,logoTemplateEntry.pos_y);
+        if ( embedded_template.has<Object>("logo")) {
+            AdLayoutEntry::TemplateEntry logoTemplateEntry = AdLayoutEntry::TemplateEntry( embedded_template.get<Object>("logo"));
+            logo = ImageEntry(logoFilename, logoTemplateEntry.size_x,logoTemplateEntry.size_y,logoTemplateEntry.pos_x,logoTemplateEntry.pos_y);
+        }
 
-        AdLayoutEntry::TemplateEntry productTemplateEntry = AdLayoutEntry::TemplateEntry( embedded_template.has<String>("product")?embedded_template.get<String>("product"):"null");
-        product = ImageEntry("valid", productTemplateEntry.size_x, productTemplateEntry.size_y, productTemplateEntry.pos_x, productTemplateEntry.pos_y);
+        if ( embedded_template.has<Object>("product")) {
+            AdLayoutEntry::TemplateEntry productTemplateEntry = AdLayoutEntry::TemplateEntry( embedded_template.get<Object>("product"));
+            product = ImageEntry("valid", productTemplateEntry.size_x, productTemplateEntry.size_y, productTemplateEntry.pos_x, productTemplateEntry.pos_y);
+        }
 
-        AdLayoutEntry::TemplateEntry priceTemplateEntry = AdLayoutEntry::TemplateEntry( embedded_template.has<String>("price")?embedded_template.get<String>("price"):"null");
-        price = TextEntry(priceFontJson, priceTemplateEntry.size_x, priceTemplateEntry.size_y, priceTemplateEntry.pos_x, priceTemplateEntry.pos_y);
+        if ( embedded_template.has<Object>("price")) {
+            AdLayoutEntry::TemplateEntry priceTemplateEntry = AdLayoutEntry::TemplateEntry( embedded_template.get<Object>("price"));
+            price = TextEntry(priceFontJson, priceTemplateEntry.size_x, priceTemplateEntry.size_y, priceTemplateEntry.pos_x, priceTemplateEntry.pos_y);
+        }
 
-         AdLayoutEntry::TemplateEntry descTemplateEntry = AdLayoutEntry::TemplateEntry( embedded_template.has<String>("description")?embedded_template.get<String>("description"):"null");
-                description = TextEntry(descriptionFontJson, descTemplateEntry.size_x, descTemplateEntry.size_y, descTemplateEntry.pos_x, descTemplateEntry.pos_y);
+        if ( embedded_template.has<Object>("description")) {
+            AdLayoutEntry::TemplateEntry descTemplateEntry = AdLayoutEntry::TemplateEntry( embedded_template.get<Object>("description"));
+            description = TextEntry(descriptionFontJson, descTemplateEntry.size_x, descTemplateEntry.size_y, descTemplateEntry.pos_x, descTemplateEntry.pos_y);
+        }
 
-        AdLayoutEntry::TemplateEntry titleTemplateEntry = AdLayoutEntry::TemplateEntry( embedded_template.has<String>("title")?embedded_template.get<String>("title"):"null");
-        title = TextEntry(titleFontJson, titleTemplateEntry.size_x, titleTemplateEntry.size_y, titleTemplateEntry.pos_x, titleTemplateEntry.pos_y);
+        if ( embedded_template.has<Object>("title")) {
+            AdLayoutEntry::TemplateEntry titleTemplateEntry = AdLayoutEntry::TemplateEntry( embedded_template.get<Object>("title"));
+            title = TextEntry(titleFontJson, titleTemplateEntry.size_x, titleTemplateEntry.size_y, titleTemplateEntry.pos_x, titleTemplateEntry.pos_y);
+        }
 
-        if ( embedded_template.has<String>("calltoaction")) {
-            AdLayoutEntry::TemplateEntry callToActionTemplateEntry = AdLayoutEntry::TemplateEntry( embedded_template.has<String>("calltoaction")?embedded_template.get<String>("calltoaction"):"null");
+        if ( embedded_template.has<Object>("calltoaction")) {
+            AdLayoutEntry::TemplateEntry callToActionTemplateEntry = AdLayoutEntry::TemplateEntry( embedded_template.get<Object>("calltoaction"));
             calltoaction = ImageEntry(callToActionFilename, callToActionTemplateEntry.size_x,callToActionTemplateEntry.size_y,callToActionTemplateEntry.pos_x,callToActionTemplateEntry.pos_y);
         }
 
-        AdLayoutEntry::TemplateEntry mainTemplateEntry = AdLayoutEntry::TemplateEntry( embedded_template.has<String>("main")?embedded_template.get<String>("main"):"null");
+        if (embedded_template.has<Object>("main")) {
+            AdLayoutEntry::TemplateEntry mainTemplateEntry = AdLayoutEntry::TemplateEntry( embedded_template.get<Object>("main"));
 
-        size_x=mainTemplateEntry.size_x;
-        size_y=mainTemplateEntry.size_y;
-
+            size_x=mainTemplateEntry.size_x;
+            size_y=mainTemplateEntry.size_y;
+        }
 
         background = ImageEntry(backgroundFilename, -1, -1, -1, -1);
 
