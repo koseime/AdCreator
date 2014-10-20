@@ -42,7 +42,8 @@ public:
 	int create(const string &product_image_file, const string &title,
 			const string &copy, const string &output_file);
 	int create(const string &productImage, const string &backgroundBlob,
-			const string &logoBlob, const AdLayoutEntry &adLayoutEntry, const string &title,
+			const string &logoBlob, const string &callToActionBlob,
+			const AdLayoutEntry &adLayoutEntry, const string &title,
 			const string &copy, string *outputBlob);
 	int create(const string &productImage, const AdLayoutEntry &adLayoutEntry,
 			const string &title, const string &copy, string *outputBlob);

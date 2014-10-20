@@ -70,9 +70,9 @@ int LayoutEngineManager::importImagesAndLayouts(const string &path) {
 		char *fileContents = new char[entry_size];
 		int retVal = archive_read_data(a, fileContents, entry_size);
 
-		if (retVal <= 0) {
-			cerr << "Error reading " + string(entry_pathname) + " from " + path;
-		} else if (strcmp(entry_pathname, "manifest.properties") == 0) {
+		if (retVal <= 0 && strcmp(entry_pathname, "./") != 0) {
+			cerr << "Error reading " + string(entry_pathname) + " from " + path << endl;
+		} else if (strcmp(entry_pathname, "manifest.properties") == 0 || strcmp(entry_pathname, "./manifest.properties") == 0) {
 			manFileFound = true;
 			importAdLayouts(fileContents, entry_size);
 		} else {

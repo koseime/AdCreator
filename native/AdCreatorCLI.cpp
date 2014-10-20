@@ -37,15 +37,16 @@ static void usage(const char *prog) {
 			<< "\t-p <product image>  : single - product image" << std::endl
 			<< "\t-t <ad title>  : single - ad title" << std::endl
 			<< "\t-c <ad copy>  : single - ad copy" << std::endl
+			<< "\t-s <template resource>  : path to resouce" << std::endl
 			<< "\t-r <ad result>  : single - ad result output" << std::endl
 			<< std::endl << std::endl;
 }
 
 int main(int argc, char *argv[])
 {
-	std::string input, inputimagedir, outputdir, exectype, prodimage, title, copy, adresult;
+	std::string input, inputimagedir, outputdir, exectype, prodimage, title, copy, adresult,resource;
 	int opt;
-	while ((opt = getopt(argc, argv, "x:i:o:p:t:c:r:g:h")) != -1) {
+	while ((opt = getopt(argc, argv, "x:i:o:p:t:c:r:g:s:h")) != -1) {
 		switch (opt) {
 		case 'x':
 			exectype = optarg;
@@ -71,6 +72,9 @@ int main(int argc, char *argv[])
 		case 'g':
 			inputimagedir = optarg;
 			break;
+		case 's':
+		    resource = optarg;
+		    break;
 		case 'h':
 		default:
 			usage(argv[0]);
@@ -84,14 +88,15 @@ int main(int argc, char *argv[])
 		std::cout << "Create an ad from parts - single use: " << std::endl
 				<< "image: " << prodimage << std::endl
 				<< "title: " << title << std::endl
+				<< "resource: " << resource << std::endl
 				<< "copy: " << copy << std::endl;
 
 		ImageMagickLayoutEngine engine;
-		engine.importResources("images/layout_resource.tar.gz");
+		engine.importResources(resource);
 		return engine.create(prodimage, title, copy, adresult);
 	} else if (exectype.compare("bulk") == 0) {
 		BulkProcessor engine;
-		engine.start(input, outputdir, inputimagedir, "images/layout_resource.tar.gz");
+		engine.start(input, outputdir, inputimagedir, resource);
 		return 0;
 	}
 

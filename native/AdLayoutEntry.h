@@ -45,6 +45,16 @@ public:
 		TextEntry(const Object &fontJsonObject, int _size_x, int _size_y, int _pos_x, int _pos_y);
 	};
 
+	class TemplateEntry {
+    	public:
+            int size_x;
+ 		    int size_y;
+ 		    int pos_x;
+ 		    int pos_y;
+    		TemplateEntry() ;
+    		TemplateEntry(const String &templateEntryAsString);
+    	};
+
 
 
 	string name;
@@ -53,10 +63,13 @@ public:
 
 	ImageEntry background;
 	ImageEntry logo;
+	ImageEntry calltoaction;
 	ImageEntry product;
 
 	TextEntry title;
 	TextEntry description;
+	int size_x;
+	int size_y;
 	AdLayoutEntry(const string &jsonString);
 };
 

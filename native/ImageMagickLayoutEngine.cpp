@@ -65,7 +65,9 @@ void ImageMagickLayoutEngine::createAllLayouts(const string &productImage, const
 int ImageMagickLayoutEngine::create(const string &productImage, const AdLayoutEntry &adLayoutEntry,
 		const string &title, const string &copy, string *outputBlob) {
 	return create(productImage, layoutEngineManager.getImageBlob(adLayoutEntry.background.fileName),
-			layoutEngineManager.getImageBlob(adLayoutEntry.logo.fileName), adLayoutEntry, title, copy,
+			layoutEngineManager.getImageBlob(adLayoutEntry.logo.fileName),
+			layoutEngineManager.getImageBlob(adLayoutEntry.calltoaction.fileName),
+			 adLayoutEntry, title, copy,
 			outputBlob);
 }
 
@@ -143,8 +145,12 @@ void ImageMagickLayoutEngine::cropSquare(MagickWand *magickWand) {
 
 void ImageMagickLayoutEngine::scaleAndExtendImage(MagickWand *backgroundMagickWand, MagickWand *magickWand,
 		const AdLayoutEntry::ImageEntry &imageEntry) {
+
+
 	double width = (double)MagickGetImageWidth(magickWand);
 	double height = (double)MagickGetImageHeight(magickWand);
+
+	//cout << "Source width/height: " << width << "/" << height << endl;
 	// TODO: compute scale correctly
 
 	double scale = ((double)imageEntry.size_x) / max(height, width);
@@ -156,7 +162,10 @@ void ImageMagickLayoutEngine::scaleAndExtendImage(MagickWand *backgroundMagickWa
 	MagickResizeImage(magickWand, newWidth, newHeight, LanczosFilter, 1);
 
 	// TODO: extend image correctly
-	MagickExtentImage(magickWand, imageEntry.size_x, imageEntry.size_x, -(imageEntry.size_x-newWidth)/2,-(imageEntry.size_x-newHeight)/2);
+
+    //cout << "Out width/height: " << imageEntry.size_x << "/" << imageEntry.size_y << endl;
+
+	MagickExtentImage(magickWand, imageEntry.size_x, imageEntry.size_y, -(imageEntry.size_x-newWidth)/2,-(imageEntry.size_y-newHeight)/2);
 
 }
 
@@ -174,7 +183,7 @@ void ImageMagickLayoutEngine::createRoundedRectangleMask(MagickWand *maskMagickW
 }
 
 int ImageMagickLayoutEngine::create(const string &productImage, const string &backgroundBlob,
-		const string &logoBlob, const AdLayoutEntry &adLayoutEntry, const string &title,
+		const string &logoBlob, const string &callToActionBlob, const AdLayoutEntry &adLayoutEntry, const string &title,
 		const string &copy, string *outputBlob) {
 	// Initialization
 	// TODO: create them once per object?
@@ -182,16 +191,19 @@ int ImageMagickLayoutEngine::create(const string &productImage, const string &ba
 	MagickWand *backgroundMagickWand = NewMagickWand();
 	MagickWand *productMagickWand = NewMagickWand();
 	MagickWand *logoMagickWand = NewMagickWand();
+    MagickWand *callToActionMagickWand = NewMagickWand();
+
 	MagickWand *maskMagickWand = NewMagickWand();
 
 	MagickSetCompressionQuality(backgroundMagickWand,100);
     MagickSetCompressionQuality(logoMagickWand,100);
+    MagickSetCompressionQuality(callToActionMagickWand,100);
     MagickSetCompressionQuality(productMagickWand,100);
 
 	// Create Background image
 	if (backgroundBlob.empty()) {
 		PixelSetColor(pixelWand, adLayoutEntry.backgroundColor.c_str());
-		MagickNewImage(backgroundMagickWand, 320, 50, pixelWand);
+		MagickNewImage(backgroundMagickWand, adLayoutEntry.size_x, adLayoutEntry.size_y, pixelWand);
 	} else {
 		MagickReadImageBlob(backgroundMagickWand, backgroundBlob.data(), backgroundBlob.size());
 	}
@@ -213,6 +225,14 @@ int ImageMagickLayoutEngine::create(const string &productImage, const string &ba
 		scaleAndExtendImage(backgroundMagickWand, logoMagickWand, adLayoutEntry.logo);
 		MagickCompositeImage(backgroundMagickWand, logoMagickWand, OverCompositeOp,
 				adLayoutEntry.logo.pos_x, adLayoutEntry.logo.pos_y);
+	}
+
+// Create, scale and composite the calltoaction image
+	if (!callToActionBlob.empty() && adLayoutEntry.calltoaction.fileName.compare("invalid") != 0) {
+		MagickReadImageBlob(callToActionMagickWand, callToActionBlob.data(), callToActionBlob.size());
+		scaleAndExtendImage(backgroundMagickWand, callToActionMagickWand, adLayoutEntry.calltoaction);
+		MagickCompositeImage(backgroundMagickWand, callToActionMagickWand, OverCompositeOp,
+				adLayoutEntry.calltoaction.pos_x, adLayoutEntry.calltoaction.pos_y);
 	}
 
 	// Add title and description
@@ -237,6 +257,8 @@ int ImageMagickLayoutEngine::create(const string &productImage, const string &ba
 	if (backgroundMagickWand) { backgroundMagickWand = DestroyMagickWand(backgroundMagickWand); }
 	if (productMagickWand) { productMagickWand = DestroyMagickWand(productMagickWand); }
 	if (logoMagickWand) { logoMagickWand = DestroyMagickWand(logoMagickWand); }
+	if (callToActionMagickWand) { callToActionMagickWand = DestroyMagickWand(callToActionMagickWand); }
+
 	if (maskMagickWand) { maskMagickWand = DestroyMagickWand(maskMagickWand); }
 
 	return 0;
