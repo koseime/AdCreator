@@ -8,7 +8,7 @@
             var price = document.getElementById('price').value;
 
 
-            var templateId = document.getElementById('templateId').value;
+            var templateId = "__embedded";
 
 
             var productImageFile = document.getElementById('productImage').value;
@@ -122,16 +122,6 @@
 
     Description: <input type="text" name="body" id="body" size="60" <#if descriptionText??>
                         value="${descriptionText}"</#if>/>
-
-    <br/>
-    Template:
-    <select id="templateId">
-        <option value="">-- templates --</option>
-
-    <#list templateIds as templateId>
-        <option value="${templateId}" <#if selectedTemplateId(templateId)??> selected</#if>>${templateId}</option>
-    </#list>
-    </select>
 
 
     <br/>
