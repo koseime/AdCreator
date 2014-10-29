@@ -70,4 +70,28 @@ public class AdCreatorConfiguration extends Configuration {
     public void setFontDirectory(String fontDirectory) {
         this.fontDirectory = fontDirectory;
     }
+
+
+    @NotEmpty
+    private String callToActionDirectory;
+
+    public String getCallToActionImageDirectory() {
+        return callToActionDirectory;
+    }
+
+    public void setCallToActionDirectory(String callToActionDirectory) {
+        this.callToActionDirectory = callToActionDirectory;
+    }
+
+    @NotEmpty
+    private String templateDirectory;
+
+    public String getTemplateDirectory() {
+        return templateDirectory;
+    }
+
+    public void setTemplateDirectory(String templateDirectory) {
+        this.templateDirectory = templateDirectory;
+    }
+
 }

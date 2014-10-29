@@ -228,11 +228,15 @@ int ImageMagickLayoutEngine::create(const string &productImage, const string &ba
 	}
 
 // Create, scale and composite the calltoaction image
-	if (!callToActionBlob.empty() && adLayoutEntry.calltoaction.fileName.compare("invalid") != 0) {
+    cout << "Is CallToAction" << endl;
+
+	if (!callToActionBlob.empty() ) {
 		MagickReadImageBlob(callToActionMagickWand, callToActionBlob.data(), callToActionBlob.size());
 		scaleAndExtendImage(backgroundMagickWand, callToActionMagickWand, adLayoutEntry.calltoaction);
 		MagickCompositeImage(backgroundMagickWand, callToActionMagickWand, OverCompositeOp,
 				adLayoutEntry.calltoaction.pos_x, adLayoutEntry.calltoaction.pos_y);
+				    cout << "Render CallToAction" << endl;
+
 	}
 
 	// Add title and description

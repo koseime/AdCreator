@@ -8,10 +8,8 @@ import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.views.ViewBundle;
-import com.kosei.adcreator.api.AdPreviewCreator;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
 
 public class AdCreatorApplication extends Application<AdCreatorConfiguration> {
     public static void main(String[] args) throws Exception {
@@ -43,7 +41,9 @@ public class AdCreatorApplication extends Application<AdCreatorConfiguration> {
         PreCannedImagesAndFonts preCannedImagesAndFonts = new PreCannedImagesAndFonts(
                 configuration.getFontDirectory(),
                 configuration.getLogoImageDirectory(),
-                configuration.getProductImageDirectory());
+                configuration.getProductImageDirectory(),
+                configuration.getCallToActionImageDirectory(),
+                configuration.getTemplateDirectory());
 
         environment.healthChecks().register("template", new TemplateHealthCheck(template));
 

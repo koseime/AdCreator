@@ -8,6 +8,9 @@ struct PreviewInfo {
   4: string adEntryJsonString,
   5: string title,
   6: string copy,
+  7: string backgroundColor,
+  8: binary callToActionBlob,
+  9: string price
 }
 
 service AdPreviewCreator {

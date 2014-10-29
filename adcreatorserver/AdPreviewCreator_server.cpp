@@ -29,8 +29,8 @@ class AdPreviewCreatorHandler : virtual public AdPreviewCreatorIf {
 
   void createPreview(std::string& _return, const PreviewInfo& previewInfo) {
     printf("createPreview\n");
-    engine.create(previewInfo.productBlob, previewInfo.backgroundBlob, previewInfo.logoBlob,
-    		AdLayoutEntry(previewInfo.adEntryJsonString), previewInfo.title, previewInfo.copy, &_return);
+    engine.create(previewInfo.productBlob, previewInfo.backgroundBlob, previewInfo.logoBlob, previewInfo.callToActionBlob,
+    		AdLayoutEntry(previewInfo.adEntryJsonString), previewInfo.title, previewInfo.copy, previewInfo.price, &_return);
   }
 
 };

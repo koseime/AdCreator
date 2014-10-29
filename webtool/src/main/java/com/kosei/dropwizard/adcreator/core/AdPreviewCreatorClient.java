@@ -9,18 +9,51 @@ import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
 
+import javax.ws.rs.QueryParam;
 import java.io.FileInputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by lanceriedel on 9/4/14.
  */
 public class AdPreviewCreatorClient {
-    public ByteBuffer generate(String headerText, String descriptionText, String productImageFile, String logoImageFile,
+    public ByteBuffer generate(String headerText, String descriptionText, String productImageFile, String logoImageFile, String callToActionImageFile,
                                String headerFont, int headerFontSize, int headerFontWeight, String headerFontColor,
+                               String priceFont, int priceFontSize, int priceFontWeight, String priceFontColor,
                                String descriptionFont, int descriptionFontSize, int descriptionFontWeight, String descriptionFontColor,
-                               String backgroundColor, String template_id) throws Exception {
+                               String backgroundColor, String template_id,
+                               int productHeight,
+                               int productWidth,
+                               int productOriginX,
+                               int productOriginY,
+                               int titleHeight,
+                               int titleWidth,
+                               int titleOriginX,
+                               int titleOriginY,
+                               int descriptionHeight,
+                               int descriptionWidth,
+                               int descriptionOriginX,
+                               int descriptionOriginY,
+                               int priceHeight,
+                               int priceWidth,
+                               int priceOriginX,
+                               int priceOriginY,
+                               int logoHeight,
+                               int logoWidth,
+                               int logoOriginX,
+                               int logoOriginY,
+                               int calltoactionHeight,
+                               int calltoactionWidth,
+                               int calltoactionOriginX,
+                               int calltoactionOriginY,
+                               int mainHeight,
+                               int mainWidth,
+                               String templateDefName
+
+    ) throws Exception {
         try {
             String backgroundImageFile = "invalid";
             String sample = "{\"name\":\"ad2\", \"template_id\":\"template_1\", " +
@@ -30,6 +63,8 @@ public class AdPreviewCreatorClient {
 
             String title = "Here is Header";
             String copy = "Here is Copy";
+            String price = "$0.00";
+
 
             if (headerText!=null) title = headerText;
             if (descriptionText!=null) copy = descriptionText;
@@ -37,6 +72,8 @@ public class AdPreviewCreatorClient {
             if (backgroundColor==null || backgroundColor.isEmpty()) backgroundColor = "white";
             if (headerFontColor==null || headerFontColor.isEmpty()) headerFontColor = "black";
             if (descriptionFontColor==null || descriptionFontColor.isEmpty()) descriptionFontColor = "black";
+            if (priceFontColor==null || priceFontColor.isEmpty()) priceFontColor = "black";
+
 
 
 
@@ -50,11 +87,22 @@ public class AdPreviewCreatorClient {
             if (layout.template_id == null ) layout.template_id = "template_1";
             layout.background_filename = "null" ;
             layout.logo_filename = "dd.jpg";
+            layout.calltoaction_filename = "buynow.jpg";
             layout.title_font = new FontHolder();
             layout.title_font.name = headerFont;
             layout.title_font.size = headerFontSize;
             layout.title_font.weight = headerFontWeight;
             layout.title_font.color = headerFontColor;
+
+
+
+
+
+            layout.price_font = new FontHolder();
+            layout.price_font.name = priceFont;
+            layout.price_font.size = priceFontSize;
+            layout.price_font.weight = priceFontWeight;
+            layout.price_font.color = priceFontColor;
 
             layout.description_font = new FontHolder();
             layout.description_font.name = descriptionFont;
@@ -63,6 +111,22 @@ public class AdPreviewCreatorClient {
             layout.description_font.color = descriptionFontColor;
 
 
+           // if (template_id.equals( "__embedded")) {
+            if (true) {
+                Map<String, Object> template_embedded = new HashMap<String, Object>();
+                template_embedded.put("name", templateDefName);
+
+                template_embedded.put("title", new TemplateRecord(titleHeight, titleWidth, titleOriginX, titleOriginY));
+                template_embedded.put("logo", new TemplateRecord(logoHeight, logoWidth, logoOriginX, logoOriginY));
+                template_embedded.put("product", new TemplateRecord(productHeight, productWidth, productOriginX, productOriginY));
+                template_embedded.put("description", new TemplateRecord(descriptionHeight, descriptionWidth, descriptionOriginX, descriptionOriginY));
+                template_embedded.put("main", new TemplateRecord(mainWidth, mainHeight, 0, 0));
+                template_embedded.put("calltoaction", new TemplateRecord(calltoactionHeight, calltoactionWidth, calltoactionOriginX, calltoactionOriginY));
+                template_embedded.put("price", new TemplateRecord(priceHeight, priceWidth, priceOriginX, priceOriginY));
+
+
+                layout.embedded_template = template_embedded;
+            }
 
             String adLayoutJsonString = Jackson.newObjectMapper().writeValueAsString(layout);
 
@@ -74,6 +138,7 @@ public class AdPreviewCreatorClient {
             ByteBuffer productImage = ByteBuffer.allocate(0);
             ByteBuffer backgroundImage = ByteBuffer.allocate(0);
             ByteBuffer logoImage = ByteBuffer.allocate(0);
+            ByteBuffer callToActionImage = ByteBuffer.allocate(0);
             try {
                 FileInputStream fIn = new FileInputStream(productImageFile);
                 FileChannel fChan = fIn.getChannel();
@@ -101,8 +166,18 @@ public class AdPreviewCreatorClient {
                 fChan.close();
                 fIn.close();
 
+
+                fIn = new FileInputStream(callToActionImageFile);
+                fChan = fIn.getChannel();
+                fSize = fChan.size();
+                callToActionImage = ByteBuffer.allocate((int) fSize);
+                fChan.read(callToActionImage);
+                fChan.close();
+                fIn.close();
+
             } catch (Exception exc) {
                 System.out.println("Could Not get files");
+                exc.printStackTrace();
                 transport.close();
                 return null;
             }
@@ -114,8 +189,9 @@ public class AdPreviewCreatorClient {
             productImage.rewind();
             backgroundImage.rewind();
             logoImage.rewind();
+            callToActionImage.rewind();
             PreviewInfo previewInfo = new PreviewInfo(productImage, backgroundImage, logoImage, adLayoutJsonString,
-                    title, copy);
+                    title, copy, backgroundColor, callToActionImage, price);
             ByteBuffer output = client.createPreview(previewInfo);
             transport.close();
 
@@ -135,9 +211,14 @@ public class AdPreviewCreatorClient {
         public String template_id;
         public FontHolder title_font;
         public FontHolder description_font;
+        public FontHolder price_font;
+
         public String background_filename;
         public String logo_filename;
+        public String calltoaction_filename;
         public String background_color;
+
+        public Map<String,Object> embedded_template;
 
     }
 
@@ -146,5 +227,19 @@ public class AdPreviewCreatorClient {
         public int size;
         public int weight;
         public String color;
+    }
+
+    public static class TemplateRecord {
+        public int height;
+        public int width;
+        public int origin_x;
+        public int origin_y;
+        public TemplateRecord(int width, int height, int origin_x, int origin_y) {
+            this.height = height;
+            this.width = width;
+            this.origin_x = origin_x;
+            this.origin_y = origin_y;
+
+        }
     }
 }

@@ -5,7 +5,10 @@ defaultName: Stranger
 
 productImageDirectory: ./assets/productImages
 logoImageDirectory: ./assets/logoImages
+callToActionDirectory: ./assets/calltoactionImages
 fontDirectory: ./adcreatorserver/fonts
+templateDirectory: ./assets/templates
+
 
 
 # use the simple server factory if you only want to run on a single port
