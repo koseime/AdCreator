@@ -66,17 +66,13 @@ public class AdPreviewCreatorClient {
             String price = "$0.00";
 
 
-            if (headerText!=null) title = headerText;
-            if (descriptionText!=null) copy = descriptionText;
+            if (headerText!=null && !headerText.isEmpty()) title = headerText;
+            if (descriptionText!=null && !descriptionText.isEmpty()) copy = descriptionText;
 
             if (backgroundColor==null || backgroundColor.isEmpty()) backgroundColor = "white";
             if (headerFontColor==null || headerFontColor.isEmpty()) headerFontColor = "black";
             if (descriptionFontColor==null || descriptionFontColor.isEmpty()) descriptionFontColor = "black";
             if (priceFontColor==null || priceFontColor.isEmpty()) priceFontColor = "black";
-
-
-
-
 
 
             AdLayout layout = new AdLayout();
@@ -89,26 +85,26 @@ public class AdPreviewCreatorClient {
             layout.logo_filename = "dd.jpg";
             layout.calltoaction_filename = "buynow.jpg";
             layout.title_font = new FontHolder();
-            layout.title_font.name = headerFont;
+            layout.title_font.name = headerFont==null?"unknown":headerFont;
             layout.title_font.size = headerFontSize;
             layout.title_font.weight = headerFontWeight;
-            layout.title_font.color = headerFontColor;
+            layout.title_font.color = headerFontColor==null?"unknown":headerFontColor;
 
 
 
 
 
             layout.price_font = new FontHolder();
-            layout.price_font.name = priceFont;
+            layout.price_font.name = priceFont==null?"unknown":priceFont;
             layout.price_font.size = priceFontSize;
             layout.price_font.weight = priceFontWeight;
-            layout.price_font.color = priceFontColor;
+            layout.price_font.color = priceFontColor==null?"black":priceFontColor;
 
             layout.description_font = new FontHolder();
-            layout.description_font.name = descriptionFont;
+            layout.description_font.name = descriptionFont==null?"unknown":descriptionFont;
             layout.description_font.size = descriptionFontSize;
             layout.description_font.weight = descriptionFontWeight;
-            layout.description_font.color = descriptionFontColor;
+            layout.description_font.color = descriptionFontColor==null?"black":descriptionFontColor;
 
 
            // if (template_id.equals( "__embedded")) {
