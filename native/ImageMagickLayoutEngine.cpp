@@ -146,24 +146,18 @@ void ImageMagickLayoutEngine::cropSquare(MagickWand *magickWand) {
 void ImageMagickLayoutEngine::scaleAndExtendImage(MagickWand *backgroundMagickWand, MagickWand *magickWand,
 		const AdLayoutEntry::ImageEntry &imageEntry) {
 
-
 	double width = (double)MagickGetImageWidth(magickWand);
 	double height = (double)MagickGetImageHeight(magickWand);
 
-	cout << "Source width/height: " << width << "/" << height << endl;
 	// TODO: compute scale correctly
 
 	double scale = ((double)imageEntry.size_x) / max(height, width);
 	int newWidth = floor(width * scale + 0.5);
 	int newHeight = floor(height * scale + 0.5);
-
-
 	// TODO: select appropriate filter
 	MagickResizeImage(magickWand, newWidth, newHeight, LanczosFilter, 1);
 
 	// TODO: extend image correctly
-
-    cout << "Out width/height: " << imageEntry.size_x << "/" << imageEntry.size_y << endl;
 
 	MagickExtentImage(magickWand, imageEntry.size_x, imageEntry.size_y, -(imageEntry.size_x-newWidth)/2,-(imageEntry.size_y-newHeight)/2);
 
@@ -188,7 +182,13 @@ int ImageMagickLayoutEngine::create(const string &productImage, const string &ba
 	// Initialization
 	// TODO: create them once per object?
 	//assert(isResourceImported);
-	    cout << "Start creation: " << title << endl;
+	    cout << "Start creation(title): " << title << endl;
+	    cout << "Start creation(copy): " << copy << endl;
+	    if (price.empty()) {
+	        cout << "Start creation(price): EMPTY";
+	    }
+	    cout << "Start creation(price): " << price << endl;
+
 
 	MagickWand *backgroundMagickWand = NewMagickWand();
 	MagickWand *productMagickWand = NewMagickWand();
@@ -230,7 +230,6 @@ int ImageMagickLayoutEngine::create(const string &productImage, const string &ba
 	}
 
 // Create, scale and composite the calltoaction image
-    cout << "Is CallToAction" << endl;
 
 	if (!callToActionBlob.empty() ) {
 		MagickReadImageBlob(callToActionMagickWand, callToActionBlob.data(), callToActionBlob.size());
