@@ -28,6 +28,10 @@ AdLayoutEntry::ImageEntry::ImageEntry(const string &_fileName, int _size_x, int 
 	pos_y = _pos_y;
 }
 
+AdLayoutEntry::ImageEntry::ImageEntry() {
+       skip = true;
+}
+
 //TODO: ADD CENTERED, LEFT,RIGHT
 AdLayoutEntry::TextEntry::TextEntry(const Object &jsonObject, int _size_x, int _size_y, int _pos_x, int _pos_y) {
 	defaultText = jsonObject.has<String>("text")?jsonObject.get<String>("text"):"";
@@ -77,12 +81,12 @@ AdLayoutEntry::AdLayoutEntry(const string &jsonString) {
 	string logoFilename = object.has<String>("logo_filename")?object.get<String>("logo_filename"):"null";
     string callToActionFilename = object.has<String>("calltoaction_filename")?object.get<String>("calltoaction_filename"):"null";
 	string templateId = object.has<String>("template_id")?object.get<String>("template_id"):"template_1";
-	assert(object.has<Object>("title_font"));
+	//assert(object.has<Object>("title_font"));
 	const Object &titleFontJson = object.get<Object>("title_font");
-	assert(object.has<Object>("description_font"));
+	//assert(object.has<Object>("description_font"));
 	const Object &descriptionFontJson = object.get<Object>("description_font");
 
-	assert(object.has<Object>("price_font"));
+	//assert(object.has<Object>("price_font"));
     const Object &priceFontJson = object.get<Object>("price_font");
 
     //NORMAL 210,20
@@ -93,32 +97,56 @@ AdLayoutEntry::AdLayoutEntry(const string &jsonString) {
 
         if ( embedded_template.has<Object>("logo")) {
             AdLayoutEntry::TemplateEntry logoTemplateEntry = AdLayoutEntry::TemplateEntry( embedded_template.get<Object>("logo"));
-            logo = ImageEntry(logoFilename, logoTemplateEntry.size_x,logoTemplateEntry.size_y,logoTemplateEntry.pos_x,logoTemplateEntry.pos_y);
+            if (logoFilename.compare("null")== 0 || logoTemplateEntry.size_x==0 || logoTemplateEntry.size_y==0) {
+                logo = ImageEntry();
+            } else {
+                logo = ImageEntry(logoFilename, logoTemplateEntry.size_x,logoTemplateEntry.size_y,logoTemplateEntry.pos_x,logoTemplateEntry.pos_y);
+            }
         }
 
         if ( embedded_template.has<Object>("product")) {
             AdLayoutEntry::TemplateEntry productTemplateEntry = AdLayoutEntry::TemplateEntry( embedded_template.get<Object>("product"));
-            product = ImageEntry("valid", productTemplateEntry.size_x, productTemplateEntry.size_y, productTemplateEntry.pos_x, productTemplateEntry.pos_y);
+            if (productTemplateEntry.size_x==0 || productTemplateEntry.size_y==0) {
+                product = ImageEntry();
+            } else {
+                product = ImageEntry("valid", productTemplateEntry.size_x, productTemplateEntry.size_y, productTemplateEntry.pos_x, productTemplateEntry.pos_y);
+            }
         }
 
         if ( embedded_template.has<Object>("price")) {
             AdLayoutEntry::TemplateEntry priceTemplateEntry = AdLayoutEntry::TemplateEntry( embedded_template.get<Object>("price"));
-            price = TextEntry(priceFontJson, priceTemplateEntry.size_x, priceTemplateEntry.size_y, priceTemplateEntry.pos_x, priceTemplateEntry.pos_y);
+            if ( priceTemplateEntry.size_x==0 || priceTemplateEntry.size_y==0) {
+                price = TextEntry();
+            } else {
+                price = TextEntry(priceFontJson, priceTemplateEntry.size_x, priceTemplateEntry.size_y, priceTemplateEntry.pos_x, priceTemplateEntry.pos_y);
+            }
         }
 
         if ( embedded_template.has<Object>("description")) {
             AdLayoutEntry::TemplateEntry descTemplateEntry = AdLayoutEntry::TemplateEntry( embedded_template.get<Object>("description"));
-            description = TextEntry(descriptionFontJson, descTemplateEntry.size_x, descTemplateEntry.size_y, descTemplateEntry.pos_x, descTemplateEntry.pos_y);
+            if (descTemplateEntry.size_x==0 || descTemplateEntry.size_y==0) {
+                description = TextEntry();
+            } else {
+                description = TextEntry(descriptionFontJson, descTemplateEntry.size_x, descTemplateEntry.size_y, descTemplateEntry.pos_x, descTemplateEntry.pos_y);
+            }
         }
 
         if ( embedded_template.has<Object>("title")) {
             AdLayoutEntry::TemplateEntry titleTemplateEntry = AdLayoutEntry::TemplateEntry( embedded_template.get<Object>("title"));
-            title = TextEntry(titleFontJson, titleTemplateEntry.size_x, titleTemplateEntry.size_y, titleTemplateEntry.pos_x, titleTemplateEntry.pos_y);
+            if (titleTemplateEntry.size_x==0 || titleTemplateEntry.size_y==0) {
+                title = TextEntry();
+            } else {
+                title = TextEntry(titleFontJson, titleTemplateEntry.size_x, titleTemplateEntry.size_y, titleTemplateEntry.pos_x, titleTemplateEntry.pos_y);
+            }
         }
 
         if ( embedded_template.has<Object>("calltoaction")) {
             AdLayoutEntry::TemplateEntry callToActionTemplateEntry = AdLayoutEntry::TemplateEntry( embedded_template.get<Object>("calltoaction"));
-            calltoaction = ImageEntry(callToActionFilename, callToActionTemplateEntry.size_x,callToActionTemplateEntry.size_y,callToActionTemplateEntry.pos_x,callToActionTemplateEntry.pos_y);
+            if (callToActionFilename.compare("null")== 0 || callToActionTemplateEntry.size_x==0 || callToActionTemplateEntry.size_y==0) {
+                calltoaction = ImageEntry();
+            } else {
+                calltoaction = ImageEntry(callToActionFilename, callToActionTemplateEntry.size_x,callToActionTemplateEntry.size_y,callToActionTemplateEntry.pos_x,callToActionTemplateEntry.pos_y);
+            }
         }
 
         if (embedded_template.has<Object>("main")) {

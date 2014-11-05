@@ -24,7 +24,8 @@ public:
 		int size_y;
 		int pos_x;
 		int pos_y;
-		ImageEntry() {};
+		bool skip;
+		ImageEntry() ;
 		ImageEntry(const string &_fileName, int _size_x, int _size_y, int _pos_x, int _pos_y);
 	};
 
