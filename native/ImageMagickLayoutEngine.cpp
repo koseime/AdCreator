@@ -196,7 +196,7 @@ int ImageMagickLayoutEngine::create(const string &productImage, const string &ba
         if (productImage.empty()) {
            cout << "Start creation(ImageData): EMPTY" << endl;
         }
-
+    cout.flush();
 	MagickWand *backgroundMagickWand = NewMagickWand();
 	MagickWand *productMagickWand = NewMagickWand();
 	MagickWand *logoMagickWand = NewMagickWand();
