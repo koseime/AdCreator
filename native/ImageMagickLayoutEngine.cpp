@@ -186,9 +186,12 @@ int ImageMagickLayoutEngine::create(const string &productImage, const string &ba
 	    cout << "Start creation(copy): " << copy << endl;
 	    if (price.empty()) {
 	        cout << "Start creation(price): EMPTY";
-	    }
-	    cout << "Start creation(price): " << price << endl;
-
+	    }   else {
+	        cout << "Start creation(price): " << price << endl;
+        }
+        if (productImage.empty()) {
+           cout << "Start creation(ImageData): EMPTY" << endl;
+        }
 
 	MagickWand *backgroundMagickWand = NewMagickWand();
 	MagickWand *productMagickWand = NewMagickWand();
@@ -248,9 +251,9 @@ int ImageMagickLayoutEngine::create(const string &productImage, const string &ba
 	    drawText(backgroundMagickWand, adLayoutEntry.description, copy);
 	}
 
-	if (!adLayoutEntry.price.skip)  {
+	if (!adLayoutEntry.price.skip && !price.empty())  {
     	    drawText(backgroundMagickWand, adLayoutEntry.price, price);
-    	}
+    }
 
 	// Write image and clean up
 	char *backgroundBytes;
