@@ -188,6 +188,8 @@ int ImageMagickLayoutEngine::create(const string &productImage, const string &ba
 	// Initialization
 	// TODO: create them once per object?
 	//assert(isResourceImported);
+	    cout << "Start creation: " << title << endl;
+
 	MagickWand *backgroundMagickWand = NewMagickWand();
 	MagickWand *productMagickWand = NewMagickWand();
 	MagickWand *logoMagickWand = NewMagickWand();
@@ -268,6 +270,7 @@ int ImageMagickLayoutEngine::create(const string &productImage, const string &ba
 	if (callToActionMagickWand) { callToActionMagickWand = DestroyMagickWand(callToActionMagickWand); }
 
 	if (maskMagickWand) { maskMagickWand = DestroyMagickWand(maskMagickWand); }
+    cout << "DONE : " << title << endl;
 
 	return 0;
 }
