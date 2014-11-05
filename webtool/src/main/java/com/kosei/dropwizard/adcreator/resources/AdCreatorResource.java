@@ -216,6 +216,7 @@ public class AdCreatorResource {
         ByteBuffer bb = client.generate(
                 headerText,
                 descriptionText,
+                priceText,
                 preCannedImagesAndFonts.getProducts().get(product),
                 preCannedImagesAndFonts.getLogos().get(logoImage),
                 preCannedImagesAndFonts.getCallToActions().get(callToActionImage),

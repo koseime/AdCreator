@@ -20,7 +20,7 @@ import java.util.Map;
  * Created by lanceriedel on 9/4/14.
  */
 public class AdPreviewCreatorClient {
-    public ByteBuffer generate(String headerText, String descriptionText, String productImageFile, String logoImageFile, String callToActionImageFile,
+    public ByteBuffer generate(String headerText, String descriptionText, String priceText, String productImageFile, String logoImageFile, String callToActionImageFile,
                                String headerFont, int headerFontSize, int headerFontWeight, String headerFontColor,
                                String priceFont, int priceFontSize, int priceFontWeight, String priceFontColor,
                                String descriptionFont, int descriptionFontSize, int descriptionFontWeight, String descriptionFontColor,
@@ -68,6 +68,8 @@ public class AdPreviewCreatorClient {
 
             if (headerText!=null && !headerText.isEmpty()) title = headerText;
             if (descriptionText!=null && !descriptionText.isEmpty()) copy = descriptionText;
+            if (priceText!=null && !priceText.isEmpty()) price = priceText;
+
 
             if (backgroundColor==null || backgroundColor.isEmpty()) backgroundColor = "white";
             if (headerFontColor==null || headerFontColor.isEmpty()) headerFontColor = "black";
