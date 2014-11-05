@@ -183,7 +183,11 @@ int ImageMagickLayoutEngine::create(const string &productImage, const string &ba
 	// TODO: create them once per object?
 	//assert(isResourceImported);
 	    cout << "Start creation(title): " << title << endl;
-	    cout << "Start creation(copy): " << copy << endl;
+	    if (copy.empty()) {
+	       	 cout << "Start creation(copy): EMPTY";
+	    }   else {
+	        cout << "Start creation(copy): " << copy << endl;
+	    }
 	    if (price.empty()) {
 	        cout << "Start creation(price): EMPTY";
 	    }   else {
@@ -247,7 +251,7 @@ int ImageMagickLayoutEngine::create(const string &productImage, const string &ba
 	if (!adLayoutEntry.title.skip)  {
 	    drawText(backgroundMagickWand, adLayoutEntry.title, title);
 	}
-	if (!adLayoutEntry.description.skip)  {
+	if (!adLayoutEntry.description.skip && !copy.empty())  {
 	    drawText(backgroundMagickWand, adLayoutEntry.description, copy);
 	}
 
