@@ -45,8 +45,11 @@ dependencies {
             'io.dropwizard:dropwizard-assets:0.7.0',
             'io.dropwizard:dropwizard-views-freemarker:0.7.0',
             'io.dropwizard:dropwizard-views-mustache:0.7.0',
-
-
+            'com.sun.jersey.contribs:jersey-multipart:1.18.1',
+            'com.sun.jersey:jersey-client:1.18.1',
+            'com.sun.jersey:jersey-json:1.18.1',
+            'org.jvnet:mimepull:1.9.3',
+            'com.google.guava:guava:18.0',
     )
 
   compile ('org.apache.thrift:libthrift:0.9.1') {

@@ -8,23 +8,39 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kosei.dropwizard.adcreator.core.AdCreator;
 import com.kosei.dropwizard.adcreator.core.AdPreviewCreatorClient;
 import com.kosei.dropwizard.adcreator.core.CreatedImageCache;
+import com.kosei.dropwizard.adcreator.core.CreativeAsset;
 import com.kosei.dropwizard.adcreator.core.PreCannedImagesAndFonts;
 import com.kosei.dropwizard.adcreator.views.AdCreatorView;
-import io.dropwizard.jackson.Jackson;
+import com.sun.jersey.multipart.MultiPart;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ws.rs.*;
+import io.dropwizard.jackson.Jackson;
+
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.ByteBuffer;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.*;
-import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
 
 @Path("/adcreator")
 @Produces(MediaType.APPLICATION_JSON)
@@ -108,249 +124,249 @@ public class AdCreatorResource {
                                          @QueryParam("mainWidth") int mainWidth,
                                          @QueryParam("templateDefName") String templateDefName
 
-    ) throws Exception {
-        AdCreator adCreator = new AdCreator();
+    ) throws Exception
+  {
+    AdCreator adCreator = new AdCreator();
 
-        if (product == null || product.isEmpty() || logoImage == null || logoImage.isEmpty() || descriptionFontWeight == null || descriptionFont == null
-                || descriptionFontSize == null || headerFont == null || headerFontSize == null || headerFontWeight == null) {
-            logger.info("Missing params");
-            AdCreatorView view = new AdCreatorView(adCreator, preCannedImagesAndFonts.getFonts().keySet(),
-                    preCannedImagesAndFonts.getLogos().keySet(), preCannedImagesAndFonts.getCallToActions().keySet(),
-                    preCannedImagesAndFonts.getProducts().keySet(),
-                    preCannedImagesAndFonts.getSizes(), preCannedImagesAndFonts.getWeights(), preCannedImagesAndFonts.templateIds(), preCannedImagesAndFonts.getTemplates().keySet());
+    if (product == null || product.isEmpty() || logoImage == null || logoImage.isEmpty() || descriptionFontWeight == null || descriptionFont == null
+        || descriptionFontSize == null || headerFont == null || headerFontSize == null || headerFontWeight == null) {
+      logger.info("Missing params");
+      AdCreatorView view = new AdCreatorView(adCreator, preCannedImagesAndFonts.getFonts().keySet(),
+                                             preCannedImagesAndFonts.getLogos().keySet(), preCannedImagesAndFonts.getCallToActions().keySet(),
+                                             preCannedImagesAndFonts.getProducts().keySet(),
+                                             preCannedImagesAndFonts.getSizes(), preCannedImagesAndFonts.getWeights(), preCannedImagesAndFonts.templateIds(), preCannedImagesAndFonts.getTemplates().keySet());
 
-            view.selectedTemplateId = templateId;
-            view.selectedProduct = product;
-
-
-            view.selectedLogo = logoImage;
-            view.selectedCallToAction = callToActionImage;
+      view.selectedTemplateId = templateId;
+      view.selectedProduct = product;
 
 
-            view.selectedDescriptionFont = descriptionFont;
-            view.selectedDescriptionFontSize = descriptionFontSize;
-            view.selectedDescriptionFontWeight = descriptionFontWeight;
-            view.descriptionFontColor = descriptionFontColor;
-            view.descriptionText = descriptionText;
-
-            view.selectedHeaderFont = headerFont;
-            view.selectedHeaderFontSize = headerFontSize;
-            view.selectedHeaderFontWeight = headerFontWeight;
-            view.headerFontColor = headerFontColor;
-            view.headerText = headerText;
-
-            view.selectedPriceFont = priceFont;
-            view.selectedPriceFontSize = priceFontSize;
-            view.selectedPriceFontWeight = priceFontWeight;
-            view.priceFontColor = priceFontColor;
-            view.priceText = priceText;
+      view.selectedLogo = logoImage;
+      view.selectedCallToAction = callToActionImage;
 
 
-            view.backgroundColor = backgroundColor;
+      view.selectedDescriptionFont = descriptionFont;
+      view.selectedDescriptionFontSize = descriptionFontSize;
+      view.selectedDescriptionFontWeight = descriptionFontWeight;
+      view.descriptionFontColor = descriptionFontColor;
+      view.descriptionText = descriptionText;
 
-            view.titleHeight = titleHeight;
-            view.titleWidth = titleWidth;
-            view.titleOriginX = titleOriginX;
-            view.titleOriginY = titleOriginY;
+      view.selectedHeaderFont = headerFont;
+      view.selectedHeaderFontSize = headerFontSize;
+      view.selectedHeaderFontWeight = headerFontWeight;
+      view.headerFontColor = headerFontColor;
+      view.headerText = headerText;
 
-            view.calltoactionHeight = calltoactionHeight;
-            view.calltoactionWidth = calltoactionWidth;
-            view.calltoactionOriginX = calltoactionOriginX;
-            view.calltoactionOriginY = calltoactionOriginY;
-
-            view.descriptionHeight = descriptionHeight;
-            view.descriptionWidth = descriptionWidth;
-            view.descriptionOriginX = descriptionOriginX;
-            view.descriptionOriginY = descriptionOriginY;
-
-            view.productHeight = productHeight;
-            view.productWidth = productWidth;
-            view.productOriginX = productOriginX;
-            view.productOriginY = productOriginY;
+      view.selectedPriceFont = priceFont;
+      view.selectedPriceFontSize = priceFontSize;
+      view.selectedPriceFontWeight = priceFontWeight;
+      view.priceFontColor = priceFontColor;
+      view.priceText = priceText;
 
 
-            view.priceHeight = priceHeight;
-            view.priceWidth = priceWidth;
-            view.priceOriginX = priceOriginX;
-            view.priceOriginY = priceOriginY;
+      view.backgroundColor = backgroundColor;
 
-            view.logoHeight = logoHeight;
-            view.logoWidth = logoWidth;
-            view.logoOriginX = logoOriginX;
-            view.logoOriginY = logoOriginY;
+      view.titleHeight = titleHeight;
+      view.titleWidth = titleWidth;
+      view.titleOriginX = titleOriginX;
+      view.titleOriginY = titleOriginY;
 
-            view.mainHeight = mainHeight;
-            view.mainWidth = mainWidth;
+      view.calltoactionHeight = calltoactionHeight;
+      view.calltoactionWidth = calltoactionWidth;
+      view.calltoactionOriginX = calltoactionOriginX;
+      view.calltoactionOriginY = calltoactionOriginY;
 
-            view.mainOriginX = 0;
-            view.mainOriginY = 0;
+      view.descriptionHeight = descriptionHeight;
+      view.descriptionWidth = descriptionWidth;
+      view.descriptionOriginX = descriptionOriginX;
+      view.descriptionOriginY = descriptionOriginY;
 
-            view.templateDefName = templateDefName;
-
-
-            return view;
-        }
-        if (priceFont == null || priceFontSize == null || priceFontWeight == null || priceFont.contains("HTMLSelectElement")) {
-            priceFont = "Sans";
-            priceFontSize = "10";
-            priceFontWeight = "500";
-            priceFontColor = "black";
-
-        }
-        if (backgroundColor == null) backgroundColor = "white";
-        String sBackgroundColor = backgroundColor;
-        if (descriptionFontColor == null) descriptionFontColor = "black";
-        String sDescriptionFontColor = descriptionFontColor;
-        if (headerFontColor == null) headerFontColor = "black";
-        String sHeaderFontColor = headerFontColor;
-        if (priceFontColor == null) priceFontColor = "black";
-        String sPriceFontColor = priceFontColor;
-
-        if (backgroundColor.length() == 6) sBackgroundColor = "#" + sBackgroundColor;
-        if (descriptionFontColor.length() == 6) sDescriptionFontColor = "#" + sDescriptionFontColor;
-        if (headerFontColor.length() == 6) sHeaderFontColor = "#" + sHeaderFontColor;
-        if (priceFontColor.length() == 6) sPriceFontColor = "#" + sPriceFontColor;
+      view.productHeight = productHeight;
+      view.productWidth = productWidth;
+      view.productOriginX = productOriginX;
+      view.productOriginY = productOriginY;
 
 
-        long start = System.currentTimeMillis();
-        ByteBuffer bb = client.generate(
-                headerText,
-                descriptionText,
-                priceText,
-                preCannedImagesAndFonts.getProducts().get(product),
-                preCannedImagesAndFonts.getLogos().get(logoImage),
-                preCannedImagesAndFonts.getCallToActions().get(callToActionImage),
-                preCannedImagesAndFonts.getFonts().get(headerFont),
-                Integer.parseInt(headerFontSize),
-                Integer.parseInt(headerFontWeight),
-                sHeaderFontColor,
-                preCannedImagesAndFonts.getFonts().get(priceFont),
-                Integer.parseInt(priceFontSize),
-                Integer.parseInt(priceFontWeight),
-                sPriceFontColor,
-                preCannedImagesAndFonts.getFonts().get(descriptionFont),
-                Integer.parseInt(descriptionFontSize),
-                Integer.parseInt(descriptionFontWeight),
-                sDescriptionFontColor,
-                sBackgroundColor,
-                templateId,
+      view.priceHeight = priceHeight;
+      view.priceWidth = priceWidth;
+      view.priceOriginX = priceOriginX;
+      view.priceOriginY = priceOriginY;
 
-                productHeight,
-                productWidth,
-                productOriginX,
-                productOriginY,
-                titleHeight,
-                titleWidth,
-                titleOriginX,
-                titleOriginY,
-                descriptionHeight,
-                descriptionWidth,
-                descriptionOriginX,
-                descriptionOriginY,
-                priceHeight,
-                priceWidth,
-                priceOriginX,
-                priceOriginY,
-                logoHeight,
-                logoWidth,
-                logoOriginX,
-                logoOriginY,
-                calltoactionHeight,
-                calltoactionWidth,
-                calltoactionOriginX,
-                calltoactionOriginY,
-                mainHeight,
-                mainWidth,
-                templateDefName
+      view.logoHeight = logoHeight;
+      view.logoWidth = logoWidth;
+      view.logoOriginX = logoOriginX;
+      view.logoOriginY = logoOriginY;
 
-        );
-        adCreator.setId(counter++);
-        System.out.println("Time to generate:" + (System.currentTimeMillis() - start));
+      view.mainHeight = mainHeight;
+      view.mainWidth = mainWidth;
 
-        cache.put(adCreator.getId() + "", bb);
-        adCreator.setImageUrl("/adcreator/" + adCreator.getId() + ".jpg");
-        AdCreatorView view = new AdCreatorView(adCreator,
-                preCannedImagesAndFonts.getFonts().keySet(),
-                preCannedImagesAndFonts.getLogos().keySet(),
-                preCannedImagesAndFonts.getCallToActions().keySet(),
-                preCannedImagesAndFonts.getProducts().keySet(),
-                preCannedImagesAndFonts.getSizes(),
-                preCannedImagesAndFonts.getWeights(),
-                preCannedImagesAndFonts.templateIds(),
-                preCannedImagesAndFonts.getTemplates().keySet());
+      view.mainOriginX = 0;
+      view.mainOriginY = 0;
+
+      view.templateDefName = templateDefName;
 
 
-        view.selectedTemplateId = templateId;
-        view.selectedProduct = product;
-
-
-        view.selectedLogo = logoImage;
-        view.selectedCallToAction = callToActionImage;
-
-
-        view.selectedDescriptionFont = descriptionFont;
-        view.selectedDescriptionFontSize = descriptionFontSize;
-        view.selectedDescriptionFontWeight = descriptionFontWeight;
-        view.descriptionFontColor = descriptionFontColor;
-        view.descriptionText = descriptionText;
-
-        view.selectedHeaderFont = headerFont;
-        view.selectedHeaderFontSize = headerFontSize;
-        view.selectedHeaderFontWeight = headerFontWeight;
-        view.headerFontColor = headerFontColor;
-        view.headerText = headerText;
-
-        view.selectedPriceFont = priceFont;
-        view.selectedPriceFontSize = priceFontSize;
-        view.selectedPriceFontWeight = priceFontWeight;
-        view.priceFontColor = priceFontColor;
-        view.priceText = priceText;
-
-
-        view.backgroundColor = backgroundColor;
-
-        view.titleHeight = titleHeight;
-        view.titleWidth = titleWidth;
-        view.titleOriginX = titleOriginX;
-        view.titleOriginY = titleOriginY;
-
-        view.calltoactionHeight = calltoactionHeight;
-        view.calltoactionWidth = calltoactionWidth;
-        view.calltoactionOriginX = calltoactionOriginX;
-        view.calltoactionOriginY = calltoactionOriginY;
-
-        view.descriptionHeight = descriptionHeight;
-        view.descriptionWidth = descriptionWidth;
-        view.descriptionOriginX = descriptionOriginX;
-        view.descriptionOriginY = descriptionOriginY;
-
-        view.productHeight = productHeight;
-        view.productWidth = productWidth;
-        view.productOriginX = productOriginX;
-        view.productOriginY = productOriginY;
-
-
-        view.priceHeight = priceHeight;
-        view.priceWidth = priceWidth;
-        view.priceOriginX = priceOriginX;
-        view.priceOriginY = priceOriginY;
-
-        view.logoHeight = logoHeight;
-        view.logoWidth = logoWidth;
-        view.logoOriginX = logoOriginX;
-        view.logoOriginY = logoOriginY;
-
-        view.mainHeight = mainHeight;
-        view.mainWidth = mainWidth;
-
-        view.mainOriginX = 0;
-        view.mainOriginY = 0;
-
-        view.templateDefName = templateDefName;
-
-        return view;
+      return view;
     }
+    if (priceFont == null || priceFontSize == null || priceFontWeight == null || priceFont.contains("HTMLSelectElement")) {
+      priceFont = "Sans";
+      priceFontSize = "10";
+      priceFontWeight = "500";
+      priceFontColor = "black";
 
+    }
+    if (backgroundColor == null) backgroundColor = "white";
+    String sBackgroundColor = backgroundColor;
+    if (descriptionFontColor == null) descriptionFontColor = "black";
+    String sDescriptionFontColor = descriptionFontColor;
+    if (headerFontColor == null) headerFontColor = "black";
+    String sHeaderFontColor = headerFontColor;
+    if (priceFontColor == null) priceFontColor = "black";
+    String sPriceFontColor = priceFontColor;
+
+    if (backgroundColor.length() == 6) sBackgroundColor = "#" + sBackgroundColor;
+    if (descriptionFontColor.length() == 6) sDescriptionFontColor = "#" + sDescriptionFontColor;
+    if (headerFontColor.length() == 6) sHeaderFontColor = "#" + sHeaderFontColor;
+    if (priceFontColor.length() == 6) sPriceFontColor = "#" + sPriceFontColor;
+
+
+    long start = System.currentTimeMillis();
+    ByteBuffer bb = client.generate(
+        headerText,
+        descriptionText,
+        priceText,
+        preCannedImagesAndFonts.getProducts().get(product),
+        preCannedImagesAndFonts.getLogos().get(logoImage),
+        preCannedImagesAndFonts.getCallToActions().get(callToActionImage),
+        preCannedImagesAndFonts.getFonts().get(headerFont),
+        Integer.parseInt(headerFontSize),
+        Integer.parseInt(headerFontWeight),
+        sHeaderFontColor,
+        preCannedImagesAndFonts.getFonts().get(priceFont),
+        Integer.parseInt(priceFontSize),
+        Integer.parseInt(priceFontWeight),
+        sPriceFontColor,
+        preCannedImagesAndFonts.getFonts().get(descriptionFont),
+        Integer.parseInt(descriptionFontSize),
+        Integer.parseInt(descriptionFontWeight),
+        sDescriptionFontColor,
+        sBackgroundColor,
+        templateId,
+
+        productHeight,
+        productWidth,
+        productOriginX,
+        productOriginY,
+        titleHeight,
+        titleWidth,
+        titleOriginX,
+        titleOriginY,
+        descriptionHeight,
+        descriptionWidth,
+        descriptionOriginX,
+        descriptionOriginY,
+        priceHeight,
+        priceWidth,
+        priceOriginX,
+        priceOriginY,
+        logoHeight,
+        logoWidth,
+        logoOriginX,
+        logoOriginY,
+        calltoactionHeight,
+        calltoactionWidth,
+        calltoactionOriginX,
+        calltoactionOriginY,
+        mainHeight,
+        mainWidth,
+        templateDefName
+
+    );
+    adCreator.setId(counter++);
+    System.out.println("Time to generate:" + (System.currentTimeMillis() - start));
+
+    cache.put(adCreator.getId() + "", bb);
+    adCreator.setImageUrl("/adcreator/" + adCreator.getId() + ".jpg");
+    AdCreatorView view = new AdCreatorView(adCreator,
+                                           preCannedImagesAndFonts.getFonts().keySet(),
+                                           preCannedImagesAndFonts.getLogos().keySet(),
+                                           preCannedImagesAndFonts.getCallToActions().keySet(),
+                                           preCannedImagesAndFonts.getProducts().keySet(),
+                                           preCannedImagesAndFonts.getSizes(),
+                                           preCannedImagesAndFonts.getWeights(),
+                                           preCannedImagesAndFonts.templateIds(),
+                                           preCannedImagesAndFonts.getTemplates().keySet());
+
+
+    view.selectedTemplateId = templateId;
+    view.selectedProduct = product;
+
+
+    view.selectedLogo = logoImage;
+    view.selectedCallToAction = callToActionImage;
+
+
+    view.selectedDescriptionFont = descriptionFont;
+    view.selectedDescriptionFontSize = descriptionFontSize;
+    view.selectedDescriptionFontWeight = descriptionFontWeight;
+    view.descriptionFontColor = descriptionFontColor;
+    view.descriptionText = descriptionText;
+
+    view.selectedHeaderFont = headerFont;
+    view.selectedHeaderFontSize = headerFontSize;
+    view.selectedHeaderFontWeight = headerFontWeight;
+    view.headerFontColor = headerFontColor;
+    view.headerText = headerText;
+
+    view.selectedPriceFont = priceFont;
+    view.selectedPriceFontSize = priceFontSize;
+    view.selectedPriceFontWeight = priceFontWeight;
+    view.priceFontColor = priceFontColor;
+    view.priceText = priceText;
+
+
+    view.backgroundColor = backgroundColor;
+
+    view.titleHeight = titleHeight;
+    view.titleWidth = titleWidth;
+    view.titleOriginX = titleOriginX;
+    view.titleOriginY = titleOriginY;
+
+    view.calltoactionHeight = calltoactionHeight;
+    view.calltoactionWidth = calltoactionWidth;
+    view.calltoactionOriginX = calltoactionOriginX;
+    view.calltoactionOriginY = calltoactionOriginY;
+
+    view.descriptionHeight = descriptionHeight;
+    view.descriptionWidth = descriptionWidth;
+    view.descriptionOriginX = descriptionOriginX;
+    view.descriptionOriginY = descriptionOriginY;
+
+    view.productHeight = productHeight;
+    view.productWidth = productWidth;
+    view.productOriginX = productOriginX;
+    view.productOriginY = productOriginY;
+
+
+    view.priceHeight = priceHeight;
+    view.priceWidth = priceWidth;
+    view.priceOriginX = priceOriginX;
+    view.priceOriginY = priceOriginY;
+
+    view.logoHeight = logoHeight;
+    view.logoWidth = logoWidth;
+    view.logoOriginX = logoOriginX;
+    view.logoOriginY = logoOriginY;
+
+    view.mainHeight = mainHeight;
+    view.mainWidth = mainWidth;
+
+    view.mainOriginX = 0;
+    view.mainOriginY = 0;
+
+    view.templateDefName = templateDefName;
+
+    return view;
+  }
 
     @Path("{externalId}.jpg")
     @GET
@@ -754,5 +770,97 @@ public class AdCreatorResource {
         return view;
     }
 
+  @POST
+  @Path("/createPreview")
+  @Produces(MediaType.MULTIPART_FORM_DATA)
+  @Consumes(MediaType.MULTIPART_FORM_DATA)
+  public Response createAdCreator(MultiPart multiPart) throws Exception {
+    CreativeAsset creativeAsset = multiPart.getBodyParts().get(0).getEntityAs(CreativeAsset.class);
+    AdCreator adCreator = new AdCreator();
+
+    //this should repeat several times for list of templates
+    ByteBuffer bb = client.generate(
+        "text",
+        "desc",
+        "priceText",
+        "D:/assets/productImages/a1.jpg",
+        "D:/assets/logoImages/1.png",
+        "D:/assets/calltoactionImages/buynow.jpg",
+        "D:/aseets/fonts/first.ttf",
+        Integer.parseInt("5"),
+        Integer.parseInt("4"),
+        creativeAsset.getPriceFontColor(),
+        "arial",
+        Integer.parseInt("4"),
+        Integer.parseInt("7"),
+        creativeAsset.getPriceFontColor(),
+        "arial",
+        Integer.parseInt("6"),
+        Integer.parseInt("5"),
+        "red",
+        "yellow",
+        "1",
+        59,
+        100,
+        5,
+        30,
+        10,
+        49,
+        4,
+        6,
+        56,
+        66,
+        10,
+        65,
+        7,
+        5,
+        6,
+        10,
+        5,
+        99,
+        34,
+        6,
+        7,
+        67,
+        5,
+        100,
+        299,
+        1,
+        "template_1"
+    );
+    adCreator.setId(counter++);
+
+    cache.put(adCreator.getId() + "", bb);
+
+    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+
+    try {
+      //get bytes for image
+      DataOutputStream w = new DataOutputStream(stream);
+
+      w.write(bb.array());
+
+      w.flush();
+      w.close();
+
+    } catch (Exception e) {
+      // ExceptionMapper will return HTTP 500
+      throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
+    }
+
+    CacheControl cc = new CacheControl();
+    cc.setNoTransform(true);
+    cc.setMustRevalidate(false);
+    cc.setNoCache(false);
+    cc.setMaxAge(1);
+
+    Response response = Response
+        .ok()
+        .cacheControl(cc)
+        .type("image/jpg")
+        .entity(stream.toByteArray())
+        .build();
+    return response;
+  }
 
 }
