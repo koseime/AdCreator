@@ -1,0 +1,98 @@
+apply plugin: 'idea'
+
+// General build setup
+
+buildscript {
+    apply from: "http://repository-kosei.forge.cloudbees.com/release/com/kosei/services/common-shared/${commonVersion}/common-shared-${commonVersion}-buildscript.gradle",
+          to: buildscript
+    dependencies {
+        classpath 'co.tomlee.gradle.plugins:gradle-thrift-plugin:0.0.6'
+    }
+}
+
+project("client") {
+    apply from: "http://repository-kosei.forge.cloudbees.com/release/com/kosei/services/common-client/${commonVersion}/common-client-${commonVersion}-client.gradle"
+    apply from: "http://repository-kosei.forge.cloudbees.com/release/com/kosei/services/common-shared/${commonVersion}/common-shared-${commonVersion}-shadow.gradle"
+
+    dependencies {
+        compile(project(':common'))
+    }
+}
+
+project("api") {
+    apply plugin: 'thrift'
+    apply from: "http://repository-kosei.forge.cloudbees.com/release/com/kosei/services/common-shared/${commonVersion}/common-shared-${commonVersion}-base.gradle"
+    dependencies {
+        compile(
+            'org.slf4j:slf4j-api:1.7.6'
+        )
+        compile ('org.apache.thrift:libthrift:0.9.1') {
+            exclude group: 'com.google.code.gson'
+            exclude group: 'ch.qos.logback'
+            exclude group: 'org.slf4j'
+            exclude group: 'log4j'
+        }
+    }
+
+    generateThriftSource {
+        generators {
+            java {
+                option 'hashcode'
+                option 'beans'
+                out file('build/generated-src/thrift/main/java')
+            }
+        }
+
+        generators {
+            cpp {
+                option 'hashcode'
+                option 'beans'
+                out file('build/generated-src/thrift/main/cpp')
+            }
+        }
+    }
+}
+
+project("common") {
+    apply from: "http://repository-kosei.forge.cloudbees.com/release/com/kosei/services/common-shared/${commonVersion}/common-shared-${commonVersion}-base.gradle"
+    dependencies {
+        compile 'com.fasterxml.jackson.core:jackson-annotations:2.3.3'
+        compile 'com.fasterxml.jackson.core:jackson-databind:2.3.3'
+        compile 'io.dropwizard:dropwizard-validation:0.7.1'
+        compile 'org.slf4j:slf4j-api:1.7.6'
+        compile 'javax.ws.rs:jsr311-api:1.1.1'
+        compile 'org.antlr:stringtemplate:3.2.1'
+    }
+}
+
+project("server") {
+    apply from: "http://repository-kosei.forge.cloudbees.com/release/com/kosei/services/common-server/${commonVersion}/common-server-${commonVersion}-server.gradle"
+
+    project.ext {
+        mysqlConnVersion = '5.1.31'
+    }
+
+    dependencies {
+        compile(
+            'commons-lang:commons-lang:2.6',
+            'io.dropwizard:dropwizard-views-freemarker:' + dropwizardVersion,
+            'com.sun.jersey.contribs:jersey-multipart:1.18.3',
+            project(':api'),
+            project(':common')
+        )
+        testCompile project(':client')
+        testCompile 'org.reflections:reflections:0.9.9-RC1'
+    }
+}
+
+apply from: "http://repository-kosei.forge.cloudbees.com/release/com/kosei/services/common-shared/${commonVersion}/common-shared-${commonVersion}-release.gradle"
+
+idea {
+    project {
+        languageLevel = '1.8'
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.1'
+}
