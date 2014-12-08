@@ -1,2 +1,2 @@
 include 'server', 'common', 'client', 'api'
-rootProject.name = 'ad-preview'
+rootProject.name = 'ad-creator'
