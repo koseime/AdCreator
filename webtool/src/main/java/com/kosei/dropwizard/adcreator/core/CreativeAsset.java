@@ -5,6 +5,8 @@ import com.google.common.base.Objects;
 
 import org.hibernate.validator.constraints.NotBlank;
 
+import java.util.List;
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
@@ -49,6 +51,7 @@ public class CreativeAsset {
   private String titleFontType;
   @Min(0)
   private int titleFontSize;
+  private List<String> templates;
   public CreativeAsset() {
   }
 
@@ -61,7 +64,7 @@ public class CreativeAsset {
                        String priceFontType,int priceFontSize,
                        String title, String titleFont, String titleFontColor,
                        String titleFontWeight,
-                       String titleFontType, int titleFontSize) {
+                       String titleFontType, int titleFontSize, List<String> templates) {
     this.backgroundColor = backgroundColor;
     this.body = body;
     this.bodyFont = bodyFont;
@@ -80,6 +83,7 @@ public class CreativeAsset {
     this.titleFontWeight = titleFontWeight;
     this.titleFontType = titleFontType;
     this.titleFontSize = titleFontSize;
+    this.templates = templates;
   }
 
   public String getBackgroundColor() {
@@ -226,6 +230,14 @@ public class CreativeAsset {
     this.titleFontSize = titleFontSize;
   }
 
+  public List<String> getTemplates() {
+    return templates;
+  }
+
+  public void setTemplates(List<String> templates) {
+    this.templates = templates;
+  }
+
   @Override
   public int hashCode() {
     return Objects
@@ -233,7 +245,7 @@ public class CreativeAsset {
                  backgroundColor, body, bodyFont,
                   bodyFontColor, bodyFontWeight, bodyFontType, bodyFontSize, priceFont,
                   priceFontColor, priceFontWeight, priceFontType, priceFontSize, title, titleFont,
-                  titleFontColor, titleFontWeight, titleFontType, titleFontSize);
+                  titleFontColor, titleFontWeight, titleFontType, titleFontSize, templates);
   }
 
   @Override
@@ -261,7 +273,8 @@ public class CreativeAsset {
            && Objects.equal(this.titleFontColor, other.titleFontColor) && Objects
         .equal(this.titleFontWeight, other.titleFontWeight) && Objects
                .equal(this.titleFontType, other.titleFontType) && Objects
-               .equal(this.titleFontSize, other.titleFontSize);
+               .equal(this.titleFontSize, other.titleFontSize)&& Objects
+               .equal(this.templates, other.templates);
   }
 
   @Override
@@ -285,6 +298,7 @@ public class CreativeAsset {
         .add("titleFontWeight", titleFontWeight)
         .add("titleFontType", titleFontType)
         .add("titleFontSize", titleFontSize)
+        .add("templates", templates)
         .toString();
   }
 }

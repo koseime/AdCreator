@@ -126,5 +126,15 @@ public class PreCannedImagesAndFonts {
 
     public List<String> templateIds() { return templateIds; }
 
+    public String getCallToActionDir() {
+      return callToActionDir;
+    }
 
+    public String getProductsDir() {
+      return productsDir;
+    }
+
+    public String getLogoDir() {
+      return logoDir;
+    }
 }
