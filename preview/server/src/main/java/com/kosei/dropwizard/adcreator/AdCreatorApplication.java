@@ -19,15 +19,13 @@ public class AdCreatorApplication extends Application<AdCreatorConfiguration> {
 
     @Override
     public String getName() {
-        return "hello-world";
+        return "ad-creator";
     }
 
     @Override
     public void initialize(Bootstrap<AdCreatorConfiguration> bootstrap) {
         bootstrap.addBundle(new AssetsBundle());
         bootstrap.addBundle(new ViewBundle());
-
-
     }
 
     @Override
@@ -50,7 +48,5 @@ public class AdCreatorApplication extends Application<AdCreatorConfiguration> {
         environment.jersey().register(new ViewResource());
         environment.jersey().register(new PersonResource());
         environment.jersey().register(new AdCreatorResource(cache, client, preCannedImagesAndFonts));
-
-
     }
 }

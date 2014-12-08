@@ -9,15 +9,13 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.kosei.dropwizard.adcreator.core.AdCreator;
 import com.kosei.dropwizard.adcreator.core.AdPreviewCreatorClient;
 import com.kosei.dropwizard.adcreator.core.CreatedImageCache;
-import com.kosei.dropwizard.adcreator.core.CreativeAsset;
+import com.kosei.dropwizard.adcreator.api.CreativeAsset;
 import com.kosei.dropwizard.adcreator.core.PreCannedImagesAndFonts;
 import com.kosei.dropwizard.adcreator.views.AdCreatorView;
 import com.sun.jersey.multipart.FormDataMultiPart;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import sun.misc.BASE64Encoder;
 
 import io.dropwizard.jackson.Jackson;
 
@@ -33,6 +31,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -785,27 +784,23 @@ public class AdCreatorResource {
     CreativeAsset creativeAsset = multiPart.getBodyParts().get(0).getEntityAs(CreativeAsset.class);
     InputStream productImageStream = multiPart.getBodyParts().get(1).getEntityAs(InputStream.class);
     InputStream logoImageStream = multiPart.getBodyParts().get(2).getEntityAs(InputStream.class);
-    InputStream
-        callToActionImageStream =
+    InputStream callToActionImageStream =
         multiPart.getBodyParts().get(3).getEntityAs(InputStream.class);
    /* String uploadedproductImageFileLocation = preCannedImagesAndFonts.getProductsDir() + "//"+ multiPart.getBodyParts().get(1).getContentDisposition().getFileName();
     String uploadedlogoImageFileLocation = preCannedImagesAndFonts.getLogoDir() + "//"+ multiPart.getBodyParts().get(2).getContentDisposition().getFileName();
     String uploadedcallToActionImageFileLocation = preCannedImagesAndFonts.getCallToActionDir() + "//"+ multiPart.getBodyParts().get(3).getContentDisposition().getFileName();*/
 
-    String
-        uploadedproductImageFileLocation =
+    String uploadedProductImageFileLocation =
         "D://" + multiPart.getBodyParts().get(1).getContentDisposition().getFileName();
-    String
-        uploadedlogoImageFileLocation =
+    String uploadedLogoImageFileLocation =
         "D://" + multiPart.getBodyParts().get(2).getContentDisposition().getFileName();
-    String
-        uploadedcallToActionImageFileLocation =
+    String uploadedCallToActionImageFileLocation =
         "D://" + multiPart.getBodyParts().get(3).getContentDisposition().getFileName();
 
     // save it
-    writeToFile(productImageStream, uploadedproductImageFileLocation);
-    writeToFile(logoImageStream, uploadedlogoImageFileLocation);
-    writeToFile(callToActionImageStream, uploadedcallToActionImageFileLocation);
+    writeToFile(productImageStream, uploadedProductImageFileLocation);
+    writeToFile(logoImageStream, uploadedLogoImageFileLocation);
+    writeToFile(callToActionImageStream, uploadedCallToActionImageFileLocation);
 
     List<AdCreator> adCreatorList = new ArrayList<>();
     for (String template : creativeAsset.getTemplates()) {
@@ -816,9 +811,9 @@ public class AdCreatorResource {
           "text",
           "desc",
           "priceText",
-          uploadedproductImageFileLocation,
-          uploadedlogoImageFileLocation,
-          uploadedcallToActionImageFileLocation,
+          uploadedProductImageFileLocation,
+          uploadedLogoImageFileLocation,
+          uploadedCallToActionImageFileLocation,
           "D:/aseets/fonts/first.ttf",
           Integer.parseInt("5"),
           Integer.parseInt("4"),
@@ -871,8 +866,8 @@ public class AdCreatorResource {
     for(AdCreator creator : adCreatorList) {
       ByteArrayOutputStream stream = new ByteArrayOutputStream();
       ByteBuffer buff = cache.get(creator.getImageUrl());
-      BASE64Encoder encoder = new BASE64Encoder();
-      imageString = encoder.encode(buff.array());
+      Base64.Encoder encoder = Base64.getEncoder();
+      imageString = encoder.encodeToString(buff.array());
       listImages.add(imageString);
       System.out.println(imageString);
     }
@@ -886,7 +881,7 @@ public class AdCreatorResource {
     ObjectMapper mapper = new ObjectMapper();
     mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
     Map<String, Object> imagesMap = new HashMap<>();
-    List<Object> images = new ArrayList<Object>();
+    List<Object> images = new ArrayList<>();
     images.add(listImages);
     images.toArray();
     imagesMap.put("images", images);
