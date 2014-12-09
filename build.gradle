@@ -10,14 +10,14 @@ buildscript {
     }
 }
 
-project("client") {
-    apply from: "http://repository-kosei.forge.cloudbees.com/release/com/kosei/services/common-client/${commonVersion}/common-client-${commonVersion}-client.gradle"
-    apply from: "http://repository-kosei.forge.cloudbees.com/release/com/kosei/services/common-shared/${commonVersion}/common-shared-${commonVersion}-shadow.gradle"
-
-    dependencies {
-        compile(project(':common'))
-    }
-}
+//project("client") {
+//    apply from: "http://repository-kosei.forge.cloudbees.com/release/com/kosei/services/common-client/${commonVersion}/common-client-${commonVersion}-client.gradle"
+//    apply from: "http://repository-kosei.forge.cloudbees.com/release/com/kosei/services/common-shared/${commonVersion}/common-shared-${commonVersion}-shadow.gradle"
+//
+//    dependencies {
+//        compile(project(':common'))
+//    }
+//}
 
 project("api") {
     apply plugin: 'thrift'
@@ -80,7 +80,7 @@ project("server") {
             project(':api'),
             project(':common')
         )
-        testCompile project(':client')
+//        testCompile project(':client')
         testCompile 'org.reflections:reflections:0.9.9-RC1'
     }
 }

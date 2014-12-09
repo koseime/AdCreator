@@ -1,0 +1,2 @@
+include 'server', 'common', 'api'
+rootProject.name = 'ad-creator'
