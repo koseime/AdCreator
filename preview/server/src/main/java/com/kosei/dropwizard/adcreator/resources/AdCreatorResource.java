@@ -5,14 +5,11 @@ package com.kosei.dropwizard.adcreator.resources;
  */
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.kosei.dropwizard.adcreator.core.AdCreator;
 import com.kosei.dropwizard.adcreator.core.AdPreviewCreatorClient;
 import com.kosei.dropwizard.adcreator.core.CreatedImageCache;
-import com.kosei.dropwizard.adcreator.api.CreativeAsset;
 import com.kosei.dropwizard.adcreator.core.PreCannedImagesAndFonts;
 import com.kosei.dropwizard.adcreator.views.AdCreatorView;
-import com.sun.jersey.multipart.FormDataMultiPart;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,20 +22,13 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.Base64;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -233,7 +223,6 @@ public class AdCreatorResource {
     if (descriptionFontColor.length() == 6) sDescriptionFontColor = "#" + sDescriptionFontColor;
     if (headerFontColor.length() == 6) sHeaderFontColor = "#" + sHeaderFontColor;
     if (priceFontColor.length() == 6) sPriceFontColor = "#" + sPriceFontColor;
-
 
     long start = System.currentTimeMillis();
     ByteBuffer bb = client.generate(
@@ -775,152 +764,5 @@ public class AdCreatorResource {
 
         return view;
     }
-
-  @POST
-  @Path("/createPreview")
-  @Produces(MediaType.APPLICATION_JSON)
-  @Consumes(MediaType.MULTIPART_FORM_DATA)
-  public Response createAdCreator(FormDataMultiPart multiPart) throws Exception {
-    CreativeAsset creativeAsset = multiPart.getBodyParts().get(0).getEntityAs(CreativeAsset.class);
-    InputStream productImageStream = multiPart.getBodyParts().get(1).getEntityAs(InputStream.class);
-    InputStream logoImageStream = multiPart.getBodyParts().get(2).getEntityAs(InputStream.class);
-    InputStream callToActionImageStream =
-        multiPart.getBodyParts().get(3).getEntityAs(InputStream.class);
-   /* String uploadedproductImageFileLocation = preCannedImagesAndFonts.getProductsDir() + "//"+ multiPart.getBodyParts().get(1).getContentDisposition().getFileName();
-    String uploadedlogoImageFileLocation = preCannedImagesAndFonts.getLogoDir() + "//"+ multiPart.getBodyParts().get(2).getContentDisposition().getFileName();
-    String uploadedcallToActionImageFileLocation = preCannedImagesAndFonts.getCallToActionDir() + "//"+ multiPart.getBodyParts().get(3).getContentDisposition().getFileName();*/
-
-    String uploadedProductImageFileLocation =
-        "D://" + multiPart.getBodyParts().get(1).getContentDisposition().getFileName();
-    String uploadedLogoImageFileLocation =
-        "D://" + multiPart.getBodyParts().get(2).getContentDisposition().getFileName();
-    String uploadedCallToActionImageFileLocation =
-        "D://" + multiPart.getBodyParts().get(3).getContentDisposition().getFileName();
-
-    // save it
-    writeToFile(productImageStream, uploadedProductImageFileLocation);
-    writeToFile(logoImageStream, uploadedLogoImageFileLocation);
-    writeToFile(callToActionImageStream, uploadedCallToActionImageFileLocation);
-
-    List<AdCreator> adCreatorList = new ArrayList<>();
-    for (String template : creativeAsset.getTemplates()) {
-      AdCreator adCreator = new AdCreator();
-
-      //this should repeat several times for list of templates
-      ByteBuffer bb = client.generate(
-          "text",
-          "desc",
-          "priceText",
-          uploadedProductImageFileLocation,
-          uploadedLogoImageFileLocation,
-          uploadedCallToActionImageFileLocation,
-          "D:/aseets/fonts/first.ttf",
-          Integer.parseInt("5"),
-          Integer.parseInt("4"),
-          creativeAsset.getPriceFontColor(),
-          "arial",
-          Integer.parseInt("4"),
-          Integer.parseInt("7"),
-          creativeAsset.getPriceFontColor(),
-          "arial",
-          Integer.parseInt("6"),
-          Integer.parseInt("5"),
-          "red",
-          "yellow",
-          "1",
-          59,
-          100,
-          5,
-          30,
-          10,
-          49,
-          4,
-          6,
-          56,
-          66,
-          10,
-          65,
-          7,
-          5,
-          6,
-          10,
-          5,
-          99,
-          34,
-          6,
-          7,
-          67,
-          5,
-          100,
-          299,
-          1,
-          template
-      );
-      adCreator.setId(counter++);
-      cache.put(adCreator.getId() + "", bb);
-      adCreatorList.add(adCreator);
-    }
-    String imageString = null;
-    List<String> listImages = new ArrayList<>();
-    //cache.size() to get all images from
-    for(AdCreator creator : adCreatorList) {
-      ByteArrayOutputStream stream = new ByteArrayOutputStream();
-      ByteBuffer buff = cache.get(creator.getImageUrl());
-      Base64.Encoder encoder = Base64.getEncoder();
-      imageString = encoder.encodeToString(buff.array());
-      listImages.add(imageString);
-      System.out.println(imageString);
-    }
-
-    CacheControl cc = new CacheControl();
-    cc.setNoTransform(true);
-    cc.setMustRevalidate(false);
-    cc.setNoCache(false);
-    cc.setMaxAge(1);
-
-    ObjectMapper mapper = new ObjectMapper();
-    mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-    Map<String, Object> imagesMap = new HashMap<>();
-    List<Object> images = new ArrayList<>();
-    images.add(listImages);
-    images.toArray();
-    imagesMap.put("images", images);
-
-    return Response.ok(imagesMap).build();
-  }
-
-
-
-  private void writeToFile(InputStream uploadedInputStream,
-                           String uploadedFileLocation) {
-    OutputStream out=null;
-    File f = new File(uploadedFileLocation);
-    try {
-
-      out = new FileOutputStream(f);
-      int read = 0;
-      byte[] bytes = new byte[1024];
-
-      out = new FileOutputStream(new File(uploadedFileLocation));
-      while ((read = uploadedInputStream.read(bytes)) != -1) {
-        out.write(bytes, 0, read);
-      }
-      out.flush();
-    } catch (IOException e) {
-
-      e.printStackTrace();
-    }
-    finally{
-      if(out !=null)
-        try {
-          uploadedInputStream.close();
-          out.close();
-        } catch (IOException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        }
-    }
-
-  }
 
 }

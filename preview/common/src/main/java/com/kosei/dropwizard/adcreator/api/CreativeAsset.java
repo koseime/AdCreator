@@ -1,70 +1,64 @@
 package com.kosei.dropwizard.adcreator.api;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
-import org.hibernate.validator.constraints.NotBlank;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 
 /**
  * Created by elisaveta.manasieva on 12/5/2014.
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CreativeAsset {
 
-  @NotBlank
-  private String backgroundColor;
-  @NotNull
-  private String body;
-  @NotBlank
-  private String bodyFont;
-  @NotBlank
-  private String bodyFontColor;
-  @NotBlank
-  private String bodyFontWeight;
-  @NotBlank
-  private String bodyFontType;
-  @Min(0)
-  private int bodyFontSize;
-  @NotBlank
-  private String priceFont;
-  @NotBlank
-  private String priceFontColor;
-  @NotBlank
-  private String priceFontWeight;
-  @NotBlank
-  private String priceFontType;
-  @Min(0)
-  private int priceFontSize;
-  @NotNull
-  private String title;
-  @NotBlank
-  private String titleFont;
-  @NotBlank
-  private String titleFontColor;
-  @NotBlank
-  private String titleFontWeight;
-  @NotBlank
-  private String titleFontType;
-  @Min(0)
-  private int titleFontSize;
-  private List<String> templates;
+  public String backgroundColor;
+  public String body;
+  public String bodyFont;
+  public String bodyFontColor;
+  public String bodyFontWeight;
+  public String bodyFontType;
+  public int bodyFontSize;
+  public String priceFont;
+  public String priceFontColor;
+  public String priceFontWeight;
+  public String priceFontType;
+  public int priceFontSize;
+  public String title;
+  public String titleFont;
+  public String titleFontColor;
+  public int titleFontWeight;
+  public String titleFontType;
+  public int titleFontSize;
+  public List<Template> templates;
   public CreativeAsset() {
   }
 
-  public CreativeAsset(
-
-                       String logoLocation, String callToActionLocation, String backgroundColor,
-                       String body, String bodyFont, String bodyFontColor, String bodyFontWeight,
-                       String bodyFontType,int bodyFontSize,
-                       String priceFont, String priceFontColor, String priceFontWeight,
-                       String priceFontType,int priceFontSize,
-                       String title, String titleFont, String titleFontColor,
-                       String titleFontWeight,
-                       String titleFontType, int titleFontSize, List<String> templates) {
+  @JsonCreator
+  public CreativeAsset(@JsonProperty("backgroundColor") String backgroundColor,
+                       @JsonProperty("body") String body,
+                       @JsonProperty("bodyFont") String bodyFont,
+                       @JsonProperty("bodyFontColor") String bodyFontColor,
+                       @JsonProperty("bodyFontWeight") String bodyFontWeight,
+                       @JsonProperty("bodyFontType") String bodyFontType,
+                       @JsonProperty("bodyFontSize") int bodyFontSize,
+                       @JsonProperty("priceFont") String priceFont,
+                       @JsonProperty("priceFontColor") String priceFontColor,
+                       @JsonProperty("priceFontWeight") String priceFontWeight,
+                       @JsonProperty("priceFontType") String priceFontType,
+                       @JsonProperty("priceFontSize") int priceFontSize,
+                       @JsonProperty("title") String title,
+                       @JsonProperty("titleFont") String titleFont,
+                       @JsonProperty("titleFontColor") String titleFontColor,
+                       @JsonProperty("titleFontWeight") int titleFontWeight,
+                       @JsonProperty("titleFontType") String titleFontType,
+                       @JsonProperty("titleFontSize") int titleFontSize,
+                       @JsonProperty("templates") List<Template> templates) {
     this.backgroundColor = backgroundColor;
     this.body = body;
     this.bodyFont = bodyFont;
@@ -206,11 +200,11 @@ public class CreativeAsset {
     this.titleFontColor = titleFontColor;
   }
 
-  public String getTitleFontWeight() {
+  public int getTitleFontWeight() {
     return titleFontWeight;
   }
 
-  public void setTitleFontWeight(String titleFontWeight) {
+  public void setTitleFontWeight(int titleFontWeight) {
     this.titleFontWeight = titleFontWeight;
   }
 
@@ -230,11 +224,11 @@ public class CreativeAsset {
     this.titleFontSize = titleFontSize;
   }
 
-  public List<String> getTemplates() {
+  public List<Template> getTemplates() {
     return templates;
   }
 
-  public void setTemplates(List<String> templates) {
+  public void setTemplates(List<Template> templates) {
     this.templates = templates;
   }
 
@@ -279,7 +273,7 @@ public class CreativeAsset {
 
   @Override
   public String toString() {
-    return MoreObjects.toStringHelper(this)
+    return Objects.toStringHelper(this)
         .add("backgroundColor", backgroundColor)
         .add("body", body)
         .add("bodyFont", bodyFont)
