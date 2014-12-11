@@ -66,9 +66,9 @@ public class PreviewResource implements PreviewResourceConstants{
       uploadedlogoImageFile = preCannedImagesAndFonts.getLogos().get(0);
       uploadedcallToActionImageFile = preCannedImagesAndFonts.getCallToActions().get(0);
     } else {
-      uploadedproductImageFile = writeToFile(productImageStream, multiPart.getBodyParts().get(1).getContentDisposition().getFileName(), null);
-      uploadedlogoImageFile = writeToFile(logoImageStream, multiPart.getBodyParts().get(2).getContentDisposition().getFileName(), null);
-      uploadedcallToActionImageFile = writeToFile(callToActionImageStream, multiPart.getBodyParts().get(3).getContentDisposition().getFileName(), null);
+      uploadedproductImageFile = writeToFile(productImageStream, multiPart.getBodyParts().get(1).getContentDisposition().getFileName());
+      uploadedlogoImageFile = writeToFile(logoImageStream, multiPart.getBodyParts().get(2).getContentDisposition().getFileName());
+      uploadedcallToActionImageFile = writeToFile(callToActionImageStream, multiPart.getBodyParts().get(3).getContentDisposition().getFileName());
     }
 
     Map<String, Object> templatesMap = new HashMap<>();
@@ -80,7 +80,7 @@ public class PreviewResource implements PreviewResourceConstants{
     return Response.ok(templatesMap).build();
   }
 
-  private String writeToFile(InputStream inputStream, String fileName, String suffix) {
+  private String writeToFile(InputStream inputStream, String fileName) {
     File f = null;
     try {
       f = File.createTempFile(fileName, "", null);
