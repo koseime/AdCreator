@@ -9,8 +9,6 @@ output/*.png
 *.jar
 *.class
 build/
-api/build/
-webtool/build/
 adcreatorserver/ad-preview-creator-server
 native/ad-creator-client
 native/ad-creator

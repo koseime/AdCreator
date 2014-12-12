@@ -1,6 +1,6 @@
 APP = ad-preview-creator-server
 CC = g++
-VPATH = ../api/build/generated-src/thrift/main
+VPATH = ../preview/api/build/generated-src/thrift/main/cpp
 
 export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig
 
