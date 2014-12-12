@@ -17,27 +17,25 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CreativeAsset {
 
-  public String backgroundColor;
-  public String body;
-  public String bodyFont;
-  public String bodyFontColor;
-  public String bodyFontWeight;
-  public String bodyFontType;
-  public int bodyFontSize;
-  public String priceFont;
-  public String priceFontColor;
-  public String priceFontWeight;
-  public String priceFontType;
-  public int priceFontSize;
-  public String title;
-  public String titleFont;
-  public String titleFontColor;
-  public int titleFontWeight;
-  public String titleFontType;
-  public int titleFontSize;
-  public List<Template> templates;
-  public CreativeAsset() {
-  }
+  public final String backgroundColor;
+  public final String body;
+  public final String bodyFont;
+  public final String bodyFontColor;
+  public final String bodyFontWeight;
+  public final String bodyFontType;
+  public final int bodyFontSize;
+  public final String priceFont;
+  public final String priceFontColor;
+  public final String priceFontWeight;
+  public final String priceFontType;
+  public final int priceFontSize;
+  public final String title;
+  public final String titleFont;
+  public final String titleFontColor;
+  public final int titleFontWeight;
+  public final String titleFontType;
+  public final int titleFontSize;
+  public final List<Template> templates;
 
   @JsonCreator
   public CreativeAsset(@JsonProperty("backgroundColor") String backgroundColor,
@@ -77,158 +75,6 @@ public class CreativeAsset {
     this.titleFontWeight = titleFontWeight;
     this.titleFontType = titleFontType;
     this.titleFontSize = titleFontSize;
-    this.templates = templates;
-  }
-
-  public String getBackgroundColor() {
-    return backgroundColor;
-  }
-
-  public void setBackgroundColor(String backgroundColor) {
-    this.backgroundColor = backgroundColor;
-  }
-
-  public String getBody() {
-    return body;
-  }
-
-  public void setBody(String body) {
-    this.body = body;
-  }
-
-  public String getBodyFont() {
-    return bodyFont;
-  }
-
-  public void setBodyFont(String bodyFont) {
-    this.bodyFont = bodyFont;
-  }
-
-  public String getBodyFontColor() {
-    return bodyFontColor;
-  }
-
-  public void setBodyFontColor(String bodyFontColor) {
-    this.bodyFontColor = bodyFontColor;
-  }
-
-  public String getBodyFontWeight() {
-    return bodyFontWeight;
-  }
-
-  public void setBodyFontWeight(String bodyFontWeight) {
-    this.bodyFontWeight = bodyFontWeight;
-  }
-
-  public String getBodyFontType() {
-    return bodyFontType;
-  }
-
-  public void setBodyFontType(String bodyFontType) {
-    this.bodyFontType = bodyFontType;
-  }
-
-  public int getBodyFontSize() {
-    return bodyFontSize;
-  }
-
-  public void setBodyFontSize(int bodyFontSize) {
-    this.bodyFontSize = bodyFontSize;
-  }
-
-  public String getPriceFont() {
-    return priceFont;
-  }
-
-  public void setPriceFont(String priceFont) {
-    this.priceFont = priceFont;
-  }
-
-  public String getPriceFontColor() {
-    return priceFontColor;
-  }
-
-  public void setPriceFontColor(String priceFontColor) {
-    this.priceFontColor = priceFontColor;
-  }
-
-  public String getPriceFontWeight() {
-    return priceFontWeight;
-  }
-
-  public void setPriceFontWeight(String priceFontWeight) {
-    this.priceFontWeight = priceFontWeight;
-  }
-
-  public String getPriceFontType() {
-    return priceFontType;
-  }
-
-  public void setPriceFontType(String priceFontType) {
-    this.priceFontType = priceFontType;
-  }
-
-  public int getPriceFontSize() {
-    return priceFontSize;
-  }
-
-  public void setPriceFontSize(int priceFontSize) {
-    this.priceFontSize = priceFontSize;
-  }
-
-  public String getTitle() {
-    return title;
-  }
-
-  public void setTitle(String title) {
-    this.title = title;
-  }
-
-  public String getTitleFont() {
-    return titleFont;
-  }
-
-  public void setTitleFont(String titleFont) {
-    this.titleFont = titleFont;
-  }
-
-  public String getTitleFontColor() {
-    return titleFontColor;
-  }
-
-  public void setTitleFontColor(String titleFontColor) {
-    this.titleFontColor = titleFontColor;
-  }
-
-  public int getTitleFontWeight() {
-    return titleFontWeight;
-  }
-
-  public void setTitleFontWeight(int titleFontWeight) {
-    this.titleFontWeight = titleFontWeight;
-  }
-
-  public String getTitleFontType() {
-    return titleFontType;
-  }
-
-  public void setTitleFontType(String titleFontType) {
-    this.titleFontType = titleFontType;
-  }
-
-  public int getTitleFontSize() {
-    return titleFontSize;
-  }
-
-  public void setTitleFontSize(int titleFontSize) {
-    this.titleFontSize = titleFontSize;
-  }
-
-  public List<Template> getTemplates() {
-    return templates;
-  }
-
-  public void setTemplates(List<Template> templates) {
     this.templates = templates;
   }
 

@@ -11,8 +11,6 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
-import javax.ws.rs.core.CacheControl;
-
 /**
  * Created by elisaveta.manasieva on 12/11/2014.
  */
@@ -27,56 +25,58 @@ public class PreviewService {
     this.cache = cache;
   }
 
-  private ByteBuffer generatePreview (CreativeAsset creativeAsset, Template template, String uploadedproductImageFile, String uploadedlogoImageFile, String uploadedcallToActionImageFile)
+  private ByteBuffer generatePreview(CreativeAsset creativeAsset, Template template,
+                                     String uploadedproductImageFile, String uploadedlogoImageFile,
+                                     String uploadedcallToActionImageFile)
       throws Exception {
     ByteBuffer bb = client.generate(
-        creativeAsset.getTitle(),
-        creativeAsset.getBody(),
+        creativeAsset.title,
+        creativeAsset.body,
         "price",
         uploadedproductImageFile,
         uploadedlogoImageFile,
         uploadedcallToActionImageFile,
-        creativeAsset.getTitleFont(),
-        creativeAsset.getTitleFontSize(),
-        creativeAsset.getTitleFontWeight(),
-        creativeAsset.getTitleFontColor(),
-        creativeAsset.getPriceFont(),
-        creativeAsset.getPriceFontSize(),
-        Integer.parseInt(creativeAsset.getPriceFontWeight()),
-        creativeAsset.getPriceFontColor(),
-        creativeAsset.getBodyFont(),
-        creativeAsset.getBodyFontSize(),
-        Integer.parseInt(creativeAsset.getBodyFontWeight()),
-        creativeAsset.getBodyFontColor(),
-        creativeAsset.getBackgroundColor(),
+        creativeAsset.titleFont,
+        creativeAsset.titleFontSize,
+        creativeAsset.titleFontWeight,
+        creativeAsset.titleFontColor,
+        creativeAsset.priceFont,
+        creativeAsset.priceFontSize,
+        Integer.parseInt(creativeAsset.priceFontWeight),
+        creativeAsset.priceFontColor,
+        creativeAsset.bodyFont,
+        creativeAsset.bodyFontSize,
+        Integer.parseInt(creativeAsset.bodyFontWeight),
+        creativeAsset.bodyFontColor,
+        creativeAsset.backgroundColor,
         "",
-        template.getProduct().getHeight(),
-        template.getProduct().getWidth(),
-        template.getProduct().getOrigin_x(),
-        template.getProduct().getOrigin_y(),
-        template.getTitle().getHeight(),
-        template.getTitle().getWidth(),
-        template.getTitle().getOrigin_x(),
-        template.getTitle().getOrigin_y(),
-        template.getDescription().getHeight(),
-        template.getDescription().getWidth(),
-        template.getDescription().getOrigin_x(),
-        template.getDescription().getOrigin_y(),
-        template.getPrice().getHeight(),
-        template.getPrice().getWidth(),
-        template.getPrice().getOrigin_x(),
-        template.getPrice().getOrigin_y(),
-        template.getLogo().getHeight(),
-        template.getLogo().getWidth(),
-        template.getLogo().getOrigin_x(),
-        template.getLogo().getOrigin_y(),
-        template.getCallToAction().getHeight(),
-        template.getCallToAction().getWidth(),
-        template.getCallToAction().getOrigin_x(),
-        template.getCallToAction().getOrigin_y(),
-        template.getMain().getHeight(),
-        template.getMain().getWidth(),
-        template.getName()
+        template.product.height,
+        template.product.width,
+        template.product.origin_x,
+        template.product.origin_y,
+        template.title.height,
+        template.title.width,
+        template.title.origin_x,
+        template.title.origin_y,
+        template.description.height,
+        template.description.width,
+        template.description.origin_x,
+        template.description.origin_y,
+        template.price.height,
+        template.price.width,
+        template.price.origin_x,
+        template.price.origin_y,
+        template.logo.height,
+        template.logo.width,
+        template.logo.origin_x,
+        template.logo.origin_y,
+        template.callToAction.height,
+        template.callToAction.width,
+        template.callToAction.origin_x,
+        template.callToAction.origin_y,
+        template.main.height,
+        template.main.width,
+        template.name
     );
     return bb;
   }
@@ -86,8 +86,9 @@ public class PreviewService {
                                           String uploadedlogoImageFile,
                                           String uploadedcallToActionImageFile)
       throws Exception {
-    List<AdCreator> adCreatorList = new ArrayList<>();
-    for (Template template : creativeAsset.getTemplates()) {
+    List<String> listTemplates = new ArrayList<>();
+    String imageString = null;
+    for (Template template : creativeAsset.templates) {
       AdCreator adCreator = new AdCreator();
       //this should repeat several times for list of templates
       ByteBuffer
@@ -97,24 +98,11 @@ public class PreviewService {
                           uploadedcallToActionImageFile);
 
       adCreator.setId(counter++);
-      cache.put(adCreator.getId() + "", bb);
-      adCreatorList.add(adCreator);
-    }
-    String imageString = null;
-    List<String> listTemplates = new ArrayList<>();
-    for (AdCreator creator : adCreatorList) {
-      ByteBuffer buff = cache.get(creator.getImageUrl());
+      adCreator.setImageUrl("/adcreator/" + adCreator.getId() + ".jpg");
       Base64.Encoder encoder = Base64.getEncoder();
-      imageString = encoder.encodeToString(buff.array());
+      imageString = encoder.encodeToString(bb.array());
       listTemplates.add(imageString);
-      System.out.println(imageString);
     }
-
-    CacheControl cc = new CacheControl();
-    cc.setNoTransform(true);
-    cc.setMustRevalidate(false);
-    cc.setNoCache(false);
-    cc.setMaxAge(1);
 
     return listTemplates;
   }

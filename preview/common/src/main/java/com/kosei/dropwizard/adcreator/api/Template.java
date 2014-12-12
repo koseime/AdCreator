@@ -1,120 +1,62 @@
 package com.kosei.dropwizard.adcreator.api;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Created by elisaveta.manasieva on 12/10/2014.
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Template {
 
 
-  private Parameters product;
-  private Parameters logo;
-  private Parameters title;
-  private Parameters price;
-  private Parameters description;
-  private String name;
-  private Parameters callToAction;
-  private Parameters main;
+  public final Parameters product;
+  public final Parameters logo;
+  public final Parameters title;
+  public final Parameters price;
+  public final Parameters description;
+  public final String name;
+  public final Parameters callToAction;
+  public final Parameters main;
 
-  public Parameters getProduct() {
-    return product;
-  }
-
-  public void setProduct(Parameters product) {
+  @JsonCreator
+  public Template(@JsonProperty("product") Parameters product,
+                  @JsonProperty("logo") Parameters logo,
+                  @JsonProperty("title") Parameters title,
+                  @JsonProperty("price") Parameters price,
+                  @JsonProperty("description") Parameters description,
+                  @JsonProperty("name") String name,
+                  @JsonProperty("callToAction") Parameters callToAction,
+                  @JsonProperty("main") Parameters main) {
     this.product = product;
-  }
-
-  public Parameters getLogo() {
-    return logo;
-  }
-
-  public void setLogo(Parameters logo) {
     this.logo = logo;
-  }
-
-  public Parameters getTitle() {
-    return title;
-  }
-
-  public void setTitle(Parameters title) {
     this.title = title;
-  }
-
-  public Parameters getDescription() {
-    return description;
-  }
-
-  public void setDescription(Parameters description) {
-    this.description = description;
-  }
-
-  public Parameters getPrice() {
-    return price;
-  }
-
-  public void setPrice(Parameters price) {
     this.price = price;
-  }
-
-  public Parameters getCallToAction() {
-    return callToAction;
-  }
-
-  public void setCallToAction(Parameters callToAction) {
+    this.description = description;
+    this.name = name;
     this.callToAction = callToAction;
-  }
-
-  public Parameters getMain() {
-    return main;
-  }
-
-  public void setMain(Parameters main) {
     this.main = main;
   }
 
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
 
   public static class Parameters {
 
-    private int height;
-    private int width;
-    private int origin_x;
-    private int origin_y;
+    public final int height;
+    public final int width;
+    public final int origin_x;
+    public final int origin_y;
 
-    public int getHeight() {
-      return height;
-    }
-
-    public void setHeight(int height) {
+    @JsonCreator
+    public Parameters(@JsonProperty("height") int height,
+                    @JsonProperty("width") int width,
+                    @JsonProperty("origin_x") int origin_x,
+                    @JsonProperty("origin_y") int origin_y) {
       this.height = height;
-    }
-
-    public int getWidth() {
-      return width;
-    }
-
-    public void setWidth(int width) {
       this.width = width;
-    }
-
-    public int getOrigin_x() {
-      return origin_x;
-    }
-
-    public void setOrigin_x(int origin_x) {
       this.origin_x = origin_x;
-    }
-
-    public int getOrigin_y() {
-      return origin_y;
-    }
-
-    public void setOrigin_y(int origin_y) {
       this.origin_y = origin_y;
     }
   }
