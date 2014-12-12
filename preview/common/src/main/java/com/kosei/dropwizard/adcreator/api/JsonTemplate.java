@@ -1,5 +1,7 @@
 package com.kosei.dropwizard.adcreator.api;
 
+import com.google.common.base.Objects;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -10,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Template {
+public class JsonTemplate {
 
 
   public final Parameters product;
@@ -23,14 +25,14 @@ public class Template {
   public final Parameters main;
 
   @JsonCreator
-  public Template(@JsonProperty("product") Parameters product,
-                  @JsonProperty("logo") Parameters logo,
-                  @JsonProperty("title") Parameters title,
-                  @JsonProperty("price") Parameters price,
-                  @JsonProperty("description") Parameters description,
-                  @JsonProperty("name") String name,
-                  @JsonProperty("callToAction") Parameters callToAction,
-                  @JsonProperty("main") Parameters main) {
+  public JsonTemplate(@JsonProperty("product") Parameters product,
+                      @JsonProperty("logo") Parameters logo,
+                      @JsonProperty("title") Parameters title,
+                      @JsonProperty("price") Parameters price,
+                      @JsonProperty("description") Parameters description,
+                      @JsonProperty("name") String name,
+                      @JsonProperty("callToAction") Parameters callToAction,
+                      @JsonProperty("main") Parameters main) {
     this.product = product;
     this.logo = logo;
     this.title = title;
@@ -42,7 +44,7 @@ public class Template {
   }
 
 
-  public static class Parameters {
+  public class Parameters {
 
     public final int height;
     public final int width;
@@ -58,6 +60,25 @@ public class Template {
       this.width = width;
       this.origin_x = origin_x;
       this.origin_y = origin_y;
+    }
+
+    @Override
+    public int hashCode() {
+      return Objects.hashCode(height, width, origin_x, origin_y);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (this == obj) {
+        return true;
+      }
+      if (obj == null || getClass() != obj.getClass()) {
+        return false;
+      }
+      final Parameters other = (Parameters) obj;
+      return Objects.equal(this.height, other.height) && Objects.equal(this.width, other.width)
+             && Objects.equal(this.origin_x, other.origin_x) && Objects
+          .equal(this.origin_y, other.origin_y);
     }
   }
 

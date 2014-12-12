@@ -1,11 +1,20 @@
 package com.kosei.dropwizard.adcreator.core.service;
 
-import com.kosei.dropwizard.adcreator.api.CreativeAsset;
-import com.kosei.dropwizard.adcreator.api.Template;
+import com.kosei.dropwizard.adcreator.api.JsonCreativeAsset;
+import com.kosei.dropwizard.adcreator.api.JsonTemplate;
 import com.kosei.dropwizard.adcreator.core.AdCreator;
 import com.kosei.dropwizard.adcreator.core.AdPreviewCreatorClient;
 import com.kosei.dropwizard.adcreator.core.CreatedImageCache;
 
+import org.apache.commons.compress.utils.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -16,6 +25,9 @@ import java.util.List;
  */
 public class PreviewService {
 
+  private static final Logger
+      logger = LoggerFactory.getLogger(PreviewService.class);
+
   private final AdPreviewCreatorClient client;
   private final CreatedImageCache cache;
   private static int counter = 0;
@@ -25,75 +37,75 @@ public class PreviewService {
     this.cache = cache;
   }
 
-  private ByteBuffer generatePreview(CreativeAsset creativeAsset, Template template,
+  private ByteBuffer generatePreview(JsonCreativeAsset jsonCreativeAsset, JsonTemplate jsonTemplate,
                                      String uploadedproductImageFile, String uploadedlogoImageFile,
                                      String uploadedcallToActionImageFile)
       throws Exception {
     ByteBuffer bb = client.generate(
-        creativeAsset.title,
-        creativeAsset.body,
-        "price",
+        jsonCreativeAsset.title,
+        jsonCreativeAsset.body,
+        jsonCreativeAsset.price,
         uploadedproductImageFile,
         uploadedlogoImageFile,
         uploadedcallToActionImageFile,
-        creativeAsset.titleFont,
-        creativeAsset.titleFontSize,
-        creativeAsset.titleFontWeight,
-        creativeAsset.titleFontColor,
-        creativeAsset.priceFont,
-        creativeAsset.priceFontSize,
-        Integer.parseInt(creativeAsset.priceFontWeight),
-        creativeAsset.priceFontColor,
-        creativeAsset.bodyFont,
-        creativeAsset.bodyFontSize,
-        Integer.parseInt(creativeAsset.bodyFontWeight),
-        creativeAsset.bodyFontColor,
-        creativeAsset.backgroundColor,
+        jsonCreativeAsset.titleFont,
+        jsonCreativeAsset.titleFontSize,
+        jsonCreativeAsset.titleFontWeight,
+        jsonCreativeAsset.titleFontColor,
+        jsonCreativeAsset.priceFont,
+        jsonCreativeAsset.priceFontSize,
+        Integer.parseInt(jsonCreativeAsset.priceFontWeight),
+        jsonCreativeAsset.priceFontColor,
+        jsonCreativeAsset.bodyFont,
+        jsonCreativeAsset.bodyFontSize,
+        Integer.parseInt(jsonCreativeAsset.bodyFontWeight),
+        jsonCreativeAsset.bodyFontColor,
+        jsonCreativeAsset.backgroundColor,
         "",
-        template.product.height,
-        template.product.width,
-        template.product.origin_x,
-        template.product.origin_y,
-        template.title.height,
-        template.title.width,
-        template.title.origin_x,
-        template.title.origin_y,
-        template.description.height,
-        template.description.width,
-        template.description.origin_x,
-        template.description.origin_y,
-        template.price.height,
-        template.price.width,
-        template.price.origin_x,
-        template.price.origin_y,
-        template.logo.height,
-        template.logo.width,
-        template.logo.origin_x,
-        template.logo.origin_y,
-        template.callToAction.height,
-        template.callToAction.width,
-        template.callToAction.origin_x,
-        template.callToAction.origin_y,
-        template.main.height,
-        template.main.width,
-        template.name
+        jsonTemplate.product.height,
+        jsonTemplate.product.width,
+        jsonTemplate.product.origin_x,
+        jsonTemplate.product.origin_y,
+        jsonTemplate.title.height,
+        jsonTemplate.title.width,
+        jsonTemplate.title.origin_x,
+        jsonTemplate.title.origin_y,
+        jsonTemplate.description.height,
+        jsonTemplate.description.width,
+        jsonTemplate.description.origin_x,
+        jsonTemplate.description.origin_y,
+        jsonTemplate.price.height,
+        jsonTemplate.price.width,
+        jsonTemplate.price.origin_x,
+        jsonTemplate.price.origin_y,
+        jsonTemplate.logo.height,
+        jsonTemplate.logo.width,
+        jsonTemplate.logo.origin_x,
+        jsonTemplate.logo.origin_y,
+        jsonTemplate.callToAction.height,
+        jsonTemplate.callToAction.width,
+        jsonTemplate.callToAction.origin_x,
+        jsonTemplate.callToAction.origin_y,
+        jsonTemplate.main.height,
+        jsonTemplate.main.width,
+        jsonTemplate.name
     );
     return bb;
   }
 
-  public List<String> getImagesByTemplate(CreativeAsset creativeAsset,
+  public List<String> getImagesByTemplate(JsonCreativeAsset jsonCreativeAsset,
                                           String uploadedproductImageFile,
                                           String uploadedlogoImageFile,
                                           String uploadedcallToActionImageFile)
       throws Exception {
     List<String> listTemplates = new ArrayList<>();
     String imageString = null;
-    for (Template template : creativeAsset.templates) {
+    for (JsonTemplate jsonTemplate : jsonCreativeAsset.jsonTemplates) {
       AdCreator adCreator = new AdCreator();
       //this should repeat several times for list of templates
       ByteBuffer
           bb =
-          generatePreview(creativeAsset, template, uploadedproductImageFile,
+          generatePreview(jsonCreativeAsset, jsonTemplate, uploadedproductImageFile,
                           uploadedlogoImageFile,
                           uploadedcallToActionImageFile);
 
@@ -105,6 +117,21 @@ public class PreviewService {
     }
 
     return listTemplates;
+  }
+
+  public String writeToFile(InputStream inputStream, String fileName) {
+    File f = null;
+    try {
+      f = File.createTempFile(fileName, "", null);
+      OutputStream outputStream = new FileOutputStream(f);
+      IOUtils.copy(inputStream, outputStream);
+      outputStream.close();
+    } catch (IOException e) {
+      logger.error("IOException " + e);
+    }
+    System.out.println(f.getAbsolutePath());
+
+    return f.getAbsolutePath();
   }
 
 }
