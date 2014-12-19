@@ -23,7 +23,7 @@ server:
 #  hardNofileLimit: 1000
   applicationConnectors:
     - type: http
-      port: 8080
+      port: 8580
 
 # this requires the npn-boot library on the JVM's boot classpath
 #    - type: spdy3
@@ -33,7 +33,7 @@ server:
 #      validateCerts: false
   adminConnectors:
     - type: http
-      port: 8081
+      port: 8581
 
 # Logging settings.
 logging:
