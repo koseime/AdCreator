@@ -16,6 +16,7 @@ public class AdCreatorJsonClient {
     RestAdapter restAdapter = new RestAdapter.Builder()
         .setEndpoint(endpoint)
         .setConverter(new JacksonJsonConverter(objectMapper))
+//        .setLogLevel(RestAdapter.LogLevel.FULL)
         .setClient(client)
         .build();
     previewResource = restAdapter.create(PreviewResource.class);
