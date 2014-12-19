@@ -129,7 +129,6 @@ public class PreviewService {
     } catch (IOException e) {
       logger.error("IOException " + e);
     }
-    System.out.println(f.getAbsolutePath());
 
     return f.getAbsolutePath();
   }
